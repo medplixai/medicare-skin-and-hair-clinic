@@ -1,0 +1,11 @@
+# OS junk
+.DS_Store
+**/.DS_Store
+
+# local dev / editor
+.claude/
+
+# Unused ORIGINAL source images — the optimized lowercase .jpg versions ARE committed
+assets/img/before-after/*.PNG
+assets/img/before-after/*.HEIC
+assets/img/before-after/*.JPG
