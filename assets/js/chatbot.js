@@ -111,7 +111,7 @@
     } },
 
     { id: "technology", keys: ["technology", "equipment", "machine", "usfda", "us-fda", "fda", "alma", "quanta", "co2", "q-switch", "qswitch", "follirich", "laser brand", "టెక్నాలజీ", "పరికర", "మెషిన్", "లేజర్ బ్రాండ్"], fn: function () {
-      return "🔬 <strong>అధునాతన టెక్నాలజీ</strong> — మేము అంతర్జాతీయ బ్రాండ్ల పరికరాలు వాడతాం: <strong>Alma Soprano Titanium</strong>, <strong>Quanta System</strong> (Discovery Pico), Fractional CO₂, Q-switched Nd:YAG — పలు లేజర్‌లు <strong>US-FDA 510(k) cleared</strong>. అలాగే Hydra ఫేషియల్ · FolliRich GFC/PRP · FUE &amp; DHI.<br><small>FDA clearance నిర్దిష్ట పరికరాలకే వర్తిస్తుంది; ఫలితాలు వ్యక్తికి మారవచ్చు.</small>" +
+      return "🔬 <strong>అధునాతన టెక్నాలజీ</strong> — మేము <strong>FDA Verified</strong> అధునాతన లేజర్‌లు వాడతాం: Diode (హెయిర్ రిడక్షన్), Pico, Fractional CO₂, Q-switched Nd:YAG — పలు లేజర్‌లు <strong>US-FDA 510(k) cleared</strong>. అలాగే Hydra ఫేషియల్ · FolliRich GFC/PRP · FUE &amp; DHI.<br><small>“FDA Verified” = US-FDA cleared పరికరాలు; ఫలితాలు వ్యక్తికి మారవచ్చు.</small>" +
         acts([act("#technology", "అన్ని పరికరాలు చూడండి", { close: true }), act("#contact", "అపాయింట్‌మెంట్", { primary: true, close: true })]);
     } },
 
