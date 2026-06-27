@@ -578,6 +578,12 @@ th.ptable__num{ color:var(--pink-700); }
 .doctor h3{ font-size:1.3rem; font-weight:700; }
 .doctor__deg{ display:block; color:var(--pink-700); font-weight:600; font-size:.92rem; margin:.25rem 0 .5rem; font-family:var(--font-en); }
 .doctor__role{ display:block; color:var(--ink-2); font-size:.93rem; }
+.doctor__exp{ display:inline-block; margin-top:.55rem; font-weight:700; font-size:.85rem; color:var(--pink-700);
+  background:var(--pink-tint); border:1px solid var(--pink-soft); padding:.28rem .75rem; border-radius:var(--r-pill); }
+.medic__exp{ display:flex; align-items:center; gap:.3rem; width:max-content; max-width:100%; margin-top:.45rem;
+  font-weight:600; font-size:.78rem; color:var(--pink-700); background:var(--pink-tint);
+  border:1px solid var(--pink-soft); padding:.22rem .55rem; border-radius:var(--r-pill); }
+.medic__exp .ic{ width:13px; height:13px; flex:none; }
 .doctors__note{ text-align:center; color:var(--muted); margin-top:1.8rem; }
 
 /* =====================================================================
