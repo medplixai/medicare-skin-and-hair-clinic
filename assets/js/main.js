@@ -144,7 +144,7 @@
   /* ---- Hero rotating phrase (grapheme-safe Telugu typewriter) ---- */
   const rot = $("#heroRotate");
   if (rot) {
-    const phrases = ["నమ్మదగిన చిరునామా", "ఆధునిక చికిత్సలు", "నిపుణుల సంరక్షణ", "అందమైన ఫలితాలు"];
+    const phrases = ["a trusted name", "modern treatments", "expert care", "beautiful results"];
     const seg = (window.Intl && Intl.Segmenter) ? new Intl.Segmenter("te", { granularity: "grapheme" }) : null;
     const clusters = (s) => seg ? Array.from(seg.segment(s), (x) => x.segment) : Array.from(s);
     let pi = 0, gi = clusters(phrases[0]).length, del = true;
