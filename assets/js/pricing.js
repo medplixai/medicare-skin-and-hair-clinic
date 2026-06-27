@@ -93,7 +93,7 @@ window.MEDICARE_PRICING = {
       "icon": "scalpel",
       "blurb": "మచ్చలు, పుట్టుమచ్చలు, cysts, warts, corns, బొల్లి సర్జరీ వంటి చర్మ సమస్యలకు చిన్నపాటి శస్త్రచికిత్సలను (minor skin surgeries) మా అనుభవజ్ఞ చర్మ నిపుణుల పర్యవేక్షణలో అందిస్తాము. స్థానిక మత్తు (local anaesthesia)తో సురక్షితంగా చేసే ఈ ప్రక్రియలు చర్మ సమస్యలను తగ్గించడంలో సహాయపడతాయి; ఫలితాలు వ్యక్తిని బట్టి మారవచ్చు.",
       "columns": [
-        "ధర / Amount"
+        "Amount"
       ],
       "rows": [
         {
@@ -232,8 +232,8 @@ window.MEDICARE_PRICING = {
       "gstAll": true,
       "blurb": "జుట్టు రాలటం, పలచబడటం కోసం GFC, PRF, Dutasteride mesotherapy వంటి అధునాతన చికిత్సలు; అలాగే చర్మ కాంతి, లోతైన శుభ్రత కోసం HydraFacial, Vampire, Carbon medifacials నిపుణుల పర్యవేక్షణలో అందిస్తాం — ఫలితాలు వ్యక్తిని బట్టి మారవచ్చు.",
       "columns": [
-        "1 సిట్టింగ్",
-        "4 సిట్టింగ్‌లు"
+        "1 session",
+        "4 sessions"
       ],
       "rows": [
         {
@@ -323,7 +323,7 @@ window.MEDICARE_PRICING = {
       "icon": "syringe",
       "blurb": "ముడతలు తగ్గించే Botox, చర్మానికి తేమ-గ్లో ఇచ్చే skin boosters, చర్మ కాంతిని పెంచే Glutathione drips, మచ్చలు/కెలాయిడ్‌లకు ILS, కొవ్వు కరిగించే lipolysis నుండి అలర్జీ-ఇన్ఫెక్షన్‌లకు మెడికల్ ఇంజెక్షన్ల వరకు — అన్నీ నిపుణుల పర్యవేక్షణలో అందిస్తాము. ప్రతి ఇంజెక్షన్ మీ చర్మ-ఆరోగ్య అవసరాలను బట్టి సురక్షితంగా, శుభ్రమైన పద్ధతిలో ఇవ్వబడుతుంది; ఫలితాలు వ్యక్తికి వ్యక్తికి మారవచ్చు.",
       "columns": [
-        "ధర / Amount"
+        "Amount"
       ],
       "rows": [
         {
@@ -477,7 +477,7 @@ window.MEDICARE_PRICING = {
       "gstAll": true,
       "blurb": "USFDA ఆమోదిత diode laser సాంకేతికతతో అన్ని శరీర భాగాలలోని అవాంఛిత రోమాలను దీర్ఘకాలికంగా (long-term reduction) తగ్గించడంలో సహాయపడుతుంది. ప్రతి సెషన్‌లో laser కిరణాలు రోమ కుదుళ్ళను లక్ష్యంగా చేసుకుంటాయి; ఫలితాలు వ్యక్తిని బట్టి మారతాయి, నిపుణుల పర్యవేక్షణలో పలు సెషన్లు సిఫార్సు చేయబడతాయి.",
       "columns": [
-        "1 సిట్టింగ్",
+        "1 session",
         "5+1",
         "6+2"
       ],
@@ -627,8 +627,8 @@ window.MEDICARE_PRICING = {
       "gstAll": true,
       "blurb": "మొటిమలు, మచ్చలు, పిగ్మెంటేషన్, మెలస్మా, టాన్, నలుపు మరియు వయసు ఛాయలను తగ్గించడంలో సహాయపడే వివిధ రకాల కెమికల్ పీల్స్ (Chemical Peels) ఇక్కడ అందుబాటులో ఉన్నాయి. చర్మ నిపుణుల పర్యవేక్షణలో మీ చర్మ రకానికి తగిన పీల్ లేదా Cosmelan ట్రీట్‌మెంట్‌ను ఎంపిక చేసి, చర్మ కాంతిని మెరుగుపరచడంలో సహాయపడతాము — ఫలితాలు ఒక్కొక్కరికి మారవచ్చు.",
       "columns": [
-        "1 సిట్టింగ్",
-        "4 సిట్టింగ్‌లు"
+        "1 session",
+        "4 sessions"
       ],
       "rows": [
         {
@@ -745,8 +745,8 @@ window.MEDICARE_PRICING = {
       "gstAll": true,
       "blurb": "అత్యాధునిక లేజర్ టెక్నాలజీతో పిగ్మెంటేషన్, మచ్చలు, టాటూ తొలగింపు, మొటిమ గుంటలు మరియు చర్మ బిగువు (HIFU, CO2, MNRF) వంటి సమస్యలకు నిపుణుల పర్యవేక్షణలో చికిత్స అందిస్తాం. ప్రతి వ్యక్తి చర్మ రకాన్ని బట్టి ఫలితాలు మారవచ్చు, సురక్షితమైన ప్రణాళికతో దశలవారీగా మెరుగుదల సాధించడంలో సహాయపడతాం.",
       "columns": [
-        "1 సిట్టింగ్",
-        "ప్యాకేజీ"
+        "1 session",
+        "Package"
       ],
       "rows": [
         {
@@ -858,12 +858,12 @@ window.MEDICARE_PRICING = {
     if (isNaN(n)) return String(v);
     return "₹" + n.toLocaleString("en-IN");
   }
-  // price cell with a small "నుండి" (starting from) qualifier
+  // price cell with a small "starts from" qualifier
   function priceFrom(v) {
     if (v === "—" || v == null || v === "") return "—";
     var n = Number(v);
     if (isNaN(n)) return String(v);
-    return "₹" + n.toLocaleString("en-IN") + '<span class="ptable__from"> నుండి</span>';
+    return '<span class="ptable__from">from </span>₹' + n.toLocaleString("en-IN");
   }
   function esc(t){ var d=document.createElement("div"); d.textContent=t==null?"":t; return d.innerHTML; }
 
@@ -879,7 +879,7 @@ window.MEDICARE_PRICING = {
         '<div class="tx__body">' +
           '<h3 class="tx__name">' + esc(s.name) + (s.nameTe ? ' <span>' + esc(s.nameTe) + '</span>' : '') + '</h3>' +
           '<p class="tx__desc">' + s.desc + '</p>' +
-          '<div class="tx__from">' + inr(s.from) + ' <span>నుండి · from</span></div>' +
+          '<div class="tx__from"><span>Starts from</span> ' + inr(s.from) + '</div>' +
         '</div>' +
       '</article>';
     }).join("");
@@ -897,7 +897,7 @@ window.MEDICARE_PRICING = {
       var from = nums.length ? Math.min.apply(null, nums) : null;
       var count = c.rows.filter(function (r) { return !r.sub; }).length;
 
-      var head = '<tr><th>చికిత్స · Procedure</th>' + c.columns.map(function (col) { return '<th class="ptable__num">' + esc(col) + '</th>'; }).join("") + '</tr>';
+      var head = '<tr><th>Procedure</th>' + c.columns.map(function (col) { return '<th class="ptable__num">' + esc(col) + '</th>'; }).join("") + '</tr>';
       var body = c.rows.map(function (r) {
         if (r.sub) return '<tr class="ptable__sub"><td colspan="' + (priceCols + 1) + '">' + esc(r.sub) + '</td></tr>';
         var isGst = c.gstAll || r.gst;
