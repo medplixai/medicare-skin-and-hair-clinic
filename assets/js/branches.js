@@ -21,16 +21,178 @@
    Leave blank => each branch simply shows a "Google Reviews" button instead.
    --------------------------------------------------------------------- */
 window.MEDICARE_REVIEWS = {
-  apiKey: "",
-  placeIds: {
-    kaikaluru: "", bhimavaram: "", gannavaram: "", nuzvid: "", eluru: "",
-    tadepalligudem: "", ongole: "", machilipatnam: "", gudivada: "", akividu: ""
-  },
-  // 👉 API లేకపోతే: ప్రతి branch Google rating + reviews count ఇక్కడ టైప్ చేయండి.
-  //    (ఉదా: kaikaluru: { rating: 4.8, count: 152 })  — apiKey+placeIds పెడితే live ఆటోమేటిక్‌గా వస్తుంది.
+  apiKey: "", // hardcoded ratings below (fetched from Google Places) — zero per-visit API cost
   manual: {
-    kaikaluru: {}, bhimavaram: {}, gannavaram: {}, nuzvid: {}, eluru: {},
-    tadepalligudem: {}, ongole: {}, machilipatnam: {}, gudivada: {}, akividu: {}
+    "kaikaluru": {
+      "rating": 5,
+      "count": 1175,
+      "uri": "https://maps.google.com/?cid=8597805686661747061&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "reviews": [
+        {
+          "name": "Chandra Bale",
+          "rating": 5,
+          "text": "Great service and very professional doctor. Highly recommended!\nGood treatment and friendly staff. Satisfied with the results.\nClean clinic, experienc…"
+        },
+        {
+          "name": "Ushasri Mandala",
+          "rating": 5,
+          "text": "Ive leg eczema  for last 15 days\nIm taking treatment in medicare skin clinc kaikaluru now i seen visible result with in days im happy tq Dr meghana ga…"
+        }
+      ]
+    },
+    "bhimavaram": {
+      "rating": 5,
+      "count": 179,
+      "uri": "https://maps.google.com/?cid=2002755678754971695&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "reviews": [
+        {
+          "name": "Parvatha Durgasaimanikanta",
+          "rating": 5,
+          "text": "Nice ambiance best doctor very hygienic best skin and hair clinic in bhimavaram"
+        },
+        {
+          "name": "PERURI KRISHNA",
+          "rating": 5,
+          "text": "Best skin doctor in bhimavaram i realised here good staff well treatment fast recovery thanku medicare"
+        }
+      ]
+    },
+    "gannavaram": {
+      "rating": 5,
+      "count": 1032,
+      "uri": "https://maps.google.com/?cid=10518838838044526321&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "reviews": [
+        {
+          "name": "chanukya marupudi",
+          "rating": 5,
+          "text": "I am undergoing GFC treatment at this hospital and I have completed 4 sessions so far. I’m already seeing new hair growth, which makes me very happy a…"
+        },
+        {
+          "name": "Hema Sujatha",
+          "rating": 5,
+          "text": "\"Highly recommended for all skin, hair, and nail issues in Gannavaram.\"\n\n\"Clinic is clean, staff is friendly, and doctors are very experienced.\"\n\n\"Aff…"
+        }
+      ]
+    },
+    "nuzvid": {
+      "rating": 5,
+      "count": 1778,
+      "uri": "https://maps.google.com/?cid=6998569486237193630&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "reviews": [
+        {
+          "name": "Md Aziza",
+          "rating": 5,
+          "text": "Best hispital i ever seen good maitinens quality skin care products best treatment advanced machines overall best skin care hospital in nuzvid medicar…"
+        },
+        {
+          "name": "Chandrasekhar Dasari",
+          "rating": 3,
+          "text": "I have visited this clinic for 4times for my son (4yrs)skin allergy issue, treated by Dr. Nuthalapati Sowjanya garu  but not yet controlled, hopefully…"
+        }
+      ]
+    },
+    "eluru": {
+      "rating": 4.9,
+      "count": 527,
+      "uri": "https://maps.google.com/?cid=16388861404867468831&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "reviews": [
+        {
+          "name": "Hemanth Yavana",
+          "rating": 5,
+          "text": "I had a wonderful experience at Medicare Skin and Hair Clinic. Dr. Sai Divija Mam is extremely professional and attentive. She listens carefully to ev…"
+        },
+        {
+          "name": "Bhyravabhotla PANDU RANGA RAMESH KUMAR",
+          "rating": 5,
+          "text": "I am a senior citizen and a permanent resident of Eluru since 1990.  My trials to find a reliable young dermotologist, as a reliable alternative to th…"
+        }
+      ]
+    },
+    "tadepalligudem": {
+      "rating": 4.9,
+      "count": 585,
+      "uri": "https://maps.google.com/?cid=6185955461385324687&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "reviews": [
+        {
+          "name": "Satish Gangoli",
+          "rating": 5,
+          "text": "Good treatment nice receiving Tq medi care skin and hair clinic tadepalligudem tadepalligudem lo the best hospital"
+        },
+        {
+          "name": "Kumari Ballipati",
+          "rating": 5,
+          "text": "Best skin nd hair hospital in tadepalligudem I was so happy vth the treatment I went to the doctor saying I had pigmentation and he said to get me a p…"
+        }
+      ]
+    },
+    "ongole": {
+      "rating": 5,
+      "count": 330,
+      "uri": "https://maps.google.com/?cid=17822404562664864366&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "reviews": [
+        {
+          "name": "Kalavakuri Karthik",
+          "rating": 5,
+          "text": "This is my first experience so much love it\nVery professional doctor and gd receiving staff nd very frndly nd hygiene also\nGd medication explaining nd…"
+        },
+        {
+          "name": "Ullaganti ganeshreddy",
+          "rating": 5,
+          "text": "I had a great in this hospital i love it\nProfessional doctor and nice receiving and frndly staff\nMedicare skin and hair clinic Ongole"
+        }
+      ]
+    },
+    "machilipatnam": {
+      "rating": 5,
+      "count": 1586,
+      "uri": "https://maps.google.com/?cid=16382434566017921767&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "reviews": [
+        {
+          "name": "Lanke Janardhanarao",
+          "rating": 5,
+          "text": "Good treatment...\nThank you very so much to Dr sudheer Kumar sir...\nFor their greatest service...\nTq Medicare in machilipatnam"
+        },
+        {
+          "name": "Monika Sai",
+          "rating": 5,
+          "text": "The best dermatologist dr Sudheer Kumar sir\nGood treatment\nGood result100%"
+        }
+      ]
+    },
+    "gudivada": {
+      "rating": 4.9,
+      "count": 857,
+      "uri": "https://maps.google.com/?cid=17073748168329911574&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "reviews": [
+        {
+          "name": "Naga Pavani",
+          "rating": 5,
+          "text": "My experience at Medicare clinic was excellent. Sir and madam was very calm, friendly and staff also. They explained everything clearly and answered a…"
+        },
+        {
+          "name": "JaswanthRoyal",
+          "rating": 5,
+          "text": "I'm thrilled with my experience at medicare akin and hair clinic gudivada. The staff was friendly, and the office was clean. The treatment was remarka…"
+        }
+      ]
+    },
+    "akividu": {
+      "rating": 5,
+      "count": 826,
+      "uri": "https://maps.google.com/?cid=11408780748580307112&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "reviews": [
+        {
+          "name": "Sanjeep 015",
+          "rating": 5,
+          "text": "I had an amazing experience at this skin care center. I went for an acne treatment, and I could see visible improvement within a few days. The staff w…"
+        },
+        {
+          "name": "William Kery",
+          "rating": 5,
+          "text": "Best skin dr in akividu Dr Meghana madam treatment is very good and medication also superb\nMedication explanation was very good by staff tanq helath c…"
+        }
+      ]
+    }
   }
 };
 
