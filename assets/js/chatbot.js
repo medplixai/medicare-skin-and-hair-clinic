@@ -147,7 +147,7 @@
     } },
 
     { id: "hours", keys: ["timing", "timings", "time", "hours", "open", "closed", "సమయ", "టైమ్", "ఎప్పుడు", "గంటలు", "sunday", "ఆదివారం", "working"], fn: function () {
-      return "🕒 <strong>సమయాలు:</strong> సోమవారం – శనివారం, ఉ. 10–2 &amp; సా. 5–9.<br>ఆదివారం సెలవు." +
+      return "🕒 <strong>సమయాలు:</strong> సోమవారం – శనివారం · ఉ. 9:00 – మ. 2:00 &amp; సా. 4:00 – రా. 9:00.<br>మ. 2:00 – సా. 4:00 విరామం · ఆదివారం సెలవు." +
         acts([act(TEL, "📞 కాల్ చేయండి"), act("#contact", "అపాయింట్‌మెంట్", { primary: true, close: true })]);
     } },
 
