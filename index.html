@@ -34,6 +34,7 @@
   <!-- Favicons -->
   <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png" />
   <link rel="apple-touch-icon" href="assets/img/favicon-180.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
 
   <!-- Fonts: Anek Telugu (Telugu) + Poppins (Latin accents) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -131,6 +132,7 @@
   </script>
 </head>
 <body>
+  <a class="skip-link" href="#main">కంటెంట్‌కి వెళ్ళండి · Skip to content</a>
 
   <!-- ============ UTILITY BAR ============ -->
   <div class="topbar">
@@ -175,7 +177,7 @@
     </div>
   </header>
 
-  <main>
+  <main id="main">
 
     <!-- ============ HERO ============ -->
     <section class="hero hero--center" id="home">
@@ -281,7 +283,7 @@
         <div class="section__head reveal">
           <span class="eyebrow eyebrow--center">మెడికేర్ ప్రత్యేకత</span>
           <h2 class="section__title">చర్మం, జుట్టు &amp; గోళ్ళ వ్యాధులకు <span class="grad">సంపూర్ణ పరిష్కారం</span></h2>
-          <p class="section__lead">చర్మం, జుట్టు &amp; గోళ్ళ వ్యాధులకు ఉత్తమ &amp; సంపూర్ణ పరిష్కారం (best &amp; complete solution) — అనుభవజ్ఞులైన నిపుణులు, advanced AI, అన్ని రకాల ఆధునిక చికిత్సలు ఒకే చోట.</p>
+          <p class="section__lead">చర్మం, జుట్టు &amp; గోళ్ళ వ్యాధులకు సమగ్ర సంరక్షణ (comprehensive care) — అనుభవజ్ఞులైన నిపుణులు, advanced AI, అన్ని రకాల ఆధునిక చికిత్సలు ఒకే చోట.</p>
         </div>
 
         <div class="grid grid--3">
@@ -565,6 +567,7 @@
             <a href="tel:+919141247777" class="btn btn--primary btn--on-grad"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg> కాల్ చేయండి · 9141 247 777</a>
           </div>
         </div>
+        <p class="note-line" style="text-align:center;margin-top:1.2rem;">⚕️ టెలీకన్సల్టేషన్ — Telemedicine Practice Guidelines ప్రకారం నిర్వహించబడుతుంది. ఇది సాధారణ సలహా కోసమే; అత్యవసర వైద్య సేవలకు ప్రత్యామ్నాయం కాదు — అత్యవసరమైతే వెంటనే సమీప ఆసుపత్రిని సంప్రదించండి.</p>
       </div>
     </section>
 
@@ -717,19 +720,20 @@
           <img src="assets/img/app-icon-web.png" alt="మెడికేర్ స్కిన్ యాప్" class="app__icon" />
         </div>
         <div class="app__content reveal">
-          <span class="eyebrow">మొబైల్ యాప్</span>
-          <h2 class="section__title">మెడికేర్ యాప్‌ను <span class="grad">డౌన్‌లోడ్ చేయండి</span></h2>
-          <p>అపాయింట్‌మెంట్‌లు, చికిత్సా వివరాలు మరియు అప్‌డేట్‌లు — అన్నీ మీ ఫోన్‌లోనే. యాప్‌ను ఇప్పుడే డౌన్‌లోడ్ చేసుకోండి.</p>
+          <span class="eyebrow">మొబైల్ యాప్ · త్వరలో</span>
+          <h2 class="section__title">మెడికేర్ యాప్ <span class="grad">త్వరలో వస్తోంది</span></h2>
+          <p>అపాయింట్‌మెంట్‌లు, చికిత్సా వివరాలు మరియు అప్‌డేట్‌లు — త్వరలో మీ ఫోన్‌లోనే. అప్పటివరకు WhatsApp లేదా కాల్ ద్వారా సులభంగా బుక్ చేయండి.</p>
           <div class="app__badges">
-            <a href="#" class="store" aria-label="App Store నుండి డౌన్‌లోడ్ చేయండి">
+            <span class="store store--soon" aria-label="App Store — త్వరలో">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.5c0-2 1.6-3 1.7-3.1-1-1.4-2.4-1.6-2.9-1.6-1.2-.1-2.4.7-3 .7-.6 0-1.6-.7-2.6-.7-1.3 0-2.6.8-3.3 2-1.4 2.4-.4 6 1 8 .7 1 1.4 2 2.5 2 1 0 1.3-.6 2.5-.6s1.5.6 2.5.6 1.7-1 2.4-2c.7-1.1 1-2.1 1-2.2-.1 0-2.3-.9-2.3-3.4zM14.3 6.2c.5-.7.9-1.6.8-2.6-.8 0-1.8.6-2.4 1.2-.5.6-1 1.5-.8 2.4.9.1 1.8-.4 2.4-1z"/></svg>
-              <span><small>డౌన్‌లోడ్</small>App Store</span>
-            </a>
-            <a href="#" class="store" aria-label="Google Play నుండి డౌన్‌లోడ్ చేయండి">
+              <span><small>త్వరలో</small>App Store</span>
+            </span>
+            <span class="store store--soon" aria-label="Google Play — త్వరలో">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3.5v17l9.5-8.5L4 3.5zm11 7.2l2.6-2.3-9.1-5.2 6.5 7.5zm0 2.6l-6.5 7.5 9.1-5.2-2.6-2.3zm1.6-1.3l3-1.7c.7-.4.7-1.2 0-1.6l-3-1.7-3 2.5 3 2.5z"/></svg>
-              <span><small>డౌన్‌లోడ్</small>Google Play</span>
-            </a>
+              <span><small>త్వరలో</small>Google Play</span>
+            </span>
           </div>
+          <a href="#contact" class="btn btn--primary app__cta">WhatsApp లో అపాయింట్‌మెంట్ బుక్ చేయండి</a>
         </div>
       </div>
     </section>
@@ -813,6 +817,15 @@
             <select id="cf-branch" name="branch">
               <option value="కైకలూరు">కైకలూరు</option>
               <option value="భీమవరం">భీమవరం</option>
+              <option value="ఏలూరు">ఏలూరు</option>
+              <option value="గుడివాడ">గుడివాడ</option>
+              <option value="గన్నవరం">గన్నవరం</option>
+              <option value="నూజివీడు">నూజివీడు</option>
+              <option value="ఆకివీడు">ఆకివీడు (Healthcare Skin Hospitals)</option>
+              <option value="తాడేపల్లిగూడెం">తాడేపల్లిగూడెం</option>
+              <option value="మచిలీపట్నం">మచిలీపట్నం</option>
+              <option value="ఒంగోలు">ఒంగోలు</option>
+              <option value="ఏదైనా / దగ్గర్లోని శాఖ">ఏదైనా / దగ్గర్లోని శాఖ</option>
             </select>
           </div>
           <div class="field">
@@ -881,6 +894,7 @@
           <span aria-hidden="true">·</span>
           <a href="privacy.html">Privacy Policy</a>
         </nav>
+        <p class="footer__disclaimer">ℹ️ ఈ వెబ్‌సైట్‌లోని సమాచారం సాధారణ అవగాహన కోసమే — వ్యక్తిగత వైద్య సలహాకు ప్రత్యామ్నాయం కాదు. ఫలితాలు వ్యక్తికి బట్టి మారవచ్చు; సరైన చికిత్స కోసం మా నిపుణులను సంప్రదించండి. అత్యవసరమైతే వెంటనే సమీప ఆసుపత్రిని సంప్రదించండి.</p>
         <p class="footer__tag">చర్మ · జుట్టు · లేజర్ · సౌందర్యం</p>
       </div>
     </div>
@@ -925,11 +939,30 @@
     </form>
   </div>
 
+  <!-- Cookie / third-party embed notice -->
+  <div class="cookie" id="cookieNotice" role="dialog" aria-label="Cookie notice">
+    <p>ఈ సైట్ సరిగ్గా పనిచేయడానికి అవసరమైన cookies, మరియు Google Maps / WhatsApp వంటి సేవలను వాడుతుంది. కొనసాగడం ద్వారా మీరు మా <a href="privacy.html">ప్రైవసీ పాలసీ</a>ని అంగీకరిస్తున్నారు.</p>
+    <div class="cookie__row">
+      <button class="btn btn--primary" id="cookieOk" type="button">అంగీకరిస్తున్నాను · Accept</button>
+    </div>
+  </div>
+
   <script src="assets/js/branches.js"></script>
   <script src="assets/js/results.js"></script>
   <script src="assets/js/pricing.js"></script>
   <script src="assets/js/main.js"></script>
   <script src="assets/js/reviews.js"></script>
   <script src="assets/js/chatbot.js"></script>
+  <script>
+    /* Cookie / embed consent notice */
+    (function () {
+      try {
+        var c = document.getElementById('cookieNotice'), ok = document.getElementById('cookieOk');
+        if (!c || !ok) return;
+        if (localStorage.getItem('mc_cookie_ok') !== '1') setTimeout(function () { c.classList.add('show'); }, 1200);
+        ok.addEventListener('click', function () { try { localStorage.setItem('mc_cookie_ok', '1'); } catch (e) {} c.classList.remove('show'); });
+      } catch (e) {}
+    })();
+  </script>
 </body>
 </html>
