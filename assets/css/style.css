@@ -915,9 +915,9 @@ body.chat-open .chat-launch, body.chat-open .totop{ opacity:0; pointer-events:no
 
 .bx .branch__map{ margin:.25rem 0; height:165px; }
 
-.bx__actions{ display:flex; gap:.5rem; margin-top:auto; padding-top:.3rem; }
+.bx__actions{ display:flex; flex-wrap:wrap; gap:.5rem; margin-top:auto; padding-top:.3rem; }
 .bx__btn{
-  flex:1; display:inline-flex; align-items:center; justify-content:center; gap:.35rem;
+  flex:1; min-width:80px; display:inline-flex; align-items:center; justify-content:center; gap:.35rem;
   font-weight:700; font-size:.86rem; padding:.62rem .4rem; border-radius:var(--r-pill);
   transition:background .2s, color .2s, transform .2s, box-shadow .2s;
 }
@@ -932,6 +932,17 @@ body.chat-open .chat-launch, body.chat-open .totop{ opacity:0; pointer-events:no
 .bx__btn--dir{ background:var(--ink); color:#fff; }
 .bx__btn--dir svg{ fill:none; stroke:#fff; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
 .bx__btn--dir:hover{ transform:translateY(-2px); }
+.bx__btn--ig{ background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5); color:#fff; box-shadow:0 6px 14px rgba(214,41,118,.3); }
+.bx__btn--ig svg{ fill:none; stroke:#fff; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.bx__btn--ig:hover{ transform:translateY(-2px); box-shadow:0 10px 20px rgba(214,41,118,.42); filter:saturate(1.08); }
+
+/* Footer Instagram / social */
+.footer__social{ display:flex; align-items:center; gap:.7rem; margin-top:1.1rem; }
+.footer__social-link{ width:42px; height:42px; flex:none; border-radius:12px; display:grid; place-items:center;
+  background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5); box-shadow:0 6px 16px rgba(214,41,118,.36); transition:transform .2s; }
+.footer__social-link svg{ width:22px; height:22px; fill:none; stroke:#fff; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.footer__social-link:hover{ transform:translateY(-2px) scale(1.05); }
+.footer__social-note{ font-size:.78rem; color:rgba(255,255,255,.62); line-height:1.45; }
 
 @media (max-width:760px){ .branch-list{ grid-template-columns:1fr; } }
 

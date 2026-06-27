@@ -204,6 +204,7 @@ window.MEDICARE_BRANCHES = [
     mapsUrl: "https://maps.app.goo.gl/HFZcis2fraDKAbANA",
     phones: ["9141247777", "08677223344"],
     whatsapp: "919141247777",
+    instagram: "https://www.instagram.com/medicareskinandhairclinickklr",
     clinicPhoto: "assets/img/branches/kaikaluru.jpg",
     doctor: { name: "డా. మేఘన", quals: "MBBS, MD, DVL (గోల్డ్ మెడలిస్ట్)", initial: "మే", photo: "assets/img/doctors/meghana.jpg" }
   },
@@ -214,6 +215,7 @@ window.MEDICARE_BRANCHES = [
     mapsUrl: "https://maps.app.goo.gl/jtQiq29Td5WY8kuQ9",
     phones: ["9573124777", "9573125777"],
     whatsapp: "919573124777",
+    instagram: "https://www.instagram.com/medicare_skin_bhimavaram",
     clinicPhoto: "assets/img/branches/bhimavaram.jpg",
     doctor: { name: "డా. శృతి", quals: "MBBS, MD, DVL", initial: "శృ", photo: "assets/img/doctors/shruti.jpg" }
   },
@@ -224,6 +226,7 @@ window.MEDICARE_BRANCHES = [
     mapsUrl: "https://maps.app.goo.gl/uibGorHRuuHGEUcAA",
     phones: ["9988167779"],
     whatsapp: "919988167779",
+    instagram: "https://www.instagram.com/gannavaram_medicareskinclinic",
     clinicPhoto: "assets/img/branches/gannavaram.jpg",
     doctors: [
       { name: "డా. సాత్విక", quals: "MBBS, MD, DVL", initial: "సా", photo: "assets/img/doctors/satvika.jpg" },
@@ -237,6 +240,7 @@ window.MEDICARE_BRANCHES = [
     mapsUrl: "https://maps.app.goo.gl/yNLqPmLvZeddiXEt9",
     phones: ["9535363536"],
     whatsapp: "919535363536",
+    instagram: "https://www.instagram.com/nuzivid_medicareskinclinic",
     clinicPhoto: "assets/img/branches/nuzvid.jpg",
     doctor: { name: "డా. సౌమ్య", quals: "MBBS, MD, DVL", initial: "సౌ", photo: "assets/img/doctors/soumya.jpg" }
   },
@@ -247,6 +251,7 @@ window.MEDICARE_BRANCHES = [
     mapsUrl: "https://maps.app.goo.gl/YqVA5ydieFBMhkyM9",
     phones: ["9988267779"],
     whatsapp: "919988267779",
+    instagram: "https://www.instagram.com/eluru_medicare_skin_clinic",
     clinicPhoto: "assets/img/branches/eluru.jpg",
     doctor: { name: "డా. కమ్మ సాయి దివిజ", quals: "MBBS, MD, DVL", initial: "కా", photo: "assets/img/doctors/sai-divija.jpg" }
   },
@@ -267,6 +272,7 @@ window.MEDICARE_BRANCHES = [
     mapsUrl: "https://maps.app.goo.gl/R3EpNzh8KvWarq7K7",
     phones: ["9515830777", "9515831777"],
     whatsapp: "919515830777",
+    instagram: "https://www.instagram.com/medicare_skin_clinic_ongole",
     clinicPhoto: "assets/img/branches/ongole.jpg",
     doctor: { name: "డా. సాయిదీప్తి", quals: "MBBS, MD, DVL", initial: "సా", photo: "assets/img/doctors/sai-deepthi.jpg" }
   },
@@ -287,6 +293,7 @@ window.MEDICARE_BRANCHES = [
     mapsUrl: "https://maps.app.goo.gl/RML6zPfHdLjcJWfD9",
     phones: ["7618882888"],
     whatsapp: "917618882888",
+    instagram: "https://www.instagram.com/gudivada_medicareskinclinic",
     clinicPhoto: "assets/img/branches/gudivada.jpg",
     doctor: { name: "డా. అనన్య బొల్లినేని", quals: "MBBS, MD, DVL", initial: "అ", photo: "assets/img/doctors/ananya.jpg" }
   },
@@ -297,6 +304,7 @@ window.MEDICARE_BRANCHES = [
     mapsUrl: "https://maps.app.goo.gl/7A4WENmD7EjfaCo69",
     phones: ["9734117777", "7241122333"],
     whatsapp: "919734117777",
+    instagram: "https://www.instagram.com/akivid_healthcareskinclinic",
     clinicPhoto: "assets/img/branches/akividu.jpg",
     doctor: { name: "డా. మేఘన", quals: "MBBS, MD, DVL (గోల్డ్ మెడలిస్ట్)", initial: "మే", photo: "assets/img/doctors/meghana.jpg" }
   }
@@ -411,6 +419,7 @@ window.MEDICARE_BRANCHES = [
           '<a class="bx__btn bx__btn--call" href="' + telOf(b.phones[0]) + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>కాల్</a>' +
           '<a class="bx__btn bx__btn--wa" href="' + waHref(b) + '" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15l-1 4 4.1-1A10 10 0 1 0 12 2z"/></svg>WhatsApp</a>' +
           '<a class="bx__btn bx__btn--dir" href="' + dirHref(b) + '" target="_blank" rel="noopener">' + PIN + 'దారి</a>' +
+          (b.instagram ? '<a class="bx__btn bx__btn--ig" href="' + b.instagram + '" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.3"/></svg>Insta</a>' : '') +
         '</div>' +
       '</div>' +
     '</article>';
