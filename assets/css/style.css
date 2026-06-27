@@ -1040,6 +1040,10 @@ body.chat-open .chat-launch, body.chat-open .totop{ opacity:0; pointer-events:no
 .store--soon small{ color:var(--pink-600) !important; font-weight:700; }
 .app__cta{ margin-top:1.4rem; }
 
+/* Per-branch landing-page link on each branch card */
+.bx__page-link{ display:inline-block; margin:.1rem 0 .3rem; font-size:.84rem; font-weight:600; color:var(--pink-700); text-decoration:none; }
+.bx__page-link:hover{ text-decoration:underline; color:var(--pink-600); }
+
 /* Compliance / safety notes */
 .note-line{ font-size:.82rem; color:var(--muted); line-height:1.6; }
 .tele-note{ margin-top:1rem; font-size:.8rem; color:rgba(255,255,255,.8); }

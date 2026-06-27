@@ -236,6 +236,7 @@ window.MEDICARE_BRANCHES = [
           '</div>' +
         '</div>' +
         '<p class="bx__addr">' + PIN + addr + '</p>' +
+        '<a class="bx__page-link" href="' + b.slug + '.html">' + b.town + ' (' + b.mapsName + ') శాఖ వివరాలు →</a>' +
         '<p class="bx__phone"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>' + phoneText + '</p>' +
         '<div class="branch__map">' +
           '<span class="branch__map-ph" aria-hidden="true">' + PIN + b.town + '</span>' +

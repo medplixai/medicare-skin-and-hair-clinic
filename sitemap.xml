@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://medicareskinandhairclinic.com/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://medicareskinandhairclinic.com/terms.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://medicareskinandhairclinic.com/privacy.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
+  <url><loc>https://medicareskinandhairclinic.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://medicareskinandhairclinic.com/kaikaluru.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://medicareskinandhairclinic.com/bhimavaram.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://medicareskinandhairclinic.com/eluru.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://medicareskinandhairclinic.com/gudivada.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://medicareskinandhairclinic.com/gannavaram.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://medicareskinandhairclinic.com/nuzvid.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://medicareskinandhairclinic.com/akividu.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://medicareskinandhairclinic.com/tadepalligudem.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://medicareskinandhairclinic.com/machilipatnam.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://medicareskinandhairclinic.com/ongole.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://medicareskinandhairclinic.com/terms.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://medicareskinandhairclinic.com/privacy.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
 </urlset>
