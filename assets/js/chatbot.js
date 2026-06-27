@@ -110,6 +110,11 @@
         acts([act("#hair-transplant", "వివరాలు చూడండి", { close: true }), act("#contact", "ఉచిత సంప్రదింపు", { primary: true, close: true })]);
     } },
 
+    { id: "technology", keys: ["technology", "equipment", "machine", "usfda", "us-fda", "fda", "alma", "quanta", "co2", "q-switch", "qswitch", "follirich", "laser brand", "టెక్నాలజీ", "పరికర", "మెషిన్", "లేజర్ బ్రాండ్"], fn: function () {
+      return "🔬 <strong>అధునాతన టెక్నాలజీ</strong> — మేము అంతర్జాతీయ బ్రాండ్ల పరికరాలు వాడతాం: <strong>Alma Soprano Titanium</strong>, <strong>Quanta System</strong> (Discovery Pico), Fractional CO₂, Q-switched Nd:YAG — పలు లేజర్‌లు <strong>US-FDA 510(k) cleared</strong>. అలాగే Hydra ఫేషియల్ · FolliRich GFC/PRP · FUE &amp; DHI.<br><small>FDA clearance నిర్దిష్ట పరికరాలకే వర్తిస్తుంది; ఫలితాలు వ్యక్తికి మారవచ్చు.</small>" +
+        acts([act("#technology", "అన్ని పరికరాలు చూడండి", { close: true }), act("#contact", "అపాయింట్‌మెంట్", { primary: true, close: true })]);
+    } },
+
     { id: "hair", keys: ["hair fall", "hairfall", "hair loss", "జుట్టు రాల", "జుట్టు రాలు", "prp", "gfc", "మెసో", "mesotherapy", "dandruff", "చుండ్రు", "జుట్టు సమస్య"], fn: function (t) {
       var p = priceLookup(t), px = p && p.length ? "<br>సుమారు ధర: " + p.map(function (h) { return esc(h.name) + " — " + inr(h.price) + " నుండి"; }).join("; ") : "";
       return "జుట్టు రాలటం, చుండ్రు, బట్టతల వంటి సమస్యలకు మేము PRP, GFC, mesotherapy, hair transplant వంటి చికిత్సలు అందిస్తాం. సరైన diagnosis కోసం consultation బుక్ చేయండి." + px +
@@ -177,6 +182,7 @@
     // strong specific routing so the generic "price" intent doesn't steal these
     if (/transplant|ట్రాన్స్‌ప్లాంట్|బట్టతల|\bfue\b|\bdhi\b/.test(t)) return intentById("hairtransplant").fn(t);
     if (/\btele|teleconsult|ఆన్‌లైన్|వీడియో|టెలీ/.test(t)) return intentById("teleconsult").fn(t);
+    if (/technology|equipment|machine|us-?fda|\bfda\b|alma|quanta|q-?switch|qswitch|follirich|\bco2\b|laser brand|టెక్నాలజీ|పరికర|మెషిన్/.test(t)) return intentById("technology").fn(t);
     var b = findBranch(t);
     var best = null, bestScore = 0;
     INTENTS.forEach(function (it) {
