@@ -1044,6 +1044,24 @@ body.chat-open .chat-launch, body.chat-open .totop{ opacity:0; pointer-events:no
 .bx__page-link{ display:inline-block; margin:.1rem 0 .3rem; font-size:.84rem; font-weight:600; color:var(--pink-700); text-decoration:none; }
 .bx__page-link:hover{ text-decoration:underline; color:var(--pink-600); }
 
+/* Quick cost estimator */
+.estimator{ background:linear-gradient(135deg, var(--pink-tint), #fff); border:1px solid var(--pink-soft);
+  border-radius:var(--r-lg); padding:clamp(1.2rem,3vw,1.8rem); margin:0 auto clamp(2rem,4vw,2.8rem); max-width:760px;
+  box-shadow:0 14px 36px -20px rgba(214,69,143,.4); }
+.estimator__head{ display:flex; align-items:center; gap:.8rem; margin-bottom:1rem; }
+.estimator__ic{ font-size:1.8rem; flex:none; }
+.estimator__head h3{ font-size:1.15rem; font-weight:700; }
+.estimator__head p{ font-size:.88rem; color:var(--muted); margin-top:.1rem; }
+.estimator__row{ display:flex; gap:1rem 1.4rem; align-items:center; flex-wrap:wrap; }
+.estimator__row select{ flex:1; min-width:240px; padding:.7rem .9rem; border:1px solid var(--line); border-radius:12px;
+  font-family:inherit; font-size:.95rem; background:#fff; outline:none; transition:border-color .2s; }
+.estimator__row select:focus{ border-color:var(--pink); }
+.estimator__result{ display:flex; flex-direction:column; min-width:160px; }
+.estimator__result strong{ color:var(--pink-700); font-size:1.55rem; line-height:1.1; }
+.estimator__result small{ color:var(--muted); font-size:.74rem; margin-top:.25rem; max-width:32ch; }
+.estimator__gst{ font-size:.68rem; font-weight:700; background:var(--pink); color:#fff; padding:.12rem .5rem; border-radius:var(--r-pill); vertical-align:middle; }
+.estimator__cta{ margin-top:1.2rem; }
+
 /* Compliance / safety notes */
 .note-line{ font-size:.82rem; color:var(--muted); line-height:1.6; }
 .tele-note{ margin-top:1rem; font-size:.8rem; color:rgba(255,255,255,.8); }

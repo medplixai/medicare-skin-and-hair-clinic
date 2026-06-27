@@ -418,6 +418,24 @@
           <p class="section__lead">USFDA ఆమోదిత యంత్రాలతో — అన్ని రకాల lasers, cosmetic &amp; aesthetic treatments ఒకే చోట. ధరలు “నుండి” సూచనగా మాత్రమే — చర్మ పరిస్థితిని బట్టి మారవచ్చు.</p>
         </div>
 
+        <!-- Quick cost estimator -->
+        <div class="estimator reveal" id="estimator">
+          <div class="estimator__head">
+            <span class="estimator__ic" aria-hidden="true">🧮</span>
+            <div>
+              <h3>ధర అంచనా · Quick Cost Estimator</h3>
+              <p>చికిత్స ఎంచుకోండి — “నుండి” ధర వెంటనే చూడండి.</p>
+            </div>
+          </div>
+          <div class="estimator__row">
+            <select id="estTreatment" aria-label="చికిత్స ఎంచుకోండి">
+              <option value="">— చికిత్స ఎంచుకోండి / Select a treatment —</option>
+            </select>
+            <div class="estimator__result" id="estResult" aria-live="polite"></div>
+          </div>
+          <a href="#contact" class="btn btn--primary estimator__cta" id="estCta" style="display:none">ఖచ్చితమైన ధర కోసం బుక్ చేయండి</a>
+        </div>
+
         <!-- Signature treatments (image showcase) — rendered by pricing.js -->
         <div class="tx-grid" id="signatureList"></div>
 
@@ -968,6 +986,31 @@
         if (localStorage.getItem('mc_cookie_ok') !== '1') setTimeout(function () { c.classList.add('show'); }, 1200);
         ok.addEventListener('click', function () { try { localStorage.setItem('mc_cookie_ok', '1'); } catch (e) {} c.classList.remove('show'); });
       } catch (e) {}
+    })();
+
+    /* Quick cost estimator — populated from the live pricing data */
+    (function () {
+      var P = window.MEDICARE_PRICING; if (!P) return;
+      var sel = document.getElementById('estTreatment'), res = document.getElementById('estResult'), cta = document.getElementById('estCta');
+      if (!sel) return;
+      var items = [], seen = {};
+      function add(label, from, gst) {
+        if (from == null || from === '—' || from === '') return;
+        if (seen[label]) return; seen[label] = 1;
+        items.push({ label: label, from: from, gst: !!gst });
+      }
+      (P.signature || []).forEach(function (s) { add((s.nameTe ? s.nameTe + ' · ' : '') + s.name, s.from, true); });
+      (P.categories || []).forEach(function (c) {
+        (c.rows || []).forEach(function (r) { if (!r.sub && r.n) add(r.n, r.p && r.p[0], c.gstAll || r.gst); });
+      });
+      items.forEach(function (it, i) { var o = document.createElement('option'); o.value = i; o.textContent = it.label; sel.appendChild(o); });
+      function inr(v) { var n = Number(v); return isNaN(n) ? v : '₹' + n.toLocaleString('en-IN'); }
+      sel.addEventListener('change', function () {
+        var it = items[sel.value];
+        if (!it) { res.innerHTML = ''; cta.style.display = 'none'; return; }
+        res.innerHTML = '<strong>' + inr(it.from) + '</strong> నుండి' + (it.gst ? ' <span class="estimator__gst">+ GST</span>' : '') + '<small>* చర్మ పరిస్థితిని బట్టి మారవచ్చు · ఖచ్చితమైన ధర consultation లో</small>';
+        cta.style.display = '';
+      });
     })();
   </script>
 </body>
