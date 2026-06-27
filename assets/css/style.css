@@ -1072,6 +1072,11 @@ body.chat-open .chat-launch, body.chat-open .totop{ opacity:0; pointer-events:no
   box-shadow:0 12px 28px -10px rgba(214,69,143,.6); }
 .badge-free strong{ font-weight:800; }
 
+/* EMI line on the hair-transplant gradient band */
+.ht-emi{ margin-top:.8rem; display:inline-block; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.32);
+  color:#fff; font-size:.9rem; line-height:1.5; padding:.5rem 1rem; border-radius:14px; }
+.ht-emi strong{ color:#fff; font-weight:700; }
+
 /* Compliance / safety notes */
 .note-line{ font-size:.82rem; color:var(--muted); line-height:1.6; }
 .tele-note{ margin-top:1rem; font-size:.8rem; color:rgba(255,255,255,.8); }
