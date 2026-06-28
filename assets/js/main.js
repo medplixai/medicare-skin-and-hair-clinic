@@ -141,9 +141,9 @@
     avatar.insertBefore(img, avatar.firstChild);
   });
 
-  /* ---- Hero headline: crossfade Telugu <-> English (Telugu primary) ---- */
-  const swap = $("#heroSwap"), leadEl = $("#heroLead"), rot = $("#heroRotate");
-  if (swap && leadEl && rot) {
+  /* ---- Hero headline: typewriter, alternating Telugu <-> English (Telugu primary) ---- */
+  const leadEl = $("#heroLead"), rot = $("#heroRotate");
+  if (leadEl && rot) {
     const LEAD = { te: "మీ చర్మం, జుట్టు & గోళ్ళ ఆరోగ్యానికి", en: "Your skin, hair & nail health —" };
     const PAIRS = [
       { te: "నమ్మదగిన చిరునామా", en: "a trusted name" },
@@ -151,27 +151,37 @@
       { te: "నిపుణుల సంరక్షణ", en: "expert care" },
       { te: "అందమైన ఫలితాలు", en: "beautiful results" }
     ];
-    // alternate Telugu then English for each phrase -> Telugu shown first & every other slide
+    // alternate Telugu then English -> Telugu shown first & on every other slide
     const order = [];
     PAIRS.forEach(function (p) {
       order.push({ lead: LEAD.te, phrase: p.te });
       order.push({ lead: LEAD.en, phrase: p.en });
     });
+    const seg = (window.Intl && Intl.Segmenter) ? new Intl.Segmenter("te", { granularity: "grapheme" }) : null;
+    const clusters = (s) => seg ? Array.from(seg.segment(s), (x) => x.segment) : Array.from(s);
+    let pi = 0, gi = clusters(order[0].phrase).length, del = true;
+    const type = () => {
+      const g = clusters(order[pi].phrase);
+      if (del) {
+        gi--;
+        rot.textContent = g.slice(0, Math.max(gi, 0)).join("");
+        if (gi <= 0) {
+          del = false;
+          pi = (pi + 1) % order.length;
+          leadEl.textContent = order[pi].lead;   // swap lead language while phrase is empty
+          gi = 0;
+          return setTimeout(type, 350);
+        }
+        return setTimeout(type, 42);
+      }
+      gi++;
+      const ng = clusters(order[pi].phrase);
+      rot.textContent = ng.slice(0, gi).join("");
+      if (gi >= ng.length) { del = true; return setTimeout(type, 1700); }
+      return setTimeout(type, 90);
+    };
     const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!reduce) {
-      var i = 0;
-      var step = function () {
-        i = (i + 1) % order.length;
-        swap.style.opacity = "0";
-        setTimeout(function () {
-          leadEl.textContent = order[i].lead;
-          rot.textContent = order[i].phrase;
-          swap.style.opacity = "1";
-        }, 380);
-        setTimeout(step, 3400);
-      };
-      setTimeout(step, 3000);
-    }
+    if (!reduce) setTimeout(type, 1600);
   }
 
   /* ---- Footer year ---- */
