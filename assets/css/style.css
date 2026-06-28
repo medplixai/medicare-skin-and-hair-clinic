@@ -102,6 +102,7 @@ input,select,textarea{ font-family:inherit; font-size:1rem; }
   font-weight:800; line-height:1.18; letter-spacing:-.5px;
   font-size:clamp(1.7rem, 3.6vw, 2.7rem); margin:.7rem 0 .6rem;
 }
+.section__title-te{ display:block; font-weight:500; font-size:.92rem; color:var(--muted); margin:-.1rem 0 .5rem; line-height:1.4; }
 .section__lead{ color:var(--ink-2); font-size:clamp(1rem,1.4vw,1.12rem); }
 
 /* Decorative blobs */
