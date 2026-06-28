@@ -141,29 +141,37 @@
     avatar.insertBefore(img, avatar.firstChild);
   });
 
-  /* ---- Hero rotating phrase (grapheme-safe Telugu typewriter) ---- */
-  const rot = $("#heroRotate");
-  if (rot) {
-    const phrases = ["a trusted name", "modern treatments", "expert care", "beautiful results"];
-    const seg = (window.Intl && Intl.Segmenter) ? new Intl.Segmenter("te", { granularity: "grapheme" }) : null;
-    const clusters = (s) => seg ? Array.from(seg.segment(s), (x) => x.segment) : Array.from(s);
-    let pi = 0, gi = clusters(phrases[0]).length, del = true;
-    const type = () => {
-      const g = clusters(phrases[pi]);
-      if (del) {
-        gi--;
-        rot.textContent = g.slice(0, Math.max(gi, 0)).join("");
-        if (gi <= 0) { del = false; pi = (pi + 1) % phrases.length; gi = 0; return setTimeout(type, 300); }
-        return setTimeout(type, 45);
-      }
-      gi++;
-      const ng = clusters(phrases[pi]);
-      rot.textContent = ng.slice(0, gi).join("");
-      if (gi >= ng.length) { del = true; return setTimeout(type, 1700); }
-      return setTimeout(type, 95);
-    };
+  /* ---- Hero headline: crossfade Telugu <-> English (Telugu primary) ---- */
+  const swap = $("#heroSwap"), leadEl = $("#heroLead"), rot = $("#heroRotate");
+  if (swap && leadEl && rot) {
+    const LEAD = { te: "మీ చర్మం, జుట్టు & గోళ్ళ ఆరోగ్యానికి", en: "Your skin, hair & nail health —" };
+    const PAIRS = [
+      { te: "నమ్మదగిన చిరునామా", en: "a trusted name" },
+      { te: "ఆధునిక చికిత్సలు", en: "modern treatments" },
+      { te: "నిపుణుల సంరక్షణ", en: "expert care" },
+      { te: "అందమైన ఫలితాలు", en: "beautiful results" }
+    ];
+    // alternate Telugu then English for each phrase -> Telugu shown first & every other slide
+    const order = [];
+    PAIRS.forEach(function (p) {
+      order.push({ lead: LEAD.te, phrase: p.te });
+      order.push({ lead: LEAD.en, phrase: p.en });
+    });
     const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!reduce) setTimeout(type, 1800);
+    if (!reduce) {
+      var i = 0;
+      var step = function () {
+        i = (i + 1) % order.length;
+        swap.style.opacity = "0";
+        setTimeout(function () {
+          leadEl.textContent = order[i].lead;
+          rot.textContent = order[i].phrase;
+          swap.style.opacity = "1";
+        }, 380);
+        setTimeout(step, 3400);
+      };
+      setTimeout(step, 3000);
+    }
   }
 
   /* ---- Footer year ---- */
