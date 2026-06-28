@@ -362,13 +362,19 @@ input,select,textarea{ font-family:inherit; font-size:1rem; }
 }
 
 /* Premium glass trust badges */
-.hero__badges{ display:flex; flex-wrap:wrap; justify-content:center; gap:.55rem .65rem; margin:.15rem 0; }
+.hero__badges{ display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:.55rem .65rem; margin:.15rem 0; }
 .hero__badge{ display:inline-flex; align-items:center; gap:.45rem; padding:.5rem .9rem; border-radius:var(--r-pill);
   background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.36); backdrop-filter:blur(8px);
   color:#fff; font-size:.86rem; font-weight:600; white-space:nowrap; box-shadow:0 8px 22px rgba(0,0,0,.22); }
 .hero__badge strong{ font-family:var(--font-en); font-weight:800; }
 .hero__badge .stars{ color:#ffd54a; letter-spacing:.5px; font-size:.82em; }
 .hero__badge .ic{ width:15px; height:15px; flex:none; fill:none; stroke:#fff; stroke-width:1.8; stroke-linejoin:round; stroke-linecap:round; }
+/* Google rating badge: rating on top, total review count below */
+.hero__badge--g{ flex-direction:column; gap:.06rem; padding:.42rem 1.05rem; }
+.hero__badge-top{ display:inline-flex; align-items:center; gap:.42rem; line-height:1; }
+.hero__badge-top strong{ font-size:1.02rem; }
+.hero__badge-sub{ font-family:var(--font-en); font-weight:600; font-size:.72rem; color:rgba(255,255,255,.88); letter-spacing:.01em; }
+.hero__badge-sub strong{ font-weight:800; }
 .hero__actions{ display:flex; flex-wrap:wrap; gap:.9rem; margin:1.7rem 0 1.4rem; }
 .hero__trust{ display:flex; flex-wrap:wrap; gap:.4rem 1.3rem; color:var(--pink-700); font-weight:600; font-size:.92rem; }
 
