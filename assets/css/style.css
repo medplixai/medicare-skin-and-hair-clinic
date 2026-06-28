@@ -584,7 +584,7 @@ th.ptable__num{ color:var(--pink-700); }
 .pricing__note{ text-align:center; color:var(--muted); font-size:.9rem; margin:1.6rem auto 1.8rem; max-width:600px; }
 
 /* ---------- Doctors ---------- */
-.doctors{ display:flex; flex-wrap:wrap; justify-content:center; align-items:center; padding-top:1rem; }
+.doctors{ display:flex; flex-wrap:wrap; justify-content:center; align-items:stretch; padding-top:1rem; }
 .doctors .doctor{
   flex:0 1 340px;
   background:#fff; border:1px solid var(--line); border-radius:var(--r-lg);
