@@ -104,9 +104,9 @@ input,select,textarea{ font-family:inherit; font-size:1rem; }
 }
 .section__title-te{ display:block; font-weight:500; font-size:.92rem; color:var(--muted); margin:-.1rem 0 .5rem; line-height:1.4; }
 .section__lead{ color:var(--ink-2); font-size:clamp(1rem,1.4vw,1.12rem); }
-.section__banner{ width:100%; border-radius:var(--r-card); display:block; margin-top:2rem; object-fit:cover; max-height:420px; }
+.section__banner{ width:100%; border-radius:var(--r-card); display:block; margin-top:2rem; }
 .section__banner-duo{ display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; margin-top:2rem; }
-.section__banner-duo img{ width:100%; border-radius:var(--r-card); object-fit:cover; max-height:300px; }
+.section__banner-duo img{ width:100%; border-radius:var(--r-card); display:block; }
 @media(max-width:640px){ .section__banner-duo{ grid-template-columns:1fr; } }
 
 /* Decorative blobs */
