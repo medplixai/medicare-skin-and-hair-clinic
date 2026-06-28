@@ -900,17 +900,17 @@ body.chat-open .chat-launch, body.chat-open .totop{ opacity:0; pointer-events:no
 
 .medics{ display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
 .medic{
-  display:flex; align-items:center; gap:.9rem;
+  display:flex; align-items:center; gap:1.1rem;
   background:#fff; border:1px solid var(--line); border-radius:var(--r);
-  padding:.9rem 1rem; box-shadow:var(--shadow-sm);
+  padding:1.1rem 1.15rem; box-shadow:var(--shadow-sm);
   transition:transform .25s var(--ease), box-shadow .25s, border-color .25s;
 }
 .medic:hover{ transform:translateY(-4px); box-shadow:var(--shadow); border-color:var(--pink-soft); }
 .medic__avatar{
-  width:52px; height:52px; flex:none; border-radius:50%; position:relative; overflow:hidden;
+  width:92px; height:92px; flex:none; border-radius:50%; position:relative; overflow:hidden;
   background:var(--grad); color:#fff; display:grid; place-items:center;
-  font-weight:800; font-size:1.15rem; box-shadow:0 8px 18px rgba(214,69,143,.28);
-  border:3px solid #fff; outline:2px solid var(--pink-soft);
+  font-weight:800; font-size:1.9rem; box-shadow:0 10px 22px rgba(214,69,143,.3);
+  border:4px solid #fff; outline:2px solid var(--pink-soft);
 }
 .medic__body{ display:flex; flex-direction:column; gap:.12rem; min-width:0; }
 .medic__body h4{ font-size:1.08rem; font-weight:700; }
