@@ -3,10 +3,10 @@
    ---------------------------------------------------------------------
    A self-contained, data-driven assistant. It reads the LIVE site data
    (window.MEDICARE_BRANCHES + window.MEDICARE_PRICING) so prices, phones,
-   addresses & doctors stay in sync automatically. Replies are in English;
-   intent matching still understands Telugu + transliterations. No backend.
-   (To upgrade to a live LLM later, replace respond() with a fetch() to a
-   server endpoint that holds the API key — never put a key in this file.)
+   addresses & doctors stay in sync automatically. Replies are in Telugu;
+   intent matching understands Telugu + English + common transliterations.
+   No backend / API key. (To upgrade to a live LLM later, replace respond()
+   with a fetch() to a server endpoint that holds the key — never here.)
    ===================================================================== */
 (function () {
   "use strict";
@@ -51,21 +51,21 @@
   }
   function branchAnswer(b) {
     var ph = (b.phones || []).map(function (p) { return '<a href="' + telHref(p) + '">' + fmtPhone(p) + "</a>"; }).join(" · ");
-    return "<strong>" + esc(b.town) + (b.mapsName ? " (" + esc(b.mapsName) + ")" : "") + "</strong> branch:<br>" +
+    return "<strong>" + esc(b.town) + (b.mapsName ? " (" + esc(b.mapsName) + ")" : "") + "</strong> శాఖ:<br>" +
       "📍 " + esc(b.address || "") + "<br>" +
       (ph ? "📞 " + ph + "<br>" : "") +
       (docOf(b) ? "🩺 " + esc(docOf(b)) + "<br>" : "") +
       acts([
-        b.phones && b.phones[0] ? act(telHref(b.phones[0]), "📞 Call") : "",
-        b.mapsUrl ? act(b.mapsUrl, "📍 Directions (Map)", { blank: true }) : "",
-        act("#contact", "Book appointment", { primary: true, close: true })
+        b.phones && b.phones[0] ? act(telHref(b.phones[0]), "📞 కాల్ చేయండి") : "",
+        b.mapsUrl ? act(b.mapsUrl, "📍 దారి (Map)", { blank: true }) : "",
+        act("#contact", "అపాయింట్‌మెంట్", { primary: true, close: true })
       ].filter(Boolean));
   }
   function branchesList() {
-    var towns = branches().map(function (b) { return esc(b.mapsName || b.town); }).join(" · ");
-    return "We have <strong>10+ branches</strong> across Andhra Pradesh:<br>" + towns +
-      "<br>👉 Type a <strong>town name</strong> for that branch's details (address, phone, doctor)." +
-      acts([act("#branches", "See all branches", { close: true })]);
+    var towns = branches().map(function (b) { return esc(b.town); }).join(" · ");
+    return "మాకు ఆంధ్రప్రదేశ్ అంతటా <strong>10+ శాఖలు</strong> ఉన్నాయి:<br>" + towns +
+      "<br>👉 ఏ ఊరి శాఖ వివరాలు (అడ్రస్, ఫోన్, డాక్టర్) కావాలో ఆ <strong>ఊరి పేరు</strong> టైప్ చేయండి." +
+      acts([act("#branches", "అన్ని శాఖలు చూడండి", { close: true })]);
   }
 
   function priceLookup(t) {
@@ -90,88 +90,88 @@
 
   /* ---------- intents ---------- */
   function greeting() {
-    return "Hi! 🌸 I'm the <strong>Medicare AI Assistant</strong>. Ask me anything about skin, hair &amp; nail treatments, prices, branches or appointments. Pick a topic below or type your question. 👇";
+    return "నమస్తే! 🌸 నేను <strong>మెడికేర్ AI అసిస్టెంట్</strong>. చర్మం, జుట్టు, గోళ్ళ చికిత్సలు, ధరలు, శాఖలు, అపాయింట్‌మెంట్ — ఏదైనా అడగండి. క్రింద ఒక అంశం ఎంచుకోండి లేదా మీ ప్రశ్న టైప్ చేయండి. 👇";
   }
   function fallback() {
-    return "Sorry, I didn't quite get that 🙏. You can ask about <strong>prices, branches, hair transplant, teleconsultation, doctors or timings</strong> — or talk to our team directly:" +
-      acts([act(telHref("9141247777"), "📞 Call"), act("https://wa.me/" + WA, "WhatsApp", { blank: true })]);
+    return "క్షమించండి, అది నాకు సరిగ్గా అర్థం కాలేదు 🙏. మీరు <strong>ధరలు, శాఖలు, హెయిర్ ట్రాన్స్‌ప్లాంట్, టెలీకన్సల్టేషన్, వైద్యులు, సమయాలు</strong> గురించి అడగవచ్చు — లేదా నేరుగా మా టీమ్‌తో మాట్లాడండి:" +
+      acts([act(telHref("9141247777"), "📞 కాల్ చేయండి"), act("https://wa.me/" + WA, "WhatsApp", { blank: true })]);
   }
 
   var INTENTS = [
     { id: "greeting", keys: ["hi", "hello", "hey", "హాయ్", "హలో", "namaste", "namaskaram", "నమస్తే", "నమస్కారం", "help", "సహాయ", "ela unnav", "ఎలా ఉన్నా"], fn: greeting },
 
     { id: "teleconsult", keys: ["tele", "teleconsult", "teleconsultation", "online", "video", "ఆన్‌లైన్", "వీడియో", "టెలీ", "ఇంటి నుండి", "phone consult", "ఫోన్ లో"], fn: function () {
-      return "🩺 <strong>Teleconsultation</strong> — talk to our senior dermatologists from home, by phone or video. Prescription &amp; follow-up included.<br>📞 Kaikaluru helpline: <a href='" + telHref("9141247777") + "'>9141 247 777</a>" +
-        acts([act(TEL, "📞 Call now", { primary: true }), act("#teleconsultation", "Details", { close: true })]);
+      return "🩺 <strong>టెలీకన్సల్టేషన్</strong> — ఇంటి నుండే ఫోన్ లేదా వీడియో ద్వారా మా సీనియర్ dermatologists తో నేరుగా మాట్లాడండి. Prescription &amp; follow-up కూడా అందుతాయి.<br>📞 కైకలూరు హెల్ప్‌లైన్: <a href='" + telHref("9141247777") + "'>9141 247 777</a>" +
+        acts([act(TEL, "📞 ఇప్పుడే కాల్ చేయండి", { primary: true }), act("#teleconsultation", "వివరాలు", { close: true })]);
     } },
 
     { id: "hairtransplant", keys: ["hair transplant", "transplant", "ట్రాన్స్‌ప్లాంట్", "hairtransplant", "fue", "dhi", "బట్టతల", "baldness", "bald", "జుట్టు మార్పిడి", "grafts", "hairline"], fn: function () {
-      return "💈 <strong>Hair Transplant</strong> — <strong>from ₹59,999</strong>.<br>Techniques: FUE · DHI · Bio-FUE + PRP/GFC · beard &amp; eyebrows.<br>✓ Natural hairline ✓ minimal discomfort ✓ your own hair that keeps growing." +
-        acts([act("#hair-transplant", "See details", { close: true }), act("#contact", "Free consultation", { primary: true, close: true })]);
+      return "💈 <strong>హెయిర్ ట్రాన్స్‌ప్లాంట్</strong> — <strong>₹59,999 నుండి</strong>.<br>పద్ధతులు: FUE · DHI · Bio-FUE + PRP/GFC · గడ్డం &amp; కనుబొమ్మలు.<br>✓ Natural hairline ✓ నొప్పి తక్కువ ✓ సహజంగా పెరిగే మీ సొంత జుట్టు." +
+        acts([act("#hair-transplant", "వివరాలు చూడండి", { close: true }), act("#contact", "ఉచిత సంప్రదింపు", { primary: true, close: true })]);
     } },
 
     { id: "technology", keys: ["technology", "equipment", "machine", "usfda", "us-fda", "fda", "alma", "quanta", "co2", "q-switch", "qswitch", "follirich", "laser brand", "టెక్నాలజీ", "పరికర", "మెషిన్", "లేజర్ బ్రాండ్"], fn: function () {
-      return "🔬 <strong>Advanced Technology</strong> — we use <strong>FDA Verified</strong> advanced lasers: Diode (hair reduction), Pico, Fractional CO₂, Q-switched Nd:YAG — several are <strong>US-FDA 510(k) cleared</strong>. Plus Hydra facial · FolliRich GFC/PRP · FUE &amp; DHI.<br><small>“FDA Verified” = US-FDA cleared devices; results vary by person.</small>" +
-        acts([act("#technology", "See all equipment", { close: true }), act("#contact", "Appointment", { primary: true, close: true })]);
+      return "🔬 <strong>అధునాతన టెక్నాలజీ</strong> — మేము <strong>FDA Verified</strong> అధునాతన లేజర్‌లు వాడతాం: Diode (హెయిర్ రిడక్షన్), Pico, Fractional CO₂, Q-switched Nd:YAG — పలు లేజర్‌లు <strong>US-FDA 510(k) cleared</strong>. అలాగే Hydra ఫేషియల్ · FolliRich GFC/PRP · FUE &amp; DHI.<br><small>“FDA Verified” = US-FDA cleared పరికరాలు; ఫలితాలు వ్యక్తికి మారవచ్చు.</small>" +
+        acts([act("#technology", "అన్ని పరికరాలు చూడండి", { close: true }), act("#contact", "అపాయింట్‌మెంట్", { primary: true, close: true })]);
     } },
 
     { id: "hair", keys: ["hair fall", "hairfall", "hair loss", "జుట్టు రాల", "జుట్టు రాలు", "prp", "gfc", "మెసో", "mesotherapy", "dandruff", "చుండ్రు", "జుట్టు సమస్య"], fn: function (t) {
-      var p = priceLookup(t), px = p && p.length ? "<br>Approx. price: " + p.map(function (h) { return esc(h.name) + " — from " + inr(h.price); }).join("; ") : "";
-      return "For hair fall, dandruff and baldness we offer PRP, GFC, mesotherapy and hair transplant. Book a consultation for the right diagnosis." + px +
-        acts([act("#treatments", "Treatments &amp; Pricing", { close: true }), act("#contact", "Appointment", { primary: true, close: true })]);
+      var p = priceLookup(t), px = p && p.length ? "<br>సుమారు ధర: " + p.map(function (h) { return esc(h.name) + " — " + inr(h.price) + " నుండి"; }).join("; ") : "";
+      return "జుట్టు రాలటం, చుండ్రు, బట్టతల వంటి సమస్యలకు మేము PRP, GFC, mesotherapy, hair transplant వంటి చికిత్సలు అందిస్తాం. సరైన diagnosis కోసం consultation బుక్ చేయండి." + px +
+        acts([act("#treatments", "చికిత్సలు &amp; ధరలు", { close: true }), act("#contact", "అపాయింట్‌మెంట్", { primary: true, close: true })]);
     } },
 
     { id: "skin", keys: ["acne", "pimple", "మొటిమ", "pigment", "మచ్చ", "మచ్చలు", "melasma", "మెలస్మా", "psoriasis", "సోరియాసిస్", "scar", "tan", "మంగు", "wart", "పులిపిర", "fungal", "దురద", "allergy", "అలర్జీ", "చర్మ"], fn: function () {
-      return "We treat acne, scars, pigmentation, melasma, psoriasis, fungal infections and allergies — all skin conditions, by specialists. Book a consultation for the right treatment for your condition." +
-        acts([act("#services", "See conditions", { close: true }), act("#contact", "Appointment", { primary: true, close: true })]);
+      return "మేము మొటిమలు, మచ్చలు, pigmentation, melasma, psoriasis, fungal infections, allergy — అన్ని రకాల చర్మ వ్యాధులకు నిపుణుల చికిత్స అందిస్తాం. మీ పరిస్థితిని బట్టి సరైన చికిత్స కోసం consultation బుక్ చేయండి." +
+        acts([act("#services", "వ్యాధులు చూడండి", { close: true }), act("#contact", "అపాయింట్‌మెంట్", { primary: true, close: true })]);
     } },
 
     { id: "laser", keys: ["laser", "లేజర్", "cosmetic", "కాస్మెటిక్", "botox", "బొటాక్స్", "filler", "ఫిల్లర్", "peel", "పీల్", "hydrafacial", "హైడ్రా", "glutathione", "గ్లూటా", "aesthetic", "laser hair removal", "tattoo"], fn: function (t) {
-      var p = priceLookup(t), px = p && p.length ? "<br>" + p.map(function (h) { return "• " + esc(h.name) + " — <strong>from " + inr(h.price) + "</strong>"; }).join("<br>") : "";
-      return "✨ We offer all <strong>lasers, cosmetic &amp; aesthetic</strong> treatments with USFDA-cleared machines — Botox, fillers, chemical peels, HydraFacial, glutathione, laser hair reduction, advanced lasers." + px + "<br><small>* 18% GST applies on cosmetic procedures.</small>" +
-        acts([act("#treatments", "Full pricing", { close: true }), act("#contact", "Appointment", { primary: true, close: true })]);
+      var p = priceLookup(t), px = p && p.length ? "<br>" + p.map(function (h) { return "• " + esc(h.name) + " — <strong>" + inr(h.price) + " నుండి</strong>"; }).join("<br>") : "";
+      return "✨ మాకు USFDA ఆమోదిత యంత్రాలతో అన్ని రకాల <strong>lasers, cosmetic &amp; aesthetic</strong> చికిత్సలు ఉన్నాయి — Botox, fillers, chemical peels, HydraFacial, glutathione, laser hair reduction, advanced lasers." + px + "<br><small>* cosmetic procedures పై 18% GST అదనం.</small>" +
+        acts([act("#treatments", "పూర్తి ధరలు", { close: true }), act("#contact", "అపాయింట్‌మెంట్", { primary: true, close: true })]);
     } },
 
     { id: "price", keys: ["price", "cost", "fee", "charge", "rate", "ధర", "ధరలు", "ఖర్చు", "ఫీజు", "రేటు", "ఎంత", "how much", "consultation fee"], fn: function (t) {
       var p = priceLookup(t);
-      if (p && p.length) return "Price details:<br>" + p.map(function (h) { return "• " + esc(h.name) + " — <strong>from " + inr(h.price) + "</strong>"; }).join("<br>") + "<br><small>* all are “starts from” prices; 18% GST on cosmetic procedures.</small>" + acts([act("#treatments", "All prices", { close: true })]);
-      return "💰 Consultation <strong>from ₹999</strong>. Other treatments are listed by category as “starts from” prices (85+ procedures). Hair transplant from ₹59,999.<br>👉 Type a treatment name for its price (e.g. “botox price”)." +
-        acts([act("#treatments", "See pricing page", { primary: true, close: true })]);
+      if (p && p.length) return "ధరల వివరాలు:<br>" + p.map(function (h) { return "• " + esc(h.name) + " — <strong>" + inr(h.price) + " నుండి</strong>"; }).join("<br>") + "<br><small>* అన్నీ \"నుండి\" ధరలు; cosmetic procedures పై 18% GST.</small>" + acts([act("#treatments", "అన్ని ధరలు", { close: true })]);
+      return "💰 Consultation <strong>₹999 నుండి</strong>. మిగతా చికిత్సలు విభాగాల వారీగా \"నుండి\" ధరలతో ఉన్నాయి (85+ procedures). హెయిర్ ట్రాన్స్‌ప్లాంట్ ₹59,999 నుండి.<br>👉 ఏ treatment ధర కావాలో పేరు టైప్ చేయండి (ఉదా: \"botox ధర\")." +
+        acts([act("#treatments", "ధరల పేజీ చూడండి", { primary: true, close: true })]);
     } },
 
     { id: "branches", keys: ["branch", "branches", "location", "locations", "where", "శాఖ", "శాఖలు", "address", "అడ్రస్", "చిరునామా", "ఎక్కడ", "near me", "directions", "దారి", "map"], fn: function () { return branchesList(); } },
 
     { id: "doctors", keys: ["doctor", "doctors", "వైద్యు", "డాక్టర్", "specialist", "నిపుణు", "dermatologist", "surgeon", "team", "బృందం", "meghana", "మేఘన", "nagaraju", "నాగరాజు", "founder", "ceo"], fn: function () {
-      return "🩺 <strong>Our leadership:</strong><br>• Nagaraju Bandaru — MBA, Founder &amp; CEO<br>• Dr. Meghana — MBBS, MD, DVL (Gold Medalist), Medical Director<br>Plus qualified <strong>senior dermatologists</strong> at every branch." +
-        acts([act("#doctors", "Our doctors", { close: true })]);
+      return "🩺 <strong>మా నాయకత్వం:</strong><br>• నాగరాజు బండారు — MBA, Founder &amp; CEO<br>• డా. మేఘన — MBBS, MD, DVL (Gold Medalist), Medical Director<br>అలాగే ప్రతి శాఖలో అర్హత కలిగిన <strong>సీనియర్ dermatologists</strong> ఉన్నారు." +
+        acts([act("#doctors", "వైద్యుల బృందం", { close: true })]);
     } },
 
     { id: "hours", keys: ["timing", "timings", "time", "hours", "open", "closed", "సమయ", "టైమ్", "ఎప్పుడు", "గంటలు", "sunday", "ఆదివారం", "working"], fn: function () {
-      return "🕒 <strong>Timings:</strong> Monday – Saturday · 9:00 AM – 2:00 PM &amp; 4:00 PM – 9:00 PM.<br>Break 2:00 – 4:00 PM · Sunday closed." +
-        acts([act(TEL, "📞 Call"), act("#contact", "Appointment", { primary: true, close: true })]);
+      return "🕒 <strong>సమయాలు:</strong> సోమవారం – శనివారం · ఉ. 9:00 – మ. 2:00 &amp; సా. 4:00 – రా. 9:00.<br>మ. 2:00 – సా. 4:00 విరామం · ఆదివారం సెలవు." +
+        acts([act(TEL, "📞 కాల్ చేయండి"), act("#contact", "అపాయింట్‌మెంట్", { primary: true, close: true })]);
     } },
 
     { id: "ai", keys: ["ai", "ఏఐ", "analysis", "అనాలిసిస్", "skin analysis", "hair analysis", "scan"], fn: function () {
-      return "🤖 Yes! Our clinic offers <strong>AI Skin &amp; Hair Analysis</strong> — we accurately assess your skin/hair condition and give a personalised treatment plan." +
-        acts([act("#contact", "Book appointment", { primary: true, close: true })]);
+      return "🤖 అవును! మా క్లినిక్‌లో <strong>AI స్కిన్ &amp; హెయిర్ అనాలిసిస్</strong> అందుబాటులో ఉంది — మీ చర్మం/జుట్టు పరిస్థితిని ఖచ్చితంగా అంచనా వేసి, వ్యక్తిగత చికిత్స ప్రణాళిక ఇస్తాం." +
+        acts([act("#contact", "అపాయింట్‌మెంట్ బుక్ చేయండి", { primary: true, close: true })]);
     } },
 
     { id: "appointment", keys: ["appointment", "book", "booking", "అపాయింట్", "బుక్", "slot", "consult", "సంప్రదింపు", "కన్సల్ట్", "meet", "visit", "రావాలి"], fn: function () {
-      return "📅 Booking an appointment is easy:<br>1️⃣ Fill the form below, or<br>2️⃣ Call / WhatsApp us directly." +
-        acts([act("#contact", "📝 Appointment form", { primary: true, close: true }), act(TEL, "📞 Call"), act("https://wa.me/" + WA, "WhatsApp", { blank: true })]);
+      return "📅 అపాయింట్‌మెంట్ బుక్ చేయడం చాలా సులభం:<br>1️⃣ క్రింది ఫారం నింపండి, లేదా<br>2️⃣ నేరుగా కాల్ / WhatsApp చేయండి." +
+        acts([act("#contact", "📝 అపాయింట్‌మెంట్ ఫారం", { primary: true, close: true }), act(TEL, "📞 కాల్"), act("https://wa.me/" + WA, "WhatsApp", { blank: true })]);
     } },
 
     { id: "contact", keys: ["contact", "phone", "number", "call", "whatsapp", "ఫోన్", "నంబర్", "కాల్", "సంప్రదించ", "వాట్సాప్", "reach"], fn: function () {
-      return "📞 <strong>Contact us:</strong><br><a href='" + telHref("9141247777") + "'>9141 247 777</a> · <a href='" + telHref("08677223344") + "'>08677 223344</a> (Kaikaluru)" +
-        acts([act(TEL, "📞 Call", { primary: true }), act("https://wa.me/" + WA, "WhatsApp", { blank: true })]);
+      return "📞 <strong>మమ్మల్ని సంప్రదించండి:</strong><br><a href='" + telHref("9141247777") + "'>9141 247 777</a> · <a href='" + telHref("08677223344") + "'>08677 223344</a> (కైకలూరు)" +
+        acts([act(TEL, "📞 కాల్ చేయండి", { primary: true }), act("https://wa.me/" + WA, "WhatsApp", { blank: true })]);
     } },
 
     { id: "services", keys: ["service", "services", "treatment", "treatments", "చికిత్స", "సేవ", "what do you", "ఏం చేస్తా", "ఏమి చేస్తా", "specialit", "ప్రత్యేక"], fn: function () {
-      return "At Medicare Skin &amp; Hair Clinic we offer complete care for <strong>skin, hair &amp; nail</strong> conditions: dermatology, hair transplant, plastic/aesthetic procedures, all lasers, cosmetic &amp; aesthetic treatments + AI Skin &amp; Hair Analysis — by senior specialists." +
-        acts([act("#services", "Conditions", { close: true }), act("#treatments", "Treatments &amp; Pricing", { close: true })]);
+      return "మెడికేర్ స్కిన్ &amp; హెయిర్ క్లినిక్‌లో <strong>చర్మం, జుట్టు &amp; గోళ్ళ</strong> వ్యాధులకు సంపూర్ణ చికిత్స: dermatology, hair transplant, plastic/aesthetic procedures, అన్ని రకాల lasers, cosmetic &amp; aesthetic treatments + AI స్కిన్ &amp; హెయిర్ అనాలిసిస్ — సీనియర్ నిపుణుల చేతుల్లో." +
+        acts([act("#services", "వ్యాధులు", { close: true }), act("#treatments", "చికిత్సలు &amp; ధరలు", { close: true })]);
     } },
 
-    { id: "thanks", keys: ["thank", "thanks", "ధన్యవాద", "thank you", "tq", "thx", "super", "బాగుంది"], fn: function () { return "Glad I could help! 😊 Ask me anything else. Stay healthy! 🌸"; } }
+    { id: "thanks", keys: ["thank", "thanks", "ధన్యవాద", "thank you", "tq", "thx", "super", "బాగుంది"], fn: function () { return "మీకు సహాయం చేయగలిగినందుకు సంతోషం! 😊 మరేదైనా సందేహం ఉంటే అడగండి. ఆరోగ్యంగా ఉండండి! 🌸"; } }
   ];
 
   function intentById(id) { for (var i = 0; i < INTENTS.length; i++) if (INTENTS[i].id === id) return INTENTS[i]; }
@@ -195,7 +195,7 @@
     return fallback();
   }
 
-  var CHIPS = ["Prices", "Branches", "Hair Transplant", "Appointment", "Teleconsultation", "Doctors", "Timings"];
+  var CHIPS = ["ధరలు", "శాఖలు", "హెయిర్ ట్రాన్స్‌ప్లాంట్", "అపాయింట్‌మెంట్", "టెలీకన్సల్టేషన్", "వైద్యులు", "సమయాలు"];
 
   /* ---------- UI ---------- */
   function el(html) { var d = document.createElement("div"); d.innerHTML = html.trim(); return d.firstChild; }
