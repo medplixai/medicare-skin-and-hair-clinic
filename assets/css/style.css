@@ -104,10 +104,43 @@ input,select,textarea{ font-family:inherit; font-size:1rem; }
 }
 .section__title-te{ display:block; font-weight:500; font-size:.92rem; color:var(--muted); margin:-.1rem 0 .5rem; line-height:1.4; }
 .section__lead{ color:var(--ink-2); font-size:clamp(1rem,1.4vw,1.12rem); }
-.section__banner{ width:100%; border-radius:var(--r-card); display:block; margin-top:2rem; }
-.section__banner-duo{ display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; margin-top:2rem; }
-.section__banner-duo img{ width:100%; border-radius:var(--r-card); display:block; }
-@media(max-width:640px){ .section__banner-duo{ grid-template-columns:1fr; } }
+/* Section banners — framed, matted, proportional promo posters.
+   .section__banner IS the <img> (padding+bg = white mat); .section__banner-duo
+   wraps two <img>. Tokens only. (Fixes prior undefined --r-card bug.) */
+.section__banner{
+  display:block; box-sizing:border-box;
+  width:100%; max-width:720px;          /* ~61% of 1180 container — clearly smaller, poster text stays legible */
+  margin:2rem auto 0;                   /* centered */
+  padding:.5rem;                        /* small white mat */
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);            /* 26px — matches .card / .feature / .tech-card */
+  box-shadow:var(--shadow-sm);
+  background-clip:padding-box;
+  overflow:hidden;                      /* round the bitmap's own corners inside the mat */
+  transition:transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s var(--ease);
+}
+.section__banner:hover{ transform:translateY(-6px); box-shadow:var(--shadow); border-color:var(--pink-soft); }
+
+.section__banner-duo{
+  display:grid; grid-template-columns:1fr 1fr; gap:1.2rem;
+  width:100%; max-width:920px;          /* each pane ~445px — readable, pair stays restrained */
+  margin:2rem auto 0;                   /* centered */
+}
+.section__banner-duo img{
+  display:block; box-sizing:border-box; width:100%;
+  padding:.5rem; background:var(--white);
+  border:1px solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--shadow-sm); background-clip:padding-box; overflow:hidden;
+  transition:transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s var(--ease);
+}
+.section__banner-duo img:hover{ transform:translateY(-6px); box-shadow:var(--shadow); border-color:var(--pink-soft); }
+
+@media(max-width:640px){
+  .section__banner{ max-width:100%; padding:.4rem; border-radius:var(--r); }
+  .section__banner-duo{ grid-template-columns:1fr; max-width:480px; gap:1rem; }
+  .section__banner-duo img{ padding:.4rem; border-radius:var(--r); }
+}
 
 /* Decorative blobs */
 .blob{ position:absolute; border-radius:50%; filter:blur(50px); opacity:.7; z-index:0; pointer-events:none; }
