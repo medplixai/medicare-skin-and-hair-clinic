@@ -639,10 +639,10 @@ th.ptable__num{ color:var(--pink-700); }
   padding:.26rem .8rem; border-radius:var(--r-pill); box-shadow:0 8px 18px -8px rgba(214,69,143,.55);
 }
 .doctor__avatar{
-  width:96px; height:96px; border-radius:50%; margin:0 auto 1rem; position:relative; overflow:hidden;
+  width:140px; height:140px; border-radius:50%; margin:0 auto 1.1rem; position:relative; overflow:hidden;
   background:var(--grad); display:grid; place-items:center;
-  color:#fff; font-weight:800; font-size:2rem; box-shadow:0 12px 26px rgba(214,69,143,.3);
-  border:4px solid #fff; outline:2px solid var(--pink-soft);
+  color:#fff; font-weight:800; font-size:2.9rem; box-shadow:0 14px 30px rgba(214,69,143,.32);
+  border:5px solid #fff; outline:2px solid var(--pink-soft);
 }
 .doctor__avatar img, .medic__avatar img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 20%; }
 .doctor h3{ font-size:1.3rem; font-weight:700; }
