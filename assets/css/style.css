@@ -142,6 +142,22 @@ input,select,textarea{ font-family:inherit; font-size:1rem; }
   .section__banner-duo img{ padding:.4rem; border-radius:var(--r); }
 }
 
+/* Hair-transplant technique photo gallery — framed, left-to-right */
+.ht-gallery{ display:grid; grid-template-columns:repeat(4,1fr); gap:1.3rem; margin-top:2.4rem; }
+.ht-photo{
+  display:flex; flex-direction:column; background:var(--white);
+  border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden;
+  box-shadow:var(--shadow-sm);
+  transition:transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s var(--ease);
+}
+.ht-photo:hover{ transform:translateY(-6px); box-shadow:var(--shadow); border-color:var(--pink-soft); }
+.ht-photo img{ width:100%; aspect-ratio:3/2; object-fit:contain; background:var(--white); display:block; }
+.ht-photo figcaption{ padding:.85rem .95rem 1.05rem; }
+.ht-photo figcaption strong{ display:block; color:var(--pink-700); font-weight:700; font-size:1.02rem; }
+.ht-photo figcaption span{ display:block; margin-top:.2rem; font-size:.86rem; line-height:1.55; color:var(--ink-2); }
+@media(max-width:900px){ .ht-gallery{ grid-template-columns:1fr 1fr; gap:1.1rem; } }
+@media(max-width:560px){ .ht-gallery{ grid-template-columns:1fr; max-width:440px; margin-inline:auto; } }
+
 /* Decorative blobs */
 .blob{ position:absolute; border-radius:50%; filter:blur(50px); opacity:.7; z-index:0; pointer-events:none; }
 .blob--1{ width:420px; height:420px; background:radial-gradient(circle, #FF8FCB 0%, rgba(255,143,203,0) 70%); top:-110px; right:-90px; }
