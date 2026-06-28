@@ -187,7 +187,7 @@ input,select,textarea{ font-family:inherit; font-size:1rem; }
 .hero--center .hero__inner{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.25rem;
   flex:1; max-width:960px; padding-top:clamp(4rem,9vh,7rem); padding-bottom:clamp(2.5rem,6vh,4rem); }
 .hero__logomark{ position:relative; display:inline-block; line-height:0; margin-bottom:.1rem; }
-.hero__logo{ height:clamp(82px, 12vw, 140px); width:auto; max-width:100%;
+.hero__logo{ height:clamp(120px, 16vw, 180px); width:auto; max-width:100%;
   filter:drop-shadow(0 6px 24px rgba(0,0,0,.4)); }
 /* sparkles twinkling around the flower (top of the logo) — bright pink + white glow so they pop on the white logo */
 .hero__sparkle{ position:absolute; pointer-events:none; background:#ff3d9a;
