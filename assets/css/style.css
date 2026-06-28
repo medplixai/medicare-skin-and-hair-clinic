@@ -158,6 +158,79 @@ input,select,textarea{ font-family:inherit; font-size:1rem; }
 @media(max-width:900px){ .ht-gallery{ grid-template-columns:1fr 1fr; gap:1.1rem; } }
 @media(max-width:560px){ .ht-gallery{ grid-template-columns:1fr; max-width:440px; margin-inline:auto; } }
 
+/* ===== Inclusive-care callout — clean trust strip, harmonizes with .card ===== */
+.inclusive{
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  box-shadow:var(--shadow-sm);
+  padding:clamp(1.3rem,3vw,1.7rem) clamp(1.25rem,3.5vw,1.9rem);
+  max-width:920px;
+  margin:clamp(1.4rem,3vw,2rem) auto clamp(2rem,4vw,3rem);
+  transition:box-shadow .3s var(--ease), border-color .3s var(--ease);
+}
+.inclusive:hover{ box-shadow:var(--shadow); border-color:var(--pink-soft); }
+
+/* Headline row: Telugu-primary title + single gradient age pill */
+.inclusive__head{
+  display:flex; flex-wrap:wrap; align-items:center; justify-content:center;
+  gap:.6rem .9rem; text-align:center; margin-bottom:.85rem;
+}
+.inclusive__title{ font-weight:700; font-size:clamp(1.04rem,2.4vw,1.22rem); color:var(--ink); }
+.inclusive__title i{ font-style:normal; font-family:var(--font-en); font-weight:600; font-size:.74rem; color:var(--pink-600); opacity:.9; margin-left:.3rem; }
+.inclusive__age{
+  display:inline-flex; align-items:baseline; gap:.4rem;
+  font-weight:700; font-size:.95rem; color:#fff;
+  background:var(--grad); padding:.32rem .9rem; border-radius:var(--r-pill);
+  box-shadow:var(--glow-soft); white-space:nowrap;
+}
+.inclusive__age i{ font-style:normal; font-family:var(--font-en); font-weight:600; font-size:.7rem; opacity:.92; }
+
+/* Inclusive lead line */
+.inclusive__lead{
+  text-align:center; max-width:640px; margin:0 auto 1.05rem;
+  font-weight:600; line-height:1.55; font-size:clamp(.96rem,1.6vw,1.06rem); color:var(--ink-2);
+}
+.inclusive__lead strong{ color:var(--pink-700); font-weight:800; }
+.inclusive__lead i{ display:block; font-style:normal; font-family:var(--font-en); font-weight:500; font-size:.82rem; color:var(--muted); margin-top:.15rem; }
+
+/* Audience chips (kids / men / women) */
+.inclusive__who{
+  display:flex; flex-wrap:wrap; justify-content:center; gap:.55rem; margin:0 0 1.1rem; padding:0; list-style:none;
+}
+.inclusive__who li{
+  display:inline-flex; align-items:center; gap:.4rem;
+  font-size:.9rem; font-weight:700; color:var(--pink-700);
+  background:var(--pink-tint); border:1px solid var(--pink-soft);
+  padding:.4rem .85rem; border-radius:var(--r-pill);
+}
+.inclusive__who li i{ font-style:normal; font-family:var(--font-en); font-size:.7rem; font-weight:500; color:var(--pink-600); opacity:.85; }
+.inclusive__who .ic{ width:16px; height:16px; flex:none; fill:none; stroke:var(--pink-600); stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+/* Divider + condition-group chips */
+.inclusive__what{
+  display:flex; flex-wrap:wrap; justify-content:center; gap:.6rem;
+  border-top:1px solid var(--line); padding:1.05rem 0 0; margin:0 0 1rem; list-style:none;
+}
+.inclusive__what li{
+  display:inline-flex; align-items:baseline; gap:.4rem;
+  font-size:.88rem; font-weight:600; color:var(--pink-700);
+  background:var(--pink-tint); border:1px solid var(--pink-soft);
+  padding:.34rem .75rem; border-radius:var(--r-pill);
+}
+.inclusive__what li i{ font-style:normal; font-family:var(--font-en); font-size:.72rem; font-weight:500; color:var(--pink-600); opacity:.85; }
+.inclusive__what--std{ background:var(--pink-soft); }
+
+/* Safe, supportive note */
+.inclusive__note{ text-align:center; max-width:680px; margin:0 auto; font-size:.92rem; line-height:1.6; color:var(--ink-2); }
+.inclusive__note strong{ color:var(--pink-700); font-weight:700; }
+.inclusive__note i{ font-style:normal; font-family:var(--font-en); font-size:.82rem; color:var(--muted); }
+
+@media (max-width:560px){
+  .inclusive{ padding:1.25rem 1.05rem; }
+  .inclusive__title{ flex-basis:100%; }
+}
+
 /* Decorative blobs */
 .blob{ position:absolute; border-radius:50%; filter:blur(50px); opacity:.7; z-index:0; pointer-events:none; }
 .blob--1{ width:420px; height:420px; background:radial-gradient(circle, #FF8FCB 0%, rgba(255,143,203,0) 70%); top:-110px; right:-90px; }
