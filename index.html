@@ -166,6 +166,7 @@
 
       <nav class="nav" id="nav">
         <a href="#home" class="nav__link"><span class="nav__te">హోమ్</span><span class="nav__en">Home</span></a>
+        <a href="#ai-analysis" class="nav__link nav__link--ai"><span class="nav__te">✨ AI విశ్లేషణ</span><span class="nav__en">✨ AI Analysis</span></a>
         <a href="#about" class="nav__link"><span class="nav__te">మా గురించి</span><span class="nav__en">About</span></a>
         <a href="#services" class="nav__link"><span class="nav__te">వ్యాధులు</span><span class="nav__en">Conditions</span></a>
         <a href="#treatments" class="nav__link"><span class="nav__te">చికిత్సలు &amp; ధరలు</span><span class="nav__en">Treatments</span></a>
@@ -255,6 +256,20 @@
           <div class="stat__num stat__num--text">₹999<span class="stat__small"> onwards</span></div>
           <div class="stat__label">అందుబాటు ధరలో చికిత్సలు</div>
         </div>
+      </div>
+    </section>
+
+    <!-- ============ AI SKIN & HAIR ANALYSIS (interactive) ============ -->
+    <section class="section aiskin" id="ai-analysis">
+      <span class="blob blob--3" aria-hidden="true"></span>
+      <div class="container">
+        <div class="section__head reveal">
+          <span class="eyebrow eyebrow--center">✨ AI-Powered</span>
+          <h2 class="section__title">Free <span class="grad">AI Skin &amp; Hair Analysis</span></h2>
+          <p class="section__title-te">(ఉచిత AI చర్మం &amp; జుట్టు విశ్లేషణ)</p>
+          <p class="section__lead">మీ ఫోటో అప్‌లోడ్ చేసి, కొన్ని సెకన్లలో AI నుండి సాధారణ విశ్లేషణ, సంరక్షణ చిట్కాలు &amp; తగిన చికిత్సల సూచన పొందండి — 100% గోప్యం. ఇది వైద్య నిర్ధారణ కాదు; ఖచ్చితమైన అంచనా కోసం మా వైద్యులను సంప్రదించండి.</p>
+        </div>
+        <div class="aiskin__mount reveal" id="aiskinMount"><!-- rendered by ai-analysis.js --></div>
       </div>
     </section>
 
@@ -364,6 +379,13 @@
 
         <!-- ===== Inclusive-care callout — everyone, all ages 0–100 ===== -->
         <div class="inclusive reveal" role="group" aria-label="చిన్నపిల్లల నుండి పెద్దల వరకు, స్త్రీ పురుషులు పిల్లలు అందరికీ — చర్మం, జుట్టు, గోళ్ళు &amp; సుఖవ్యాధులకు నిపుణుల చికిత్స. Care for everyone, all ages 0 to 100.">
+          <figure class="inclusive__media">
+            <img src="assets/img/family-care.jpg" alt="మెడికేర్‌లో వైద్యురాలు ఒక కుటుంబానికి (పిల్లలు &amp; తల్లిదండ్రులు) చర్మం, జుట్టు &amp; గోళ్ళ సంరక్షణ సలహా ఇస్తున్నారు — family skin, hair &amp; nail care for all ages" loading="lazy">
+            <figcaption class="inclusive__cap">
+              <strong>ప్రతి కుటుంబానికీ నమ్మకమైన సంరక్షణ</strong>
+              <span>Trusted skin, hair &amp; nail care for every family — పిల్లలు, పెద్దలు అందరికీ.</span>
+            </figcaption>
+          </figure>
           <div class="inclusive__head">
             <span class="inclusive__title">ప్రతి ఒక్కరికీ — అన్ని వయసులవారికీ <i>For Everyone · All Ages</i></span>
             <span class="inclusive__age">0–100 <i>వయసు · All Ages</i></span>
@@ -1175,6 +1197,7 @@
   <script src="assets/js/main.js"></script>
   <script src="assets/js/reviews.js"></script>
   <script src="assets/js/chatbot.js"></script>
+  <script src="assets/js/ai-analysis.js" defer></script>
   <script>
     /* Cookie / embed consent notice */
     (function () {
