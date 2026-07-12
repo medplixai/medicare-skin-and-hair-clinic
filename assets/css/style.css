@@ -274,21 +274,21 @@ input,select,textarea{ font-family:inherit; font-size:1rem; }
 .brand:hover .brand__logo{ transform:scale(1.04); }
 .header.scrolled .brand__logo{ height:48px; }
 
-.nav{ display:flex; align-items:center; gap:.25rem; }
+.nav{ display:flex; align-items:center; gap:.12rem; }
 .nav__link{
-  padding:.38rem .62rem; border-radius:14px;
+  padding:.36rem .5rem; border-radius:14px;
   font-weight:600; color:var(--ink-2);
   transition:color .2s, background .2s;
   display:inline-flex; flex-direction:column; align-items:center; line-height:1.12; text-align:center;
 }
 .nav__te{ display:none; }
-.nav__en{ font-size:.92rem; font-weight:600; letter-spacing:0; text-transform:none; color:inherit; font-family:var(--font-en); }
+.nav__en{ font-size:.875rem; font-weight:600; letter-spacing:0; text-transform:none; color:inherit; font-family:var(--font-en); white-space:nowrap; }
 .nav__link:hover .nav__en, .nav__link.active .nav__en{ color:inherit; }
 .nav__link:hover{ color:var(--pink-700); background:var(--pink-tint); }
 .nav__link.active{ color:var(--pink-700); }
 .nav__link--btn{
-  background:var(--grad); color:#fff !important; margin-left:.35rem;
-  padding:.6rem 1.2rem; box-shadow:0 8px 20px rgba(214,69,143,.30);
+  background:var(--grad); color:#fff !important; margin-left:.25rem;
+  padding:.55rem 1rem; box-shadow:0 8px 20px rgba(214,69,143,.30);
 }
 .nav__link--btn:hover{ background:var(--grad); transform:translateY(-2px); }
 .nav__link--btn .nav__en{ color:#fff; }
@@ -1161,8 +1161,8 @@ body.chat-open .chat-launch, body.chat-open .totop{ opacity:0; pointer-events:no
 }
 
 /* Collapse the nav to a hamburger drawer early enough that it never overflows the header
-   on tablets / small laptops (the horizontal nav + logo need ~1120px) */
-@media (max-width:1180px){
+   on tablets / small laptops (10 links incl. AI Analysis + logo need ~1080px single-line) */
+@media (max-width:1240px){
   /* backdrop-filter creates a containing block that would trap the fixed nav — disable while the drawer is used */
   .header{ backdrop-filter:none; -webkit-backdrop-filter:none; background:rgba(255,255,255,.98); }
   .nav{
