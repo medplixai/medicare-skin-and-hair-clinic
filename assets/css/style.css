@@ -1516,3 +1516,56 @@ body.chat-open .chat-launch, body.chat-open .totop{ opacity:0; pointer-events:no
   .aiskin__stepdot{ font-size:.68rem; }
   .aiskin__metric b{ font-size:.82rem; }
 }
+
+/* ---- v4 advanced: dual uploads ---- */
+.aiskin__uploads{ display:grid; grid-template-columns:1fr 1fr; gap:.8rem; }
+.aiskin__uploads .aiskin__dropinner{ padding:1.6rem .8rem; }
+@media (max-width:560px){ .aiskin__uploads{ grid-template-columns:1fr; } }
+
+/* ---- v4 advanced: 3D face mesh (analyzing) ---- */
+.aiskin__mesh{ display:inline-block; border-radius:16px; overflow:hidden; border:1px solid var(--line);
+  background:
+    radial-gradient(60% 55% at 50% 42%, rgba(232,96,168,.25), transparent 70%),
+    linear-gradient(165deg,#4a0e2c 0%, #2b0819 58%, #1b0511 100%);
+  box-shadow:var(--shadow); position:relative; }
+.aiskin__mesh canvas{ display:block; width:min(320px,78vw); height:auto; aspect-ratio:1; }
+.aiskin__meshtag{ position:absolute; left:50%; bottom:.55rem; transform:translateX(-50%);
+  font-size:.66rem; font-weight:700; letter-spacing:.05em; color:rgba(255,255,255,.85);
+  background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.3);
+  padding:.22rem .6rem; border-radius:var(--r-pill); white-space:nowrap; font-family:var(--font-en); }
+
+/* ---- v4 advanced: score gauges ---- */
+.aiskin__gauges{ display:grid; grid-template-columns:repeat(auto-fit,minmax(96px,1fr)); gap:.7rem; margin:0 0 1.1rem; }
+.aiskin__gauge{ position:relative; text-align:center; background:var(--pink-tint2); border:1px solid var(--line);
+  border-radius:14px; padding:.7rem .3rem .55rem; }
+.aiskin__gauge svg{ width:64px; height:64px; transform:rotate(-90deg); }
+.aiskin__gauge .gbg{ fill:none; stroke:var(--pink-soft); stroke-width:7; }
+.aiskin__gauge .gfg{ fill:none; stroke-width:7; stroke-linecap:round; transition:stroke-dashoffset 1.1s var(--ease); }
+.aiskin__gauge.g-good .gfg{ stroke:#0f7a43; } .aiskin__gauge.g-good b{ color:#0f7a43; }
+.aiskin__gauge.g-mid  .gfg{ stroke:#b7791f; } .aiskin__gauge.g-mid  b{ color:#8a5a00; }
+.aiskin__gauge.g-low  .gfg{ stroke:#d6458f; } .aiskin__gauge.g-low  b{ color:#be2f79; }
+.aiskin__gauge b{ position:absolute; top:34px; left:50%; transform:translate(-50%,-50%);
+  font-family:var(--font-en); font-weight:800; font-size:.95rem; }
+.aiskin__gauge span{ display:block; margin-top:.15rem; font-size:.72rem; font-weight:700; color:var(--ink-2); line-height:1.25; }
+.aiskin__gauge span i{ display:block; font-style:normal; font-size:.62rem; font-weight:500; color:var(--muted); font-family:var(--font-en); }
+@media (prefers-reduced-motion: reduce){ .aiskin__gauge .gfg{ transition:none; } }
+
+/* ---- v4 advanced: PDF report bits ---- */
+.aiskin__pdfhead{ display:none; font-family:var(--font-en); font-size:.8rem; font-weight:600; color:var(--muted);
+  border-bottom:2px solid var(--pink); padding-bottom:.5rem; margin-bottom:1rem; }
+.aiskin__pdfhead b{ color:var(--pink-700); letter-spacing:.04em; }
+.aiskin__pdfmode .aiskin__pdfhead{ display:block; }
+
+/* ---- v4 advanced: progress compare ---- */
+.aiskin__cmp{ display:flex; align-items:center; justify-content:center; gap:.8rem; margin-bottom:1rem; }
+.aiskin__cmp figure{ margin:0; text-align:center; }
+.aiskin__cmp img{ width:min(150px,38vw); aspect-ratio:1; object-fit:cover; border-radius:12px; border:1px solid var(--line); box-shadow:var(--shadow-sm); }
+.aiskin__cmp figcaption{ font-size:.72rem; font-weight:600; color:var(--muted); margin-top:.3rem; }
+.aiskin__cmparrow{ font-size:1.2rem; color:var(--pink-700); }
+.aiskin__cmptable{ width:100%; border-collapse:collapse; font-size:.86rem; }
+.aiskin__cmptable th, .aiskin__cmptable td{ padding:.5rem .55rem; text-align:left; border-bottom:1px solid var(--line); }
+.aiskin__cmptable th{ font-size:.72rem; letter-spacing:.03em; color:var(--muted); text-transform:uppercase; font-family:var(--font-en); }
+.aiskin__cmptable td i{ font-style:normal; font-size:.68rem; color:var(--muted); font-family:var(--font-en); }
+.aiskin__cmptable td.up{ color:#0f7a43; font-weight:800; }
+.aiskin__cmptable td.down{ color:#c62b47; font-weight:800; }
+.aiskin__cmptable td.flat{ color:var(--muted); font-weight:700; }

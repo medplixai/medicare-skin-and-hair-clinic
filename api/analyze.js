@@ -61,15 +61,26 @@ CRITICAL SAFETY RULES — follow every one, without exception:
 - If the image is not a clear photo of human skin, scalp, hair, or nails (e.g. blurry, dark, unrelated object, or a face-only selfie with no visible concern), set imageUsable=false, leave the analysis arrays empty, and politely ask in the summary for a clearer, well-lit close-up of the affected area.
 - Keep everything general, supportive and educational. Always recommend an in-person consultation with Medicare's dermatologists for an accurate assessment.
 
+SCORES: Also return 4-6 appearance scores (0-100, HIGHER = healthier-looking) relevant to the focus — e.g. for skin: Hydration look, Oil balance, Even tone, Texture, Clarity; for hair/scalp: Density look, Scalp health, Volume, Shine. These are rough visual impressions from a photo, NOT measurements — be conservative, avoid extremes (stay within 25-90 unless truly obvious), and never present them as clinical readings. label = short Telugu, labelEn = short English.
+
 STYLE: Write summary, observations, possibleFactors and selfCareTips BILINGUALLY — Telugu first, then a short English phrase — in a warm, simple, reassuring tone. suggestedTreatments must be chosen ONLY from services Medicare actually offers: ${TREATMENTS}. Return ONLY the JSON described by the schema.`;
 
 const SCHEMA = {
   type: "object",
   additionalProperties: false,
-  required: ["imageUsable", "summary", "observations", "possibleFactors", "selfCareTips", "suggestedTreatments", "severity", "seeDoctorSoon", "disclaimer"],
+  required: ["imageUsable", "summary", "scores", "observations", "possibleFactors", "selfCareTips", "suggestedTreatments", "severity", "seeDoctorSoon", "disclaimer"],
   properties: {
     imageUsable: { type: "boolean" },
     summary: { type: "string" },
+    scores: { type: "array", items: {
+      type: "object", additionalProperties: false,
+      required: ["label", "labelEn", "value"],
+      properties: {
+        label: { type: "string" },
+        labelEn: { type: "string" },
+        value: { type: "integer" }
+      }
+    } },
     observations: { type: "array", items: { type: "string" } },
     possibleFactors: { type: "array", items: { type: "string" } },
     selfCareTips: { type: "array", items: { type: "string" } },
@@ -92,7 +103,7 @@ module.exports = async (req, res) => {
       res.status(503).json({ error: "not_configured", message: "AI analysis is not configured yet. (Set ANTHROPIC_API_KEY in Vercel.)" });
       return;
     }
-    const { image, mediaType, patient, consent, phone, usageToken } = req.body || {};
+    const { image, mediaType, images, patient, consent, phone, usageToken } = req.body || {};
 
     if (consent !== true) { res.status(400).json({ error: "consent_required", message: "దయచేసి అనుమతి (consent) ✓ ఇవ్వండి." }); return; }
     const ph = (phone || "").toString().replace(/\D/g, "");
@@ -106,10 +117,19 @@ module.exports = async (req, res) => {
       return;
     }
 
-    if (!image || typeof image !== "string") { res.status(400).json({ error: "image_required" }); return; }
-    const b64 = image.includes(",") ? image.split(",").pop() : image;
-    if (b64.length > 6000000) { res.status(413).json({ error: "image_too_large", message: "ఫోటో చాలా పెద్దది. దయచేసి చిన్న ఫోటో వాడండి." }); return; }
-    const mt = (mediaType && /^image\/(jpeg|png|webp)$/.test(mediaType)) ? mediaType : "image/jpeg";
+    /* accept 1-2 photos: `images:[{data,mediaType},...]` (new) or single `image` (legacy) */
+    var list = Array.isArray(images) && images.length
+      ? images.slice(0, 2).map(it => ({ data: (it && it.data) || "", mt: (it && it.mediaType) || "image/jpeg" }))
+      : (image ? [{ data: image, mt: mediaType || "image/jpeg" }] : []);
+    list = list.filter(it => it.data && typeof it.data === "string");
+    if (!list.length) { res.status(400).json({ error: "image_required" }); return; }
+    const imgBlocks = [];
+    for (const it of list) {
+      const b64 = it.data.includes(",") ? it.data.split(",").pop() : it.data;
+      if (b64.length > 6000000) { res.status(413).json({ error: "image_too_large", message: "ఫోటో చాలా పెద్దది. దయచేసి చిన్న ఫోటో వాడండి." }); return; }
+      const mt = /^image\/(jpeg|png|webp)$/.test(it.mt) ? it.mt : "image/jpeg";
+      imgBlocks.push({ type: "image", source: { type: "base64", media_type: mt, data: b64 } });
+    }
 
     const p = patient || {};
     const clip = (v, n) => (v == null ? "" : String(v)).slice(0, n);
@@ -120,19 +140,17 @@ module.exports = async (req, res) => {
 - Gender: ${clip(p.gender, 20) || "not given"}
 - Area of concern: ${clip(p.area, 80) || "not given"}
 - Described problem: ${clip(p.details, 600) || "not given"}
+- Photos provided: ${imgBlocks.length}${imgBlocks.length > 1 ? " (consider BOTH together — e.g. overall view + close-up/scalp)" : ""}
 
-Provide general, educational observations of THIS photo for the focus above, following ALL safety rules. Telugu-first bilingual text. Return only the JSON.`;
+Provide general, educational observations of ${imgBlocks.length > 1 ? "THESE photos" : "THIS photo"} for the focus above, following ALL safety rules. Telugu-first bilingual text. Return only the JSON.`;
 
     const payload = {
       model: MODEL,
-      max_tokens: 1600,
+      max_tokens: 1900,
       system: SYSTEM,
       messages: [{
         role: "user",
-        content: [
-          { type: "image", source: { type: "base64", media_type: mt, data: b64 } },
-          { type: "text", text: ctx }
-        ]
+        content: imgBlocks.concat([{ type: "text", text: ctx }])
       }],
       output_config: { format: { type: "json_schema", schema: SCHEMA } }
     };
@@ -162,7 +180,7 @@ Provide general, educational observations of THIS photo for the focus above, fol
 
     if (data.stop_reason === "refusal") {
       res.status(200).json({ ok: true, usageToken: newToken, remaining: remaining, result: {
-        imageUsable: false,
+        imageUsable: false, scores: [],
         summary: "క్షమించండి, ఈ ఫోటోను విశ్లేషించలేకపోయాం. దయచేసి మా వైద్యులను నేరుగా సంప్రదించండి. Sorry, we couldn't analyze this photo — please consult our doctors directly.",
         observations: [], possibleFactors: [], selfCareTips: [], suggestedTreatments: [],
         severity: "recommend-consult", seeDoctorSoon: false, disclaimer: SAFE_DISCLAIMER
