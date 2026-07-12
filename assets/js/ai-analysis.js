@@ -1,7 +1,7 @@
 /* =====================================================================
-   MEDICARE — AI Skin & Hair Analysis wizard (front-end)
-   Talks to /api/send-otp, /api/verify-otp, /api/analyze.
-   Add ?aidemo=1 to the URL to walk the flow without a backend (demo data).
+   MEDICARE — AI Skin & Hair Analysis wizard  (v2, elegant shell UI)
+   Backend: /api/send-otp, /api/verify-otp, /api/analyze (unchanged).
+   Add ?aidemo=1 to the URL to walk the flow without a backend.
    ===================================================================== */
 (function () {
   "use strict";
@@ -9,11 +9,36 @@
   if (!mount) return;
 
   var DEMO = /[?&]aidemo=1/.test(location.search);
-  var WA = "919141247777"; // Kaikaluru WhatsApp
+  var WA = "919141247777";
+  var REDUCE = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  var state = { step: 0, type: "skin", patient: {}, phone: "", consentToken: "", image: "", mediaType: "image/jpeg", result: null };
+  /* ------------------------------ state ------------------------------ */
+  var state = {
+    view: "form",            // form | verify | photo | analyzing | result
+    type: "skin",
+    age: "", gender: "", concerns: [], details: "",
+    phone: "", otpSent: false, devHint: "", verifyMsg: "",
+    consentToken: "",
+    image: "", mediaType: "image/jpeg", dim: false,
+    result: null,
+    cleanup: null             // per-view timers/listeners
+  };
 
-  /* ---------- tiny helpers ---------- */
+  var CONCERNS = {
+    skin: [
+      ["మొటిమలు", "Acne"], ["మచ్చలు / పిగ్మెంటేషన్", "Pigmentation"], ["టాన్ / నలుపుదనం", "Tan"],
+      ["ముడతలు / వృద్ధాప్య ఛాయలు", "Wrinkles"], ["దురద / తామర", "Itch / Eczema"], ["సోరియాసిస్", "Psoriasis"],
+      ["బొల్లి మచ్చలు", "Vitiligo"], ["ఫంగల్ ఇన్ఫెక్షన్", "Fungal"], ["గోళ్ళ సమస్య", "Nail issue"], ["ఇతర", "Other"]
+    ],
+    hair: [
+      ["జుట్టు రాలడం", "Hair fall"], ["చుండ్రు", "Dandruff"], ["బట్టతల / పలచబడటం", "Thinning"],
+      ["ప్యాచీ అలోపేసియా", "Patchy loss"], ["స్కాల్ప్ దురద", "Scalp itch"], ["ముందుగా తెల్లజుట్టు", "Early greying"], ["ఇతర", "Other"]
+    ]
+  };
+  var AGES = ["18 లోపు", "18–25", "26–35", "36–50", "50+"];
+  var GENDERS = [["స్త్రీ", "Female"], ["పురుషుడు", "Male"], ["ఇతర", "Other"]];
+
+  /* ----------------------------- helpers ----------------------------- */
   function el(html) { var t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstChild; }
   function esc(s) { return (s == null ? "" : String(s)).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   function digits(s) { return (s || "").replace(/\D/g, ""); }
@@ -21,7 +46,7 @@
   function api(path, body) {
     if (DEMO) return demo(path, body);
     return fetch(path, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) })
-      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, status: r.status, json: j }; }); });
+      .then(function (r) { return r.json().catch(function(){return {};}).then(function (j) { return { ok: r.ok, status: r.status, json: j }; }); });
   }
   function demo(path, body) {
     return new Promise(function (res) {
@@ -33,254 +58,399 @@
         } else if (path === "/api/analyze") {
           res({ ok: true, status: 200, json: { ok: true, result: {
             imageUsable: true,
-            summary: "మీ ఫోటోలో మొటిమలు (acne) & స్వల్ప మచ్చలు కనిపిస్తున్నాయి. ఇది సాధారణంగా నయం చేయదగినది. Your photo shows mild acne with a few marks — commonly manageable.",
-            observations: ["కొన్ని మొటిమలు & రెడ్‌నెస్ · a few active pimples and redness", "స్వల్ప మచ్చలు · mild post-acne marks"],
-            possibleFactors: ["ఆయిల్ ఎక్కువ / hormonal మార్పులు · oily skin or hormonal changes", "సరైన skincare లేకపోవడం · irregular skincare"],
-            selfCareTips: ["రోజుకు 2 సార్లు మృదువైన cleanser వాడండి", "sunscreen తప్పకుండా వాడండి", "మొటిమలను పిండవద్దు"],
-            suggestedTreatments: ["Acne & acne-scar treatment", "Chemical peels", "Pigmentation/melasma treatment"],
+            summary: "మీ ఫోటోలో మొటిమలు (acne) & స్వల్ప మచ్చలు కనిపిస్తున్నాయి — ఇది సాధారణంగా చికిత్సతో మెరుగుపడుతుంది. Your photo shows mild acne with a few marks; commonly manageable with care.",
+            observations: ["కొన్ని active మొటిమలు & రెడ్‌నెస్ · a few active pimples with redness", "స్వల్ప post-acne మచ్చలు · mild post-acne marks"],
+            possibleFactors: ["ఆయిల్ స్కిన్ / hormonal మార్పులు · oily skin or hormonal changes", "సరిపడని skincare · irregular skincare routine"],
+            selfCareTips: ["రోజుకు 2 సార్లు మృదువైన cleanser వాడండి", "బయటికి వెళ్ళేటప్పుడు sunscreen తప్పనిసరి", "మొటిమలను గిల్లవద్దు / పిండవద్దు"],
+            suggestedTreatments: ["Acne & acne-scar treatment", "Chemical peels", "HydraFacial"],
             severity: "recommend-consult", seeDoctorSoon: false,
             disclaimer: "ఇది AI సాధారణ సమాచారం మాత్రమే — వైద్య నిర్ధారణ కాదు. ఖచ్చితమైన అంచనా కోసం మా వైద్యులను సంప్రదించండి."
           }}});
         } else res({ ok: false, status: 400, json: {} });
-      }, path === "/api/analyze" ? 1400 : 500);
+      }, path === "/api/analyze" ? 2600 : 600);
     });
   }
 
-  /* ---------- image downscale (privacy + smaller upload) ---------- */
+  /* photo: downscale + simple brightness check */
   function readImage(file, cb) {
     var img = new Image();
     img.onload = function () {
       var max = 1280, w = img.width, h = img.height;
       if (w > max || h > max) { if (w > h) { h = Math.round(h * max / w); w = max; } else { w = Math.round(w * max / h); h = max; } }
       var c = document.createElement("canvas"); c.width = w; c.height = h;
-      c.getContext("2d").drawImage(img, 0, 0, w, h);
-      cb(c.toDataURL("image/jpeg", 0.85));
+      var x = c.getContext("2d"); x.drawImage(img, 0, 0, w, h);
+      var dim = false;
+      try {
+        var d = x.getImageData(0, 0, w, h).data, sum = 0, n = 0;
+        for (var i = 0; i < d.length; i += 4 * 97) { sum += (d[i] * 299 + d[i + 1] * 587 + d[i + 2] * 114) / 1000; n++; }
+        dim = (sum / Math.max(n, 1)) < 46;
+      } catch (e) {}
+      cb(c.toDataURL("image/jpeg", 0.85), dim);
     };
-    img.onerror = function () { cb(null); };
+    img.onerror = function () { cb(null, false); };
     var fr = new FileReader();
     fr.onload = function (e) { img.src = e.target.result; };
     fr.readAsDataURL(file);
   }
 
-  /* ---------- progress ---------- */
-  var STEPS = ["వివరాలు", "అనుమతి", "OTP", "ఫోటో", "ఫలితం"];
-  function progress(active) {
-    var dots = STEPS.map(function (s, i) {
-      var cls = i < active ? "done" : (i === active ? "on" : "");
-      return '<span class="aiskin__dot ' + cls + '"><b>' + (i + 1) + "</b>" + esc(s) + "</span>";
-    }).join("");
-    return '<div class="aiskin__steps" aria-hidden="true">' + dots + "</div>";
+  /* ------------------------------ shell ------------------------------ */
+  var STAGES = ["వివరాలు", "ధృవీకరణ", "ఫోటో", "ఫలితం"];
+  function stageIndex() {
+    return state.view === "form" ? 0 : state.view === "verify" ? 1 :
+           state.view === "photo" ? 2 : 3;
   }
 
-  var DISCLAIMER =
-    "⚠️ ఇది AI ద్వారా ఇచ్చే <strong>సాధారణ, విద్యాపరమైన</strong> సమాచారం మాత్రమే — <strong>వైద్య నిర్ధారణ (diagnosis) కాదు</strong>. " +
-    "ఖచ్చితమైన అంచనా &amp; చికిత్స కోసం దయచేసి మా అర్హత గల చర్మవైద్య నిపుణులను సంప్రదించండి. మీ ఫోటో ఎక్కడా save చేయబడదు (100% గోప్యం).";
+  function shell(contentNode) {
+    var idx = stageIndex();
+    var pct = Math.round(((idx + (state.view === "result" ? 1 : 0.55)) / STAGES.length) * 100);
+    var labels = STAGES.map(function (s, i) {
+      return '<span class="' + (i < idx ? "done" : i === idx ? "on" : "") + '">' + (i < idx ? "✓ " : "") + s + "</span>";
+    }).join("");
 
-  /* ---------- renderers ---------- */
-  function render() { mount.innerHTML = ""; mount.appendChild(views[state.step]()); }
+    var v = el(
+      '<div class="aiskin__shell">' +
+        '<aside class="aiskin__rail">' +
+          '<div class="aiskin__brand"><span class="aiskin__badge">✨ Medicare AI</span>' +
+            "<h3>చర్మం &amp; జుట్టు <br>AI విశ్లేషణ</h3>" +
+            '<p class="aiskin__railsub">ఫోటోతో ~30 సెకన్లలో వ్యక్తిగత సూచనలు</p></div>' +
+          '<ol class="aiskin__how">' +
+            "<li><b>1</b>వివరాలు &amp; ఫోటో ఇవ్వండి</li>" +
+            "<li><b>2</b>AI విశ్లేషిస్తుంది</li>" +
+            "<li><b>3</b>ఫలితం &amp; చికిత్స సూచనలు</li>" +
+          "</ol>" +
+          '<div class="aiskin__trust">' +
+            "<span>🔒 100% గోప్యం</span><span>🗑️ ఫోటో save అవదు</span><span>🆓 పూర్తిగా ఉచితం</span><span>⚕️ diagnosis కాదు</span>" +
+          "</div>" +
+        "</aside>" +
+        '<div class="aiskin__content">' +
+          '<div class="aiskin__progress"><div class="aiskin__bar"><i style="width:' + pct + '%"></i></div>' +
+            '<div class="aiskin__stages">' + labels + "</div></div>" +
+          '<div class="aiskin__view" id="aiView"></div>' +
+        "</div>" +
+      "</div>"
+    );
+    v.querySelector("#aiView").appendChild(contentNode);
+    return v;
+  }
 
+  function setView(name) {
+    if (state.cleanup) { try { state.cleanup(); } catch (e) {} state.cleanup = null; }
+    state.view = name;
+    mount.innerHTML = "";
+    mount.appendChild(shell(views[name]()));
+    var r = mount.getBoundingClientRect();
+    if (r.top < 0 || r.top > innerHeight * 0.6) {
+      mount.scrollIntoView({ behavior: REDUCE ? "auto" : "smooth", block: "start" });
+    }
+  }
+
+  /* ------------------------------ views ------------------------------ */
   var views = {
-    /* 0 — intro */
-    0: function () {
+
+    /* ---- 1. details: all tap-chips, no typing needed ---- */
+    form: function () {
       var v = el(
-        '<div class="aiskin__card">' +
-          '<div class="aiskin__intro">' +
-            '<span class="aiskin__ai">✨ AI</span>' +
-            "<h3>మీ చర్మం / జుట్టు — AI విశ్లేషణ</h3>" +
-            "<p>ఫోటో అప్‌లోడ్ చేసి, కొన్ని సెకన్లలో <strong>సాధారణ విశ్లేషణ, సంరక్షణ చిట్కాలు &amp; తగిన చికిత్సల సూచన</strong> పొందండి. పూర్తిగా ఉచితం &amp; గోప్యం.</p>" +
-            '<div class="aiskin__pick">' +
-              '<button class="aiskin__pickbtn" data-type="skin"><span>🧴</span>చర్మం / గోళ్ళు<i>Skin / Nails</i></button>' +
-              '<button class="aiskin__pickbtn" data-type="hair"><span>💇</span>జుట్టు / స్కాల్ప్<i>Hair / Scalp</i></button>' +
-            "</div>" +
-            '<p class="aiskin__note">' + DISCLAIMER + "</p>" +
+        '<div class="aiskin__step">' +
+          '<h3 class="aiskin__h">దేని గురించి? <i>What is this about?</i></h3>' +
+          '<div class="aiskin__seg" role="tablist">' +
+            '<button class="' + (state.type === "skin" ? "sel" : "") + '" data-t="skin">🧴 చర్మం / గోళ్ళు</button>' +
+            '<button class="' + (state.type === "hair" ? "sel" : "") + '" data-t="hair">💇 జుట్టు / స్కాల్ప్</button>' +
           "</div>" +
-        "</div>"
-      );
-      v.querySelectorAll(".aiskin__pickbtn").forEach(function (b) {
-        b.addEventListener("click", function () { state.type = b.getAttribute("data-type"); state.step = 1; render(); });
-      });
-      return v;
-    },
-
-    /* 1 — patient details */
-    1: function () {
-      var v = el(
-        '<div class="aiskin__card">' + progress(0) +
-          '<h3 class="aiskin__h">మీ వివరాలు <i>Your details</i></h3>' +
-          '<form class="aiskin__form" id="aiForm">' +
-            '<label>వయసు · Age<input name="age" type="number" min="0" max="120" inputmode="numeric" placeholder="ఉదా. 25" required></label>' +
-            "<label>లింగం · Gender<select name=\"gender\" required><option value=''>—</option><option>స్త్రీ / Female</option><option>పురుషుడు / Male</option><option>ఇతర / Other</option></select></label>" +
-            '<label class="aiskin__full">సమస్య ఉన్న ప్రాంతం · Area<input name="area" maxlength="60" placeholder="ఉదా. ముఖం, తల, చేతులు" required></label>' +
-            '<label class="aiskin__full">సమస్య వివరించండి · Describe the problem<textarea name="details" maxlength="500" rows="3" placeholder="ఉదా. 2 నెలలుగా మొటిమలు, దురద..."></textarea></label>' +
-          "</form>" +
-          '<div class="aiskin__actions"><button class="btn btn--ghost aiskin__back">← వెనక్కి</button><button class="btn btn--primary aiskin__next">కొనసాగించు →</button></div>' +
-        "</div>"
-      );
-      v.querySelector(".aiskin__back").addEventListener("click", function () { state.step = 0; render(); });
-      v.querySelector(".aiskin__next").addEventListener("click", function () {
-        var f = v.querySelector("#aiForm");
-        if (!f.reportValidity()) return;
-        var d = new FormData(f);
-        state.patient = { type: state.type, age: d.get("age"), gender: d.get("gender"), area: d.get("area"), details: d.get("details") };
-        state.step = 2; render();
-      });
-      return v;
-    },
-
-    /* 2 — consent + phone */
-    2: function () {
-      var v = el(
-        '<div class="aiskin__card">' + progress(1) +
-          '<h3 class="aiskin__h">అనుమతి &amp; మొబైల్ ధృవీకరణ <i>Consent &amp; mobile verify</i></h3>' +
-          '<div class="aiskin__consent">' +
-            '<label class="aiskin__check"><input type="checkbox" id="aiConsent"><span>నా ఫోటో &amp; వివరాలను AI విశ్లేషణ కోసం ప్రాసెస్ చేయడానికి నేను అంగీకరిస్తున్నాను. ఇది వైద్య నిర్ధారణ కాదని, ఫోటో save చేయబడదని నాకు తెలుసు. <i>I consent to AI processing of my photo &amp; details; I understand this is not a diagnosis and my photo is not stored.</i></span></label>' +
+          '<h4 class="aiskin__label">సమస్య ఎంచుకోండి <i>(ఒకటి లేదా ఎక్కువ)</i></h4>' +
+          '<div class="aiskin__chips" id="aiConcerns"></div>' +
+          '<div class="aiskin__row2">' +
+            '<div><h4 class="aiskin__label">వయసు</h4><div class="aiskin__chips aiskin__chips--sm" id="aiAges"></div></div>' +
+            '<div><h4 class="aiskin__label">లింగం</h4><div class="aiskin__chips aiskin__chips--sm" id="aiGenders"></div></div>' +
           "</div>" +
-          '<label class="aiskin__phone">మొబైల్ నంబర్ · Mobile number<div class="aiskin__phonerow"><span>+91</span><input id="aiPhone" type="tel" inputmode="numeric" maxlength="10" placeholder="10 అంకెల నంబర్"></div></label>' +
-          '<p class="aiskin__err" id="aiErr2"></p>' +
-          '<div class="aiskin__actions"><button class="btn btn--ghost aiskin__back">← వెనక్కి</button><button class="btn btn--primary aiskin__next">OTP పంపు →</button></div>' +
+          '<h4 class="aiskin__label">మరిన్ని వివరాలు <i>(optional — ఎప్పటి నుండి, ఎక్కడ...)</i></h4>' +
+          '<textarea class="aiskin__ta" id="aiDetails" rows="2" maxlength="500" placeholder="ఉదా. 2 నెలలుగా ముఖం మీద మొటిమలు...">' + esc(state.details) + "</textarea>" +
+          '<p class="aiskin__err" id="aiErrF"></p>' +
+          '<div class="aiskin__actions"><span></span><button class="btn btn--primary aiskin__next">కొనసాగించండి →</button></div>' +
         "</div>"
       );
-      v.querySelector(".aiskin__back").addEventListener("click", function () { state.step = 1; render(); });
-      var err = v.querySelector("#aiErr2");
-      v.querySelector(".aiskin__next").addEventListener("click", function () {
-        err.textContent = "";
-        if (!v.querySelector("#aiConsent").checked) { err.textContent = "దయచేసి అనుమతి ఇవ్వండి."; return; }
-        var ph = digits(v.querySelector("#aiPhone").value);
-        if (ph.length !== 10) { err.textContent = "10 అంకెల సరైన మొబైల్ నంబర్ ఇవ్వండి."; return; }
-        state.phone = ph;
-        var btn = v.querySelector(".aiskin__next"); btn.disabled = true; btn.textContent = "పంపుతోంది…";
-        api("/api/send-otp", { phone: ph }).then(function (r) {
-          if (r.ok && r.json.ok) { state.devHint = r.json.devHint || ""; state.step = 3; render(); }
-          else { err.textContent = (r.json && r.json.message) || "OTP పంపడంలో సమస్య."; btn.disabled = false; btn.textContent = "OTP పంపు →"; }
-        }).catch(function () { err.textContent = "నెట్‌వర్క్ సమస్య. మళ్ళీ ప్రయత్నించండి."; btn.disabled = false; btn.textContent = "OTP పంపు →"; });
-      });
-      return v;
-    },
 
-    /* 3 — OTP */
-    3: function () {
-      var hint = state.devHint ? '<p class="aiskin__hint">🔑 Test/DEV OTP: <b>' + esc(state.devHint) + "</b> (Twilio configure చేసాక ఇది రాదు)</p>" : "";
-      var v = el(
-        '<div class="aiskin__card">' + progress(2) +
-          '<h3 class="aiskin__h">OTP నమోదు చేయండి <i>Enter OTP</i></h3>' +
-          "<p class=\"aiskin__sub\">+91 " + esc(state.phone) + " కి పంపిన కోడ్ ఎంటర్ చేయండి.</p>" + hint +
-          '<input id="aiOtp" class="aiskin__otp" type="text" inputmode="numeric" maxlength="6" placeholder="______">' +
-          '<p class="aiskin__err" id="aiErr3"></p>' +
-          '<div class="aiskin__actions"><button class="btn btn--ghost aiskin__back">← మార్చు</button><button class="btn btn--primary aiskin__next">ధృవీకరించు →</button></div>' +
-        "</div>"
-      );
-      v.querySelector(".aiskin__back").addEventListener("click", function () { state.step = 2; render(); });
-      var err = v.querySelector("#aiErr3");
-      v.querySelector(".aiskin__next").addEventListener("click", function () {
-        err.textContent = "";
-        var code = digits(v.querySelector("#aiOtp").value);
-        if (code.length < 4) { err.textContent = "OTP కోడ్ ఎంటర్ చేయండి."; return; }
-        var btn = v.querySelector(".aiskin__next"); btn.disabled = true; btn.textContent = "ధృవీకరిస్తోంది…";
-        api("/api/verify-otp", { phone: state.phone, code: code }).then(function (r) {
-          if (r.ok && r.json.ok && r.json.consentToken) { state.consentToken = r.json.consentToken; state.step = 4; render(); }
-          else { err.textContent = (r.json && r.json.message) || "OTP సరిగ్గా లేదు."; btn.disabled = false; btn.textContent = "ధృవీకరించు →"; }
-        }).catch(function () { err.textContent = "నెట్‌వర్క్ సమస్య."; btn.disabled = false; btn.textContent = "ధృవీకరించు →"; });
-      });
-      return v;
-    },
+      function chips(holder, list, selected, single) {
+        holder.innerHTML = "";
+        list.forEach(function (item) {
+          var te = Array.isArray(item) ? item[0] : item, en = Array.isArray(item) ? item[1] : "";
+          var b = el('<button type="button" class="aiskin__chip' + (selected.indexOf(te) > -1 ? " sel" : "") + '">' + esc(te) + (en ? "<i>" + esc(en) + "</i>" : "") + "</button>");
+          b.addEventListener("click", function () {
+            if (single) { selected.length = 0; selected.push(te); chips(holder, list, selected, true); }
+            else {
+              var i = selected.indexOf(te);
+              if (i > -1) selected.splice(i, 1); else selected.push(te);
+              b.classList.toggle("sel");
+            }
+          });
+          holder.appendChild(b);
+        });
+      }
+      var ageSel = state.age ? [state.age] : [], genSel = state.gender ? [state.gender] : [];
+      chips(v.querySelector("#aiConcerns"), CONCERNS[state.type], state.concerns, false);
+      chips(v.querySelector("#aiAges"), AGES, ageSel, true);
+      chips(v.querySelector("#aiGenders"), GENDERS, genSel, true);
 
-    /* 4 — photo */
-    4: function () {
-      var v = el(
-        '<div class="aiskin__card">' + progress(3) +
-          '<h3 class="aiskin__h">ఫోటో అప్‌లోడ్ చేయండి <i>Upload a clear photo</i></h3>' +
-          '<p class="aiskin__sub">సమస్య ఉన్న ప్రాంతం యొక్క <strong>స్పష్టమైన, వెలుతురులో</strong> క్లోజ్-అప్ ఫోటో తీయండి.</p>' +
-          '<label class="aiskin__drop" id="aiDrop"><input id="aiFile" type="file" accept="image/*" capture="environment" hidden>' +
-            '<span class="aiskin__dropinner"><b>📷</b> ఫోటో ఎంచుకోండి / తీయండి<i>Tap to take or choose a photo</i></span>' +
-          "</label>" +
-          '<div class="aiskin__preview" id="aiPrev" hidden></div>' +
-          '<p class="aiskin__err" id="aiErr4"></p>' +
-          '<div class="aiskin__actions"><button class="btn btn--ghost aiskin__back">← వెనక్కి</button><button class="btn btn--primary aiskin__next" disabled>విశ్లేషించు ✨</button></div>' +
-        "</div>"
-      );
-      var next = v.querySelector(".aiskin__next"), prev = v.querySelector("#aiPrev"), err = v.querySelector("#aiErr4");
-      v.querySelector(".aiskin__back").addEventListener("click", function () { state.step = 3; render(); });
-      v.querySelector("#aiFile").addEventListener("change", function (e) {
-        var file = e.target.files && e.target.files[0]; if (!file) return;
-        err.textContent = "";
-        readImage(file, function (dataUrl) {
-          if (!dataUrl) { err.textContent = "ఫోటో చదవలేకపోయాం. మరో ఫోటో ప్రయత్నించండి."; return; }
-          state.image = dataUrl; state.mediaType = "image/jpeg";
-          prev.hidden = false; prev.innerHTML = '<img src="' + dataUrl + '" alt="preview"><button class="aiskin__retake">మార్చు</button>';
-          prev.querySelector(".aiskin__retake").addEventListener("click", function () { state.image = ""; prev.hidden = true; prev.innerHTML = ""; next.disabled = true; v.querySelector("#aiFile").value = ""; });
-          next.disabled = false;
+      v.querySelectorAll(".aiskin__seg button").forEach(function (b) {
+        b.addEventListener("click", function () {
+          if (state.type !== b.getAttribute("data-t")) { state.type = b.getAttribute("data-t"); state.concerns = []; setView("form"); }
         });
       });
-      next.addEventListener("click", function () {
-        if (!state.image) return;
-        state.step = 5; render(); runAnalysis();
+
+      v.querySelector(".aiskin__next").addEventListener("click", function () {
+        var err = v.querySelector("#aiErrF");
+        state.details = v.querySelector("#aiDetails").value.trim();
+        state.age = ageSel[0] || ""; state.gender = genSel[0] || "";
+        if (!state.concerns.length && !state.details) { err.textContent = "కనీసం ఒక సమస్య ఎంచుకోండి (లేదా వివరించండి)."; return; }
+        if (!state.age) { err.textContent = "వయసు ఎంచుకోండి."; return; }
+        if (!state.gender) { err.textContent = "లింగం ఎంచుకోండి."; return; }
+        setView(state.consentToken ? "photo" : "verify");
       });
       return v;
     },
 
-    /* 5 — analyzing */
-    5: function () {
-      return el(
-        '<div class="aiskin__card aiskin__loading">' +
-          '<div class="aiskin__spin"></div>' +
-          "<h3>AI విశ్లేషిస్తోంది…</h3>" +
-          "<p>మీ ఫోటోను మా AI పరిశీలిస్తోంది. కొన్ని సెకన్లు వేచి ఉండండి.</p>" +
+    /* ---- 2. consent + phone + inline OTP ---- */
+    verify: function () {
+      var phaseB = state.otpSent;
+      var v = el(
+        '<div class="aiskin__step">' +
+          '<h3 class="aiskin__h">అనుమతి &amp; మొబైల్ ధృవీకరణ <i>Consent &amp; verify</i></h3>' +
+          '<label class="aiskin__check"><input type="checkbox" id="aiConsent"' + (state.consentChecked ? " checked" : "") + '><span>నా ఫోటో &amp; వివరాలను AI విశ్లేషణ కోసం ప్రాసెస్ చేయడానికి అంగీకరిస్తున్నాను. ఇది <b>వైద్య నిర్ధారణ కాదు</b>; ఫోటో <b>save అవదు</b>.<i>I consent to AI processing; not a diagnosis; photo is not stored.</i></span></label>' +
+          '<h4 class="aiskin__label">మొబైల్ నంబర్</h4>' +
+          '<div class="aiskin__phonerow"><span>+91</span><input id="aiPhone" type="tel" inputmode="numeric" maxlength="10" placeholder="10 అంకెలు" value="' + esc(state.phone) + '"' + (phaseB ? " disabled" : "") + ">" +
+            '<button class="btn btn--primary aiskin__send" id="aiSend">' + (phaseB ? "మార్చు" : "OTP పంపండి") + "</button></div>" +
+          (phaseB
+            ? ('<h4 class="aiskin__label">OTP నమోదు చేయండి' + (state.devHint ? ' <i class="aiskin__devhint">🔑 test code: ' + esc(state.devHint) + "</i>" : "") + "</h4>" +
+               '<div class="aiskin__otps" id="aiOtps">' + "<input maxlength='1' inputmode='numeric'>".repeat(6) + "</div>" +
+               '<p class="aiskin__resend" id="aiResend">మళ్ళీ పంపడానికి <b>30</b>s</p>')
+            : "") +
+          '<p class="aiskin__err" id="aiErrV">' + esc(state.verifyMsg || "") + "</p>" +
+          '<div class="aiskin__actions"><button class="btn btn--ghost aiskin__back">← వెనక్కి</button>' +
+            (phaseB ? '<button class="btn btn--primary aiskin__go">ధృవీకరించండి ✓</button>' : "<span></span>") +
+          "</div>" +
         "</div>"
       );
+      state.verifyMsg = "";
+      var err = v.querySelector("#aiErrV");
+      v.querySelector(".aiskin__back").addEventListener("click", function () { state.otpSent = false; setView("form"); });
+
+      function sendOtp() {
+        if (!v.querySelector("#aiConsent").checked) { err.textContent = "దయచేసి పైన అనుమతి ✓ ఇవ్వండి."; return; }
+        var ph = digits(v.querySelector("#aiPhone").value);
+        if (ph.length !== 10) { err.textContent = "10 అంకెల సరైన నంబర్ ఇవ్వండి."; return; }
+        state.phone = ph; state.consentChecked = true;
+        var btn = v.querySelector("#aiSend"); btn.disabled = true; btn.textContent = "పంపుతోంది…";
+        api("/api/send-otp", { phone: ph }).then(function (r) {
+          if (r.ok && r.json.ok) { state.devHint = r.json.devHint || ""; state.otpSent = true; setView("verify"); }
+          else { err.textContent = (r.json && r.json.message) || "OTP పంపడంలో సమస్య."; btn.disabled = false; btn.textContent = "OTP పంపండి"; }
+        }).catch(function () { err.textContent = "నెట్‌వర్క్ సమస్య."; btn.disabled = false; btn.textContent = "OTP పంపండి"; });
+      }
+
+      if (!phaseB) {
+        v.querySelector("#aiSend").addEventListener("click", sendOtp);
+      } else {
+        /* change number */
+        v.querySelector("#aiSend").addEventListener("click", function () { state.otpSent = false; setView("verify"); });
+
+        /* OTP boxes: auto-advance, backspace, paste */
+        var boxes = [].slice.call(v.querySelectorAll("#aiOtps input"));
+        boxes[0] && setTimeout(function () { boxes[0].focus(); }, 60);
+        boxes.forEach(function (b, i) {
+          b.addEventListener("input", function () {
+            b.value = digits(b.value).slice(-1);
+            if (b.value && i < 5) boxes[i + 1].focus();
+          });
+          b.addEventListener("keydown", function (e) {
+            if (e.key === "Backspace" && !b.value && i > 0) boxes[i - 1].focus();
+            if (e.key === "Enter") doVerify();
+          });
+          b.addEventListener("paste", function (e) {
+            var t = digits((e.clipboardData || window.clipboardData).getData("text")).slice(0, 6);
+            if (t.length > 1) { e.preventDefault(); boxes.forEach(function (x, j) { x.value = t[j] || ""; }); (boxes[Math.min(t.length, 5)] || b).focus(); }
+          });
+        });
+
+        /* resend timer */
+        var left = 30, rs = v.querySelector("#aiResend");
+        var timer = setInterval(function () {
+          left--;
+          if (left <= 0) {
+            clearInterval(timer);
+            rs.innerHTML = '<button type="button" class="aiskin__link">మళ్ళీ OTP పంపండి</button>';
+            rs.querySelector("button").addEventListener("click", function () { state.otpSent = false; sendOtpAgain(); });
+          } else rs.innerHTML = "మళ్ళీ పంపడానికి <b>" + left + "</b>s";
+        }, 1000);
+        state.cleanup = function () { clearInterval(timer); };
+        function sendOtpAgain() {
+          api("/api/send-otp", { phone: state.phone }).then(function (r) {
+            if (r.ok && r.json.ok) { state.devHint = r.json.devHint || ""; state.otpSent = true; setView("verify"); }
+          });
+        }
+
+        function doVerify() {
+          var code = boxes.map(function (b) { return b.value; }).join("");
+          if (digits(code).length !== 6) { err.textContent = "6 అంకెల OTP నమోదు చేయండి."; return; }
+          var go = v.querySelector(".aiskin__go"); go.disabled = true; go.textContent = "ధృవీకరిస్తోంది…";
+          api("/api/verify-otp", { phone: state.phone, code: code }).then(function (r) {
+            if (r.ok && r.json.ok && r.json.consentToken) { state.consentToken = r.json.consentToken; setView("photo"); }
+            else { err.textContent = (r.json && r.json.message) || "OTP సరిపోలేదు."; go.disabled = false; go.textContent = "ధృవీకరించండి ✓"; }
+          }).catch(function () { err.textContent = "నెట్‌వర్క్ సమస్య."; go.disabled = false; go.textContent = "ధృవీకరించండి ✓"; });
+        }
+        v.querySelector(".aiskin__go").addEventListener("click", doVerify);
+      }
+      return v;
     },
 
-    /* 6 — result */
-    6: function () {
-      var r = state.result || {};
-      function list(arr, cls) {
-        if (!arr || !arr.length) return "";
-        return '<ul class="aiskin__list ' + (cls || "") + '">' + arr.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>";
+    /* ---- 3. photo ---- */
+    photo: function () {
+      var v = el(
+        '<div class="aiskin__step">' +
+          '<h3 class="aiskin__h">ఫోటో ఇవ్వండి <i>Upload a clear photo</i></h3>' +
+          '<div class="aiskin__tips"><span>💡 మంచి వెలుతురు</span><span>📏 దగ్గరగా (close-up)</span><span>🚫 ఫిల్టర్ వద్దు</span></div>' +
+          '<label class="aiskin__drop" id="aiDrop"><input id="aiFile" type="file" accept="image/*" hidden>' +
+            '<span class="aiskin__dropinner" id="aiDropInner"><b>📷</b><strong>ఫోటో తీయండి / ఎంచుకోండి</strong><i>tap · drag &amp; drop · paste</i></span>' +
+            '<span class="aiskin__preview" id="aiPrev" hidden></span>' +
+          "</label>" +
+          '<p class="aiskin__warn" id="aiWarn" hidden>⚠️ ఫోటో కొంచెం చీకటిగా ఉంది — వెలుతురులో తీస్తే ఫలితం మెరుగ్గా ఉంటుంది.</p>' +
+          '<p class="aiskin__err" id="aiErrP"></p>' +
+          '<div class="aiskin__actions"><button class="btn btn--ghost aiskin__back">← వెనక్కి</button>' +
+            '<button class="btn btn--primary aiskin__go"' + (state.image ? "" : " disabled") + ">విశ్లేషించండి ✨</button></div>" +
+        "</div>"
+      );
+      var drop = v.querySelector("#aiDrop"), inner = v.querySelector("#aiDropInner"),
+          prev = v.querySelector("#aiPrev"), go = v.querySelector(".aiskin__go"),
+          err = v.querySelector("#aiErrP"), warn = v.querySelector("#aiWarn");
+
+      function showPreview() {
+        if (!state.image) return;
+        inner.hidden = true; prev.hidden = false;
+        prev.innerHTML = '<img src="' + state.image + '" alt="మీ ఫోటో"><button type="button" class="aiskin__retake">🔄 మార్చండి</button>';
+        prev.querySelector(".aiskin__retake").addEventListener("click", function (e) {
+          e.preventDefault(); e.stopPropagation();
+          state.image = ""; state.dim = false; prev.hidden = true; prev.innerHTML = ""; inner.hidden = false;
+          warn.hidden = true; go.disabled = true; v.querySelector("#aiFile").value = "";
+        });
+        warn.hidden = !state.dim;
+        go.disabled = false;
       }
-      var soon = r.seeDoctorSoon
-        ? '<div class="aiskin__soon">⚕️ మంచిది త్వరగా మా వైద్యులను స్వయంగా సంప్రదించండి. <i>Please see our dermatologist in person soon.</i></div>' : "";
-      var body;
+      function accept(file) {
+        if (!file || !/^image\//.test(file.type)) { err.textContent = "దయచేసి ఫోటో (image) ఎంచుకోండి."; return; }
+        err.textContent = "";
+        readImage(file, function (dataUrl, dim) {
+          if (!dataUrl) { err.textContent = "ఫోటో చదవలేకపోయాం — మరో ఫోటో ప్రయత్నించండి."; return; }
+          state.image = dataUrl; state.mediaType = "image/jpeg"; state.dim = dim;
+          showPreview();
+        });
+      }
+      v.querySelector("#aiFile").addEventListener("change", function (e) { accept(e.target.files && e.target.files[0]); });
+      ["dragover", "dragenter"].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add("over"); }); });
+      ["dragleave", "drop"].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove("over"); }); });
+      drop.addEventListener("drop", function (e) { accept(e.dataTransfer.files && e.dataTransfer.files[0]); });
+      function onPaste(e) {
+        var items = (e.clipboardData || {}).items || [];
+        for (var i = 0; i < items.length; i++) if (items[i].type.indexOf("image") === 0) { accept(items[i].getAsFile()); break; }
+      }
+      document.addEventListener("paste", onPaste);
+      state.cleanup = function () { document.removeEventListener("paste", onPaste); };
+
+      showPreview();
+      v.querySelector(".aiskin__back").addEventListener("click", function () { setView("form"); });
+      go.addEventListener("click", function () { if (state.image) { setView("analyzing"); runAnalysis(); } });
+      return v;
+    },
+
+    /* ---- 4. analyzing: photo scan animation ---- */
+    analyzing: function () {
+      var v = el(
+        '<div class="aiskin__step aiskin__center">' +
+          '<div class="aiskin__scanwrap">' +
+            '<img src="' + state.image + '" alt="">' +
+            '<span class="aiskin__scanline" aria-hidden="true"></span>' +
+          "</div>" +
+          '<h3 class="aiskin__h" style="margin-top:1.1rem">AI విశ్లేషిస్తోంది…</h3>' +
+          '<p class="aiskin__scanmsg" id="aiScanMsg">ఫోటోను పరిశీలిస్తోంది…</p>' +
+        "</div>"
+      );
+      var msgs = ["ఫోటోను పరిశీలిస్తోంది…", "చర్మం / జుట్టు లక్షణాలను గుర్తిస్తోంది…", "సంరక్షణ సూచనలు సిద్ధం చేస్తోంది…", "దాదాపు పూర్తయింది…"];
+      var i = 0, m = v.querySelector("#aiScanMsg");
+      var t = setInterval(function () { i = (i + 1) % msgs.length; m.textContent = msgs[i]; }, 1700);
+      state.cleanup = function () { clearInterval(t); };
+      return v;
+    },
+
+    /* ---- 5. result ---- */
+    result: function () {
+      var r = state.result || {};
+      function list(arr) {
+        return '<ul class="aiskin__list">' + (arr || []).map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>";
+      }
+      function section(ic, te, en, inner) {
+        return '<section class="aiskin__sec"><h4><span>' + ic + "</span>" + te + " <i>" + en + "</i></h4>" + inner + "</section>";
+      }
+
+      var v;
       if (r.imageUsable === false) {
-        body =
-          '<div class="aiskin__result">' +
-            '<p class="aiskin__summary">' + esc(r.summary || "ఫోటో స్పష్టంగా లేదు. దయచేసి మంచి వెలుతురులో, క్లోజ్-అప్ ఫోటో మళ్ళీ అప్‌లోడ్ చేయండి.") + "</p>" +
-            '<div class="aiskin__actions"><button class="btn btn--primary aiskin__retry">మళ్ళీ ఫోటో ✨</button></div>' +
-          "</div>";
+        v = el(
+          '<div class="aiskin__step aiskin__center">' +
+            '<p class="aiskin__summary">' + esc(r.summary || "ఫోటో స్పష్టంగా లేదు — మంచి వెలుతురులో close-up ఫోటో మళ్ళీ ప్రయత్నించండి.") + "</p>" +
+            '<div class="aiskin__actions"><span></span><button class="btn btn--primary aiskin__retry">📷 మళ్ళీ ఫోటో</button></div>' +
+          "</div>"
+        );
       } else {
-        body =
-          '<div class="aiskin__result">' + soon +
+        var sev = r.severity === "see-soon" ? 2 : r.severity === "recommend-consult" ? 1 : 0;
+        var sevRow = ["సాధారణ సంరక్షణ", "వైద్య సలహా మంచిది", "త్వరగా సంప్రదించండి"].map(function (s, i) {
+          return '<span class="' + (i === sev ? "on s" + i : "") + '">' + s + "</span>";
+        }).join("");
+        var waText = "నమస్తే Medicare 🌸 నేను website లో AI Skin & Hair Analysis చేసాను.\n" +
+                     "ఫలితం: " + (r.summary || "").slice(0, 220) + "\nConsultation కావాలి.";
+        v = el(
+          '<div class="aiskin__step">' +
+            '<h3 class="aiskin__h">మీ AI ఫలితం <i>Your result</i></h3>' +
+            '<div class="aiskin__sev">' + sevRow + "</div>" +
+            (r.seeDoctorSoon ? '<div class="aiskin__soon">⚕️ దయచేసి త్వరగా మా వైద్యులను స్వయంగా కలవండి. <i>Please visit our dermatologist soon.</i></div>' : "") +
             (r.summary ? '<p class="aiskin__summary">' + esc(r.summary) + "</p>" : "") +
-            (r.observations && r.observations.length ? "<h4>👁️ కనిపించినవి · Observations</h4>" + list(r.observations) : "") +
-            (r.possibleFactors && r.possibleFactors.length ? "<h4>🔎 సాధ్యమయ్యే కారణాలు · Possible factors</h4>" + list(r.possibleFactors) : "") +
-            (r.selfCareTips && r.selfCareTips.length ? "<h4>🌿 సంరక్షణ చిట్కాలు · Self-care tips</h4>" + list(r.selfCareTips) : "") +
-            (r.suggestedTreatments && r.suggestedTreatments.length ? '<h4>💠 సూచించిన చికిత్సలు · Suggested at Medicare</h4><div class="aiskin__tags">' + r.suggestedTreatments.map(function (t) { return "<span>" + esc(t) + "</span>"; }).join("") + "</div>" : "") +
+            (r.observations && r.observations.length ? section("👁️", "కనిపించినవి", "Observations", list(r.observations)) : "") +
+            (r.possibleFactors && r.possibleFactors.length ? section("🔎", "సాధ్య కారణాలు", "Possible factors", list(r.possibleFactors)) : "") +
+            (r.selfCareTips && r.selfCareTips.length ? section("🌿", "సంరక్షణ చిట్కాలు", "Self-care", list(r.selfCareTips)) : "") +
+            (r.suggestedTreatments && r.suggestedTreatments.length
+              ? section("💠", "Medicare లో తగిన చికిత్సలు", "Suggested treatments",
+                  '<div class="aiskin__tags">' + r.suggestedTreatments.map(function (t) { return "<span>" + esc(t) + "</span>"; }).join("") + "</div>")
+              : "") +
             '<p class="aiskin__disc">' + esc(r.disclaimer || "") + "</p>" +
             '<div class="aiskin__cta">' +
-              '<a class="btn btn--primary" href="#contact">📅 అపాయింట్‌మెంట్ బుక్ చేయండి</a>' +
-              '<a class="btn btn--ghost" target="_blank" rel="noopener" href="https://wa.me/' + WA + '?text=' + encodeURIComponent("నమస్తే, AI analysis చేసా — consultation కావాలి.") + '">💬 WhatsApp</a>' +
-              '<button class="btn btn--ghost aiskin__retry">🔄 మరొక ఫోటో</button>' +
+              '<a class="btn btn--primary" href="#contact">📅 అపాయింట్‌మెంట్</a>' +
+              '<a class="btn btn--ghost" target="_blank" rel="noopener" href="https://wa.me/' + WA + "?text=" + encodeURIComponent(waText) + '">💬 WhatsApp లో పంపండి</a>' +
+              '<button class="btn btn--ghost aiskin__retry">📷 మరో ఫోటో</button>' +
+              '<button class="btn btn--ghost aiskin__edit">✏️ వివరాలు మార్చండి</button>' +
             "</div>" +
-          "</div>";
+          "</div>"
+        );
+        v.querySelector(".aiskin__edit").addEventListener("click", function () { state.result = null; setView("form"); });
       }
-      var v = el('<div class="aiskin__card">' + progress(4) + '<h3 class="aiskin__h">AI ఫలితం <i>Your AI result</i></h3>' + body + "</div>");
       var rt = v.querySelector(".aiskin__retry");
-      if (rt) rt.addEventListener("click", function () { state.image = ""; state.result = null; state.step = 4; render(); });
+      if (rt) rt.addEventListener("click", function () { state.image = ""; state.result = null; setView("photo"); });
       return v;
     }
   };
 
+  /* ----------------------------- analyze ----------------------------- */
   function runAnalysis() {
-    api("/api/analyze", { image: state.image, mediaType: state.mediaType, patient: state.patient, consentToken: state.consentToken })
+    var patient = {
+      type: state.type, age: state.age, gender: state.gender,
+      area: state.concerns.join(", ").slice(0, 80),
+      details: (state.concerns.length ? "సమస్యలు: " + state.concerns.join(", ") + ". " : "") + state.details
+    };
+    api("/api/analyze", { image: state.image, mediaType: state.mediaType, patient: patient, consentToken: state.consentToken })
       .then(function (r) {
-        if (r.ok && r.json.ok && r.json.result) { state.result = r.json.result; state.step = 6; render(); return; }
-        if (r.status === 401) { alert("మీ ధృవీకరణ గడువు ముగిసింది. దయచేసి మళ్ళీ OTP ధృవీకరించండి."); state.step = 2; render(); return; }
-        state.result = { imageUsable: true, summary: (r.json && r.json.message) || "AI విశ్లేషణ విఫలమైంది. దయచేసి మళ్ళీ ప్రయత్నించండి, లేదా మా వైద్యులను సంప్రదించండి.", severity: "recommend-consult", disclaimer: "" };
-        state.step = 6; render();
+        if (r.ok && r.json.ok && r.json.result) { state.result = r.json.result; setView("result"); return; }
+        if (r.status === 401) { state.consentToken = ""; state.otpSent = false; state.verifyMsg = "ధృవీకరణ గడువు ముగిసింది — దయచేసి మళ్ళీ OTP చేయండి."; setView("verify"); return; }
+        state.result = { imageUsable: true, summary: (r.json && r.json.message) || "AI విశ్లేషణ విఫలమైంది — దయచేసి మళ్ళీ ప్రయత్నించండి, లేదా మా వైద్యులను నేరుగా సంప్రదించండి.", observations: [], possibleFactors: [], selfCareTips: [], suggestedTreatments: [], severity: "recommend-consult", seeDoctorSoon: false, disclaimer: "" };
+        setView("result");
       })
       .catch(function () {
-        state.result = { imageUsable: true, summary: "నెట్‌వర్క్ సమస్య. దయచేసి మళ్ళీ ప్రయత్నించండి.", disclaimer: "" };
-        state.step = 6; render();
+        state.result = { imageUsable: true, summary: "నెట్‌వర్క్ సమస్య — దయచేసి మళ్ళీ ప్రయత్నించండి.", observations: [], possibleFactors: [], selfCareTips: [], suggestedTreatments: [], severity: "recommend-consult", seeDoctorSoon: false, disclaimer: "" };
+        setView("result");
       });
   }
 
-  render();
+  setView("form");
 })();
