@@ -2,32 +2,45 @@
 //  /api/analyze  —  AI Skin & Hair Analysis (Claude Opus 4.8 vision)
 //  Serverless function (Vercel Node runtime). No dependencies: uses the
 //  built-in fetch + crypto. The uploaded photo is analyzed in-memory and
-//  is NEVER stored (privacy-first). A valid signed consent token (issued
-//  by /api/verify-otp after OTP) is required.
+//  is NEVER stored (privacy-first).
+//
+//  Access control (OTP-less until an SMS provider is wired):
+//    - consent flag (checkbox attestation) + 10-digit mobile number
+//    - LIMIT: 5 analyses per mobile number per 90 days, enforced via a
+//      stateless HMAC-signed usage token the client stores & echoes back
+//      (no database). When SMS/OTP is added later, the same token gets
+//      anchored to a verified number.
 //
 //  Required env vars (set in Vercel → Project → Settings → Environment):
 //    ANTHROPIC_API_KEY   — your Anthropic API key (billing)
-//    CONSENT_SECRET      — a long random string (HMAC secret for consent tokens)
+//    CONSENT_SECRET      — a long random string (HMAC secret for tokens)
 // =====================================================================
 const crypto = require("crypto");
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const CONSENT_SECRET = process.env.CONSENT_SECRET || "DEV_INSECURE_change_me_set_CONSENT_SECRET";
 const MODEL = "claude-opus-4-8";
+const LIMIT = 5;                                   // free analyses…
+const WINDOW_MS = 90 * 24 * 60 * 60 * 1000;        // …per 90 days per number
 
-/* ---- consent token verification (HMAC, must match /api/verify-otp) ---- */
-function verifyConsent(token) {
+/* ---- stateless per-number usage token (HMAC-signed) ---- */
+function hmac(body) { return crypto.createHmac("sha256", CONSENT_SECRET).update(body).digest("base64url"); }
+function readUsage(token, phone) {
   try {
-    if (!token || typeof token !== "string") return null;
+    if (!token || typeof token !== "string") return { start: Date.now(), count: 0 };
     const [body, sig] = token.split(".");
-    if (!body || !sig) return null;
-    const expected = crypto.createHmac("sha256", CONSENT_SECRET).update(body).digest("base64url");
-    const a = Buffer.from(sig), b = Buffer.from(expected);
-    if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return null;
-    const payload = JSON.parse(Buffer.from(body, "base64url").toString("utf8"));
-    if (!payload.consent || !payload.exp || Date.now() > payload.exp) return null;
-    return payload;
-  } catch (e) { return null; }
+    if (!body || !sig) return { start: Date.now(), count: 0 };
+    const a = Buffer.from(sig), b = Buffer.from(hmac(body));
+    if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return { start: Date.now(), count: 0 };
+    const p = JSON.parse(Buffer.from(body, "base64url").toString("utf8"));
+    if (p.p !== phone) return { start: Date.now(), count: 0 };
+    if (!p.s || Date.now() - p.s > WINDOW_MS) return { start: Date.now(), count: 0 };  // window expired → reset
+    return { start: p.s, count: Math.max(0, p.c | 0) };
+  } catch (e) { return { start: Date.now(), count: 0 }; }
+}
+function signUsage(phone, start, count) {
+  const body = Buffer.from(JSON.stringify({ p: phone, s: start, c: count, v: 1 })).toString("base64url");
+  return body + "." + hmac(body);
 }
 
 const TREATMENTS =
@@ -79,10 +92,19 @@ module.exports = async (req, res) => {
       res.status(503).json({ error: "not_configured", message: "AI analysis is not configured yet. (Set ANTHROPIC_API_KEY in Vercel.)" });
       return;
     }
-    const { image, mediaType, patient, consentToken } = req.body || {};
+    const { image, mediaType, patient, consent, phone, usageToken } = req.body || {};
 
-    const consent = verifyConsent(consentToken);
-    if (!consent) { res.status(401).json({ error: "consent_required", message: "మీ అనుమతి/OTP ధృవీకరణ అవసరం లేదా గడువు ముగిసింది. దయచేసి మళ్ళీ ధృవీకరించండి." }); return; }
+    if (consent !== true) { res.status(400).json({ error: "consent_required", message: "దయచేసి అనుమతి (consent) ✓ ఇవ్వండి." }); return; }
+    const ph = (phone || "").toString().replace(/\D/g, "");
+    if (ph.length !== 10) { res.status(400).json({ error: "phone_required", message: "దయచేసి 10 అంకెల మొబైల్ నంబర్ ఇవ్వండి." }); return; }
+
+    /* per-number limit: 5 analyses / 90 days (stateless signed token) */
+    const usage = readUsage(usageToken, ph);
+    if (usage.count >= LIMIT) {
+      res.status(429).json({ error: "limit_reached", remaining: 0,
+        message: "ఈ నంబర్‌కు 90 రోజుల్లో " + LIMIT + " ఉచిత AI విశ్లేషణలు పూర్తయ్యాయి. ఖచ్చితమైన అంచనా కోసం మా వైద్యులను సంప్రదించండి 🌸" });
+      return;
+    }
 
     if (!image || typeof image !== "string") { res.status(400).json({ error: "image_required" }); return; }
     const b64 = image.includes(",") ? image.split(",").pop() : image;
@@ -133,8 +155,13 @@ Provide general, educational observations of THIS photo for the focus above, fol
     }
     const data = await r.json();
 
+    /* each successful Claude call consumes one of the 5 free uses */
+    const newCount = usage.count + 1;
+    const newToken = signUsage(ph, usage.start, newCount);
+    const remaining = Math.max(0, LIMIT - newCount);
+
     if (data.stop_reason === "refusal") {
-      res.status(200).json({ ok: true, result: {
+      res.status(200).json({ ok: true, usageToken: newToken, remaining: remaining, result: {
         imageUsable: false,
         summary: "క్షమించండి, ఈ ఫోటోను విశ్లేషించలేకపోయాం. దయచేసి మా వైద్యులను నేరుగా సంప్రదించండి. Sorry, we couldn't analyze this photo — please consult our doctors directly.",
         observations: [], possibleFactors: [], selfCareTips: [], suggestedTreatments: [],
@@ -151,7 +178,7 @@ Provide general, educational observations of THIS photo for the focus above, fol
 
     if (!result.disclaimer) result.disclaimer = SAFE_DISCLAIMER;
     // Privacy: the image is never persisted — it lived only in this request.
-    res.status(200).json({ ok: true, result });
+    res.status(200).json({ ok: true, usageToken: newToken, remaining: remaining, result: result });
   } catch (e) {
     console.error("server_error", e && e.message);
     res.status(500).json({ error: "server_error", message: "సర్వర్ లోపం. దయచేసి మళ్ళీ ప్రయత్నించండి." });

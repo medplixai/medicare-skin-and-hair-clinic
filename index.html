@@ -261,15 +261,60 @@
 
     <!-- ============ AI SKIN & HAIR ANALYSIS (interactive) ============ -->
     <section class="section aiskin" id="ai-analysis">
-      <span class="blob blob--3" aria-hidden="true"></span>
       <div class="container">
-        <div class="section__head reveal">
-          <span class="eyebrow eyebrow--center">✨ AI-Powered</span>
-          <h2 class="section__title">Free <span class="grad">AI Skin &amp; Hair Analysis</span></h2>
-          <p class="section__title-te">(ఉచిత AI చర్మం &amp; జుట్టు విశ్లేషణ)</p>
-          <p class="section__lead">సమస్య ఎంచుకోండి → ఫోటో ఇవ్వండి → <strong>~30 సెకన్లలో</strong> AI విశ్లేషణ, సంరక్షణ చిట్కాలు &amp; తగిన చికిత్సల సూచన — టైపింగ్ అవసరం లేదు, 100% గోప్యం. ఇది వైద్య నిర్ధారణ కాదు; ఖచ్చితమైన అంచనా కోసం మా వైద్యులను సంప్రదించండి.</p>
+        <div class="aiskin__grid">
+
+          <!-- animated scan visual -->
+          <div class="aiskin__visual reveal" aria-hidden="true">
+            <div class="aiskin__scene">
+              <span class="aiskin__ring aiskin__ring--1"></span>
+              <span class="aiskin__ring aiskin__ring--2"></span>
+              <span class="aiskin__ring aiskin__ring--3"></span>
+              <svg class="aiskin__face" viewBox="0 0 200 240" fill="none">
+                <ellipse cx="100" cy="112" rx="62" ry="82" class="aiskin__face-outline"/>
+                <path d="M38 112 Q100 92 162 112" class="aiskin__face-grid"/>
+                <path d="M42 82 Q100 64 158 82" class="aiskin__face-grid"/>
+                <path d="M46 142 Q100 162 154 142" class="aiskin__face-grid"/>
+                <path d="M60 176 Q100 196 140 176" class="aiskin__face-grid"/>
+                <path d="M100 30 V194" class="aiskin__face-grid"/>
+                <path d="M64 60 Q100 44 136 60" class="aiskin__face-grid"/>
+                <ellipse cx="74" cy="104" rx="12" ry="6" class="aiskin__face-feat"/>
+                <ellipse cx="126" cy="104" rx="12" ry="6" class="aiskin__face-feat"/>
+                <path d="M94 118 Q100 130 106 118" class="aiskin__face-feat"/>
+                <path d="M84 152 Q100 162 116 152" class="aiskin__face-feat"/>
+                <g class="aiskin__face-dots">
+                  <circle cx="74" cy="104" r="2"/><circle cx="126" cy="104" r="2"/>
+                  <circle cx="100" cy="126" r="2"/><circle cx="100" cy="155" r="2"/>
+                  <circle cx="55" cy="130" r="2"/><circle cx="145" cy="130" r="2"/>
+                  <circle cx="66" cy="76" r="2"/><circle cx="134" cy="76" r="2"/>
+                </g>
+              </svg>
+              <span class="aiskin__sweep"></span>
+              <span class="aiskin__metric aiskin__metric--1"><span>Hydration</span><b>78%</b></span>
+              <span class="aiskin__metric aiskin__metric--2"><span>Pigmentation</span><b>Scan…</b></span>
+              <span class="aiskin__metric aiskin__metric--3"><span>Hair Density</span><b>82%</b></span>
+              <span class="aiskin__metric aiskin__metric--4"><span>Texture</span><b>Good</b></span>
+            </div>
+          </div>
+
+          <!-- pitch -->
+          <div class="aiskin__pitch">
+            <span class="eyebrow reveal">✨ AI Powered · Claude Vision</span>
+            <h2 class="section__title reveal">Free <span class="grad">AI Skin &amp; Hair Analysis</span></h2>
+            <p class="section__title-te reveal">(ఉచిత AI చర్మం &amp; జుట్టు విశ్లేషణ)</p>
+            <p class="aiskin__lead reveal">ఫోటో అప్‌లోడ్ చేయండి — <strong>~30 సెకన్లలో</strong> AI నివేదిక, సంరక్షణ చిట్కాలు &amp; తగిన చికిత్సల సూచనలు.</p>
+            <ul class="aiskin__ticks reveal">
+              <li>తక్షణ AI నివేదిక <i>Instant AI report</i></li>
+              <li>100% గోప్యం — ఫోటో save అవదు <i>Private, not stored</i></li>
+              <li>వ్యక్తిగత చికిత్స సూచనలు <i>Personalised suggestions</i></li>
+            </ul>
+            <button type="button" class="btn btn--primary aiskin__start reveal" id="aiStart" aria-expanded="false">ఉచిత AI విశ్లేషణ ప్రారంభించండి ✨</button>
+            <p class="aiskin__foot reveal">ఇది వైద్య నిర్ధారణ కాదు · ఒక నంబర్‌కు 90 రోజుల్లో 5 ఉచిత విశ్లేషణలు</p>
+          </div>
         </div>
-        <div class="aiskin__mount reveal" id="aiskinMount"><!-- rendered by ai-analysis.js --></div>
+
+        <!-- 3-step flow (hidden until start) -->
+        <div class="aiskin__flow" id="aiskinFlow" hidden><!-- rendered by ai-analysis.js --></div>
       </div>
     </section>
 
