@@ -1569,3 +1569,14 @@ body.chat-open .chat-launch, body.chat-open .totop{ opacity:0; pointer-events:no
 .aiskin__cmptable td.up{ color:#0f7a43; font-weight:800; }
 .aiskin__cmptable td.down{ color:#c62b47; font-weight:800; }
 .aiskin__cmptable td.flat{ color:var(--muted); font-weight:700; }
+
+/* ---- bilingual helpers: English heading + small Telugu beside/below ---- */
+.te-sub{ display:block; font-size:.78rem; font-weight:500; color:var(--muted);
+  margin-top:.18rem; line-height:1.5; letter-spacing:0; text-transform:none; font-family:var(--font); }
+.lbl-te{ font-weight:500; color:var(--muted); font-size:.85em; margin-left:.25rem; }
+.name-te{ display:block; font-size:.8rem; font-weight:500; color:var(--muted); margin-top:.12rem; }
+.footer__col h4 .te-sub{ display:inline; margin:0 0 0 .4rem; font-size:.7rem; color:rgba(255,255,255,.55); }
+.team-sub__title .te-sub{ margin-top:.3rem; }
+.ht-photo figcaption strong .te-sub{ margin-top:.05rem; }
+.aiskin__start{ flex-direction:column; gap:.05rem; }
+.aiskin__start .te{ display:block; font-size:.72rem; font-weight:600; opacity:.92; letter-spacing:0; }

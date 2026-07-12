@@ -120,18 +120,21 @@
     });
   }
 
-  /* ---- Doctor photos: inject into leadership + roster avatars (falls back to initials) ---- */
-  const DOC_PHOTOS = {
-    "డా. మేఘన": "meghana", "డా. శృతి": "shruti", "నాగరాజు బండారు": "nagaraju",
-    "డా. సాత్విక": "satvika", "డా. సౌమ్య": "soumya", "డా. కమ్మ సాయి దివిజ": "sai-divija",
-    "డా. అఖిల": "akhila", "డా. సాయిదీప్తి": "sai-deepthi", "డా. సుధీర్ కుమార్": "sudheer-kumar",
-    "డా. ఆదిత్య": "aditya", "డా. అనన్య బొల్లినేని": "ananya"
-  };
+  /* ---- Doctor photos: inject into leadership + roster avatars (falls back to initials) ----
+     Headings are bilingual (English + Telugu), so match by substring. ---- */
+  const DOC_PHOTOS = [
+    ["Nagaraju", "nagaraju"], ["Meghana", "meghana"], ["Sruthi", "shruti"],
+    ["Satvika", "satvika"], ["Sowmya", "soumya"], ["Divija", "sai-divija"],
+    ["Akhila", "akhila"], ["Deepthi", "sai-deepthi"], ["Sudheer", "sudheer-kumar"],
+    ["Aditya", "aditya"], ["Ananya", "ananya"]
+  ];
   $$(".doctor, .medic").forEach(card => {
     const nameEl = card.querySelector("h3, h4");
     const avatar = card.querySelector(".doctor__avatar, .medic__avatar");
     if (!nameEl || !avatar) return;
-    const slug = DOC_PHOTOS[nameEl.textContent.trim()];
+    const txt = nameEl.textContent;
+    let slug = null;
+    DOC_PHOTOS.forEach(p => { if (!slug && txt.indexOf(p[0]) > -1) slug = p[1]; });
     if (!slug) return;
     const img = new Image();
     img.src = "assets/img/doctors/" + slug + ".jpg";

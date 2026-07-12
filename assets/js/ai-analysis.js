@@ -129,7 +129,7 @@
   function stepsBar() {
     var idx = state.view === "details" ? 0 : state.view === "photo" ? 1 : 2;
     return '<div class="aiskin__steps" aria-hidden="true">' +
-      ["వివరాలు", "ఫోటో", "ఫలితం"].map(function (s, i) {
+      ["Details", "Photo", "Result"].map(function (s, i) {
         var cls = i < idx ? "done" : i === idx ? "on" : "";
         return '<span class="aiskin__stepdot ' + cls + '"><b>' + (i < idx ? "✓" : i + 1) + "</b>" + s + "</span>" + (i < 2 ? '<i class="aiskin__stepline"></i>' : "");
       }).join("") + "</div>";
@@ -156,22 +156,22 @@
       }).join("");
       var v = el(
         '<div class="aiskin__step">' +
-          '<div class="aiskin__fld"><input type="text" id="aiName" maxlength="60" placeholder=" " value="' + esc(state.name) + '"><label for="aiName">పేరు · Name</label></div>' +
+          '<div class="aiskin__fld"><input type="text" id="aiName" maxlength="60" placeholder=" " value="' + esc(state.name) + '"><label for="aiName">Name · పేరు</label></div>' +
           '<div class="aiskin__fldrow">' +
-            '<div class="aiskin__fld"><input type="tel" id="aiPhone" inputmode="numeric" maxlength="10" placeholder=" " value="' + esc(state.phone) + '"><label for="aiPhone">మొబైల్ · Mobile *</label></div>' +
-            '<div class="aiskin__fld"><input type="number" id="aiAge" min="1" max="120" placeholder=" " value="' + esc(state.age) + '"><label for="aiAge">వయసు · Age *</label></div>' +
+            '<div class="aiskin__fld"><input type="tel" id="aiPhone" inputmode="numeric" maxlength="10" placeholder=" " value="' + esc(state.phone) + '"><label for="aiPhone">Mobile · మొబైల్ *</label></div>' +
+            '<div class="aiskin__fld"><input type="number" id="aiAge" min="1" max="120" placeholder=" " value="' + esc(state.age) + '"><label for="aiAge">Age · వయసు *</label></div>' +
           "</div>" +
           '<div class="aiskin__fldrow">' +
             '<div class="aiskin__fld"><select id="aiGender" required><option value="" disabled' + (state.gender ? "" : " selected") + ' hidden></option>' +
               ["స్త్రీ · Female", "పురుషుడు · Male", "ఇతర · Other"].map(function (g) { return "<option" + (state.gender === g ? " selected" : "") + ">" + g + "</option>"; }).join("") +
-            '</select><label for="aiGender">లింగం · Gender *</label></div>' +
+            '</select><label for="aiGender">Gender · లింగం *</label></div>' +
             '<div class="aiskin__fld"><select id="aiConcern" required><option value="" disabled' + (state.concern ? "" : " selected") + " hidden></option>" + opts +
-            '</select><label for="aiConcern">ప్రధాన సమస్య · Main concern *</label></div>' +
+            '</select><label for="aiConcern">Main Concern · ప్రధాన సమస్య *</label></div>' +
           "</div>" +
           '<label class="aiskin__check"><input type="checkbox" id="aiConsent"' + (state.consented ? " checked" : "") + '>' +
             '<span>నా ఫోటోను AI విశ్లేషణ కోసం ప్రాసెస్ చేయడానికి సమ్మతిస్తున్నాను — ఇది <b>వైద్య నిర్ధారణ కాదు</b>, ఫోటో <b>save అవదు</b>. <a href="privacy.html" target="_blank" rel="noopener">Privacy</a></span></label>' +
           '<p class="aiskin__err" id="aiErr1">' + esc(state.limitMsg || "") + "</p>" +
-          '<button class="btn btn--primary aiskin__full" id="aiNext1">ఫోటోకు కొనసాగండి →</button>' +
+          '<button class="btn btn--primary aiskin__full" id="aiNext1">Continue to Photo →</button>' +
         "</div>"
       );
       state.limitMsg = "";
@@ -208,13 +208,13 @@
       var v = el(
         '<div class="aiskin__step">' +
           '<div class="aiskin__uploads">' +
-            box("aiF1", faceIc, "సమస్య ఉన్న భాగం *", "మంచి వెలుతురు · దగ్గరగా · tap / drag / paste") +
-            box("aiF2", hairIc, "మరో ఫోటో (optional)", "వేరే angle / జుట్టు / స్కాల్ప్") +
+            box("aiF1", faceIc, "Affected Area Photo *", "సమస్య ఉన్న భాగం · మంచి వెలుతురు · దగ్గరగా") +
+            box("aiF2", hairIc, "Another Photo (optional)", "వేరే angle / జుట్టు / స్కాల్ప్") +
           "</div>" +
           '<p class="aiskin__warn" id="aiWarn" hidden>⚠️ ఫోటో కొంచెం చీకటిగా ఉంది — వెలుతురులో తీస్తే ఫలితం మెరుగ్గా ఉంటుంది.</p>' +
           '<p class="aiskin__err" id="aiErrP"></p>' +
-          '<div class="aiskin__actions"><button class="btn btn--ghost" id="aiBack2">← వెనక్కి</button>' +
-            '<button class="btn btn--primary" id="aiGo2"' + (state.image ? "" : " disabled") + ">AI తో విశ్లేషించండి ✨</button></div>" +
+          '<div class="aiskin__actions"><button class="btn btn--ghost" id="aiBack2">← Back</button>' +
+            '<button class="btn btn--primary" id="aiGo2"' + (state.image ? "" : " disabled") + ">Analyze with AI ✨</button></div>" +
         "</div>"
       );
       var err = v.querySelector("#aiErrP"), warn = v.querySelector("#aiWarn"), go = v.querySelector("#aiGo2");
@@ -225,7 +225,7 @@
         function show() {
           if (!state[key]) return;
           inner.hidden = true; prev.hidden = false;
-          prev.innerHTML = '<img src="' + state[key] + '" alt=""><button type="button" class="aiskin__retake">🔄 మార్చండి</button>';
+          prev.innerHTML = '<img src="' + state[key] + '" alt=""><button type="button" class="aiskin__retake">🔄 Change</button>';
           prev.querySelector(".aiskin__retake").addEventListener("click", function (e) {
             e.preventDefault(); e.stopPropagation();
             state[key] = ""; if (dimCheck) { state.dim = false; warn.hidden = true; }
@@ -272,7 +272,7 @@
         '<div class="aiskin__step aiskin__center">' +
           '<div class="aiskin__scanwrap" id="aiScanWrap"><img src="' + state.image + '" alt=""><span class="aiskin__scanline" aria-hidden="true"></span></div>' +
           '<div class="aiskin__mesh" id="aiMesh" hidden><canvas id="aiMeshCanvas" width="320" height="320"></canvas><span class="aiskin__meshtag">3D ఫేస్ మ్యాప్ · on-device</span></div>' +
-          '<h3 class="aiskin__h" style="margin-top:1.1rem">AI విశ్లేషిస్తోంది…</h3>' +
+          '<h3 class="aiskin__h" style="margin-top:1.1rem">AI is Analyzing… <i>AI విశ్లేషిస్తోంది</i></h3>' +
           '<p class="aiskin__scanmsg" id="aiScanMsg">ఫోటోను పరిశీలిస్తోంది…</p>' +
         "</div>"
       );
@@ -329,10 +329,10 @@
       return el(
         '<div class="aiskin__step aiskin__center">' +
           '<div class="aiskin__limitic">🌸</div>' +
-          '<h3 class="aiskin__h">ఉచిత విశ్లేషణలు పూర్తయ్యాయి</h3>' +
+          '<h3 class="aiskin__h">Free Analyses Used Up <i>ఉచిత విశ్లేషణలు పూర్తయ్యాయి</i></h3>' +
           '<p class="aiskin__summary" style="text-align:left">' + esc(state.limitMsg || "ఈ నంబర్‌కు 90 రోజుల్లో 5 ఉచిత AI విశ్లేషణలు పూర్తయ్యాయి. ఖచ్చితమైన అంచనా & చికిత్స కోసం మా వైద్యులను సంప్రదించండి.") + "</p>" +
           '<div class="aiskin__cta">' +
-            '<a class="btn btn--primary" href="#contact">📅 అపాయింట్‌మెంట్ బుక్ చేయండి</a>' +
+            '<a class="btn btn--primary" href="#contact">📅 Book Appointment</a>' +
             '<a class="btn btn--ghost" target="_blank" rel="noopener" href="https://wa.me/' + WA + "?text=" + encodeURIComponent("నమస్తే Medicare 🌸 AI analysis limit అయిపోయింది — consultation కావాలి.") + '">💬 WhatsApp</a>' +
           "</div>" +
         "</div>"
@@ -343,7 +343,7 @@
     result: function () {
       var r = state.result || {};
       function list(arr) { return '<ul class="aiskin__list">' + (arr || []).map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>"; }
-      function section(ic, te, en, inner) { return '<section class="aiskin__sec"><h4><span>' + ic + "</span>" + te + " <i>" + en + "</i></h4>" + inner + "</section>"; }
+      function section(ic, te, en, inner) { return '<section class="aiskin__sec"><h4><span>' + ic + "</span>" + en + " <i>" + te + "</i></h4>" + inner + "</section>"; }
 
       var remainNote = (state.remaining != null)
         ? '<p class="aiskin__remain">మిగిలిన ఉచిత విశ్లేషణలు: <b>' + state.remaining + "/5</b> (90 రోజుల్లో)</p>" : "";
@@ -352,7 +352,7 @@
         var vb = el(
           '<div class="aiskin__step aiskin__center">' +
             '<p class="aiskin__summary" style="text-align:left">' + esc(r.summary || "ఫోటో స్పష్టంగా లేదు — మంచి వెలుతురులో close-up ఫోటో మళ్ళీ ప్రయత్నించండి.") + "</p>" + remainNote +
-            '<div class="aiskin__actions"><span></span><button class="btn btn--primary aiskin__retry">📷 మళ్ళీ ఫోటో</button></div>' +
+            '<div class="aiskin__actions"><span></span><button class="btn btn--primary aiskin__retry">📷 Try Another Photo</button></div>' +
           "</div>"
         );
         vb.querySelector(".aiskin__retry").addEventListener("click", function () { state.image = ""; state.image2 = ""; state.result = null; setView("photo"); });
@@ -378,13 +378,13 @@
       }).join("");
       var waText = "నమస్తే Medicare 🌸 " + (state.name ? state.name + " — " : "") + "నేను website లో AI Skin & Hair Analysis చేసాను.\nఫలితం: " + (r.summary || "").slice(0, 220) + "\nConsultation కావాలి.";
       var hist = lsGet(HIST_KEY, []);
-      var compareBtn = hist.length >= 2 ? '<button class="btn btn--ghost aiskin__compare">📈 మునుపటితో పోల్చండి</button>' : "";
+      var compareBtn = hist.length >= 2 ? '<button class="btn btn--ghost aiskin__compare">📈 Compare Progress</button>' : "";
 
       var v = el(
         '<div class="aiskin__step">' +
           '<div id="aiReport">' +
             '<div class="aiskin__pdfhead"><b>MEDICARE</b> Skin &amp; Hair Clinic — AI Report · ' + new Date().toLocaleDateString("en-IN") + "</div>" +
-            '<h3 class="aiskin__h">మీ AI ఫలితం <i>Your result</i></h3>' +
+            '<h3 class="aiskin__h">Your AI Result <i>మీ AI ఫలితం</i></h3>' +
             gauges +
             '<div class="aiskin__sev">' + sevRow + "</div>" +
             (r.seeDoctorSoon ? '<div class="aiskin__soon">⚕️ దయచేసి త్వరగా మా వైద్యులను స్వయంగా కలవండి. <i>Please visit our dermatologist soon.</i></div>' : "") +
@@ -399,11 +399,11 @@
             '<p class="aiskin__disc">' + esc(r.disclaimer || "") + "</p>" +
           "</div>" + remainNote +
           '<div class="aiskin__cta">' +
-            '<a class="btn btn--primary" href="#contact">📅 అపాయింట్‌మెంట్</a>' +
+            '<a class="btn btn--primary" href="#contact">📅 Book Appointment</a>' +
             '<a class="btn btn--ghost" target="_blank" rel="noopener" href="https://wa.me/' + WA + "?text=" + encodeURIComponent(waText) + '">💬 WhatsApp</a>' +
-            '<button class="btn btn--ghost aiskin__pdf">📄 PDF రిపోర్ట్</button>' +
+            '<button class="btn btn--ghost aiskin__pdf">📄 PDF Report</button>' +
             compareBtn +
-            ((state.remaining == null || state.remaining > 0) ? '<button class="btn btn--ghost aiskin__retry">📷 మరో ఫోటో</button>' : "") +
+            ((state.remaining == null || state.remaining > 0) ? '<button class="btn btn--ghost aiskin__retry">📷 New Photo</button>' : "") +
           "</div>" +
         "</div>"
       );
@@ -424,7 +424,7 @@
       if (cp) cp.addEventListener("click", function () { setView("compare"); });
 
       v.querySelector(".aiskin__pdf").addEventListener("click", function () {
-        var btn = this; btn.disabled = true; btn.textContent = "తయారవుతోంది…";
+        var btn = this; btn.disabled = true; btn.textContent = "Preparing…";
         Promise.all([
           loadScript("https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"),
           loadScript("https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js")
@@ -452,7 +452,7 @@
             pdf.save(fn);
           });
         }).catch(function () { alert("PDF తయారు చేయలేకపోయాం — దయచేసి మళ్ళీ ప్రయత్నించండి."); })
-          .then(function () { btn.disabled = false; btn.textContent = "📄 PDF రిపోర్ట్"; });
+          .then(function () { btn.disabled = false; btn.textContent = "📄 PDF Report"; });
       });
       return v;
     },
@@ -476,16 +476,16 @@
       }
       var v = el(
         '<div class="aiskin__step">' +
-          '<h3 class="aiskin__h">పురోగతి పోలిక <i>Progress · on your phone only</i></h3>' +
+          '<h3 class="aiskin__h">Progress Comparison <i>పురోగతి పోలిక · మీ ఫోన్‌లోనే</i></h3>' +
           '<div class="aiskin__cmp">' +
-            '<figure><img src="' + (a && a.thumb || "") + '" alt=""><figcaption>మునుపు · ' + (a ? dt(a.d) : "") + "</figcaption></figure>" +
+            '<figure><img src="' + (a && a.thumb || "") + '" alt=""><figcaption>Before · ' + (a ? dt(a.d) : "") + "</figcaption></figure>" +
             '<span class="aiskin__cmparrow">➜</span>' +
-            '<figure><img src="' + (b && b.thumb || "") + '" alt=""><figcaption>ఇప్పుడు · ' + (b ? dt(b.d) : "") + "</figcaption></figure>" +
+            '<figure><img src="' + (b && b.thumb || "") + '" alt=""><figcaption>Now · ' + (b ? dt(b.d) : "") + "</figcaption></figure>" +
           "</div>" +
-          (rows ? '<table class="aiskin__cmptable"><thead><tr><th>పరామితి</th><th>మునుపు</th><th>ఇప్పుడు</th><th>మార్పు</th></tr></thead><tbody>' + rows + "</tbody></table>"
+          (rows ? '<table class="aiskin__cmptable"><thead><tr><th>Parameter · పరామితి</th><th>Before · మునుపు</th><th>Now · ఇప్పుడు</th><th>Change</th></tr></thead><tbody>' + rows + "</tbody></table>"
                 : '<p class="aiskin__scanmsg">పోల్చదగిన స్కోర్లు లేవు.</p>') +
           '<p class="aiskin__disc">ఈ పోలిక మీ ఫోన్‌లో మాత్రమే భద్రం — server కి వెళ్ళదు. ఫోటో పరిస్థితులు (వెలుతురు, angle) మారితే స్కోర్లు మారవచ్చు.</p>' +
-          '<div class="aiskin__actions"><button class="btn btn--ghost aiskin__backres">← ఫలితానికి</button><a class="btn btn--primary" href="#contact">📅 అపాయింట్‌మెంట్</a></div>' +
+          '<div class="aiskin__actions"><button class="btn btn--ghost aiskin__backres">← Back to Result</button><a class="btn btn--primary" href="#contact">📅 Book Appointment</a></div>' +
         "</div>"
       );
       v.querySelector(".aiskin__backres").addEventListener("click", function () { setView("result"); });
