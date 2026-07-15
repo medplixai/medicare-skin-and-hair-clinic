@@ -1609,3 +1609,22 @@ body.chat-open .chat-launch, body.chat-open .totop{ opacity:0; pointer-events:no
 .search-hit{ animation:searchHit 3s var(--ease); }
 @keyframes searchHit{ 0%{ background:#fff3c9; box-shadow:0 0 0 3px #ffd98a inset; } 100%{ background:transparent; box-shadow:none; } }
 tr.search-hit td{ background:#fff3c9; transition:background 2.5s var(--ease) .5s; }
+
+/* ---- careers page ---- */
+.careers-hero{ background:linear-gradient(180deg,var(--pink-tint2) 0%, #fff 70%); }
+.careers-sub{ text-align:center; font-size:1.15rem; font-weight:800; margin:0 0 1.1rem; }
+.crole-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:.8rem; }
+.crole{ display:flex; align-items:center; gap:.65rem; background:#fff; border:1px solid var(--line);
+  border-radius:var(--r); padding:.85rem 1rem; box-shadow:var(--shadow-sm);
+  transition:transform .25s var(--ease), box-shadow .25s, border-color .25s; }
+.crole:hover{ transform:translateY(-4px); box-shadow:var(--shadow); border-color:var(--pink-soft); }
+.crole__ic{ width:40px; height:40px; flex:none; display:grid; place-items:center; font-size:1.25rem;
+  background:var(--pink-tint); border:1px solid var(--pink-soft); border-radius:12px; }
+.crole b{ display:block; font-size:.92rem; font-weight:800; color:var(--ink); line-height:1.25; }
+.crole i{ display:block; font-style:normal; font-size:.74rem; font-weight:500; color:var(--muted); }
+.careers-form{ max-width:840px; margin-inline:auto; }
+.careers-done{ text-align:center; max-width:560px; margin:0 auto; background:#fff; border:1px solid var(--line);
+  border-radius:var(--r-lg); box-shadow:var(--shadow); padding:2rem 1.4rem; }
+.careers-done__ic{ font-size:2.6rem; margin-bottom:.4rem; }
+.careers-done h3{ font-size:1.25rem; font-weight:800; }
+.careers-done p{ color:var(--ink-2); margin:.6rem 0 0; }
