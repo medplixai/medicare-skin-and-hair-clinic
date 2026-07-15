@@ -287,15 +287,28 @@
         Page:'careers.html'
       };
       var btn=document.getElementById('crSubmit'); btn.disabled=true; btn.textContent='పంపుతోంది… Sending…';
-      fetch('https://formsubmit.co/ajax/'+TO,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)})
-        .then(function(r){ return r.json().catch(function(){return {};}).then(function(j){ return {ok:r.ok,j:j}; }); })
-        .then(function(r){
-          if(r.ok && r.j && String(r.j.success)==='true'){
+      var apiBody={name:fd.get('name'),phone:fd.get('phone'),email:fd.get('email'),position:fd.get('position'),
+        experience:fd.get('experience'),preferred_branch:fd.get('preferred_branch'),qualification:fd.get('qualification'),
+        resume_link:fd.get('resume_link'),message:fd.get('message'),_honey:fd.get('_honey')};
+      /* transport 1: our own serverless mailer (Resend) — active once RESEND_API_KEY is set */
+      function viaApi(){
+        return fetch('/api/career-apply',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(apiBody)})
+          .then(function(r){ return r.json().catch(function(){return {};}).then(function(j){ if(r.ok&&j.ok) return true; throw new Error('api'); }); });
+      }
+      /* transport 2: FormSubmit (needs one-time activation) */
+      function viaFormsubmit(){
+        return fetch('https://formsubmit.co/ajax/'+TO,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)})
+          .then(function(r){ return r.json().catch(function(){return {};}).then(function(j){ return {ok:r.ok,j:j}; }); })
+          .then(function(r){ if(r.ok && r.j && String(r.j.success)==='true') return true; throw new Error('formsubmit'); });
+      }
+      viaApi().catch(function(){ return viaFormsubmit(); })
+        .then(function(){
+          if(true){
             var wa='నమస్తే Medicare HR 🌸%0AName: '+encodeURIComponent(fd.get('name'))+'%0APosition: '+encodeURIComponent(fd.get('position'))+'%0AExperience: '+encodeURIComponent(fd.get('experience'))+'%0A(Resume attach చేస్తున్నాను)';
             document.getElementById('crWa').href='https://wa.me/'+WA+'?text='+wa;
             form.hidden=true; done.hidden=false;
             done.scrollIntoView({behavior:'smooth',block:'center'});
-          } else { throw new Error((r.j&&r.j.message)||'send failed'); }
+          }
         })
         .catch(function(){
           /* email service down → auto-deliver the application via WhatsApp so nothing is lost */
