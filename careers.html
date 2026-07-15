@@ -271,6 +271,7 @@
     var form=document.getElementById('careerForm');
     var err=document.getElementById('crErr');
     var done=document.getElementById('crDone');
+    if(/[?&]sent=1/.test(location.search)){ form.hidden=true; done.hidden=false; }
     form.addEventListener('submit',function(e){
       e.preventDefault(); err.textContent='';
       if(!form.reportValidity()) return;
@@ -297,8 +298,19 @@
           } else { throw new Error((r.j&&r.j.message)||'send failed'); }
         })
         .catch(function(){
-          err.textContent='పంపడంలో సమస్య వచ్చింది — దయచేసి WhatsApp (9141 247 777) లో మీ వివరాలు పంపండి.';
-          btn.disabled=false; btn.innerHTML='📩 Submit Application <span class="lbl-te" style="color:rgba(255,255,255,.85)">దరఖాస్తు పంపండి</span>';
+          /* email service down → auto-deliver the application via WhatsApp so nothing is lost */
+          var lines=['నమస్తే Medicare HR 🌸 (Career Application)',
+            'Name: '+fd.get('name'), 'Phone: '+fd.get('phone'), 'Email: '+(fd.get('email')||'-'),
+            'Position: '+fd.get('position'), 'Experience: '+fd.get('experience'),
+            'Branch: '+fd.get('preferred_branch'), 'Qualification: '+(fd.get('qualification')||'-'),
+            'Resume: '+(fd.get('resume_link')||'WhatsApp lo attach chestanu'),
+            'Message: '+(fd.get('message')||'-')];
+          var waUrl='https://wa.me/'+WA+'?text='+encodeURIComponent(lines.join('\n'));
+          document.getElementById('crWa').href=waUrl;
+          document.querySelector('#crDone p').innerHTML='Email server బిజీగా ఉంది — మీ దరఖాస్తు <b>WhatsApp</b> ద్వారా పంపండి (వివరాలు సిద్ధంగా ఉన్నాయి) 👇';
+          form.hidden=true; done.hidden=false;
+          done.scrollIntoView({behavior:'smooth',block:'center'});
+          window.open(waUrl,'_blank');
         });
     });
   })();
