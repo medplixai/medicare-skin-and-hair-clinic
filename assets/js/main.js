@@ -91,8 +91,19 @@
     sections.forEach(s => so.observe(s));
   }
 
-  /* ---- Booking form -> WhatsApp ---- */
+  /* ---- Booking form -> CRM lead + WhatsApp ----
+     The enquiry is saved to the group's CRM first (fire-and-forget, never blocks),
+     then WhatsApp opens with the prefilled message exactly as before. ---- */
   const WHATSAPP_NUMBER = "919141247777"; // Kaikaluru head-office WhatsApp
+  const BRANCH_SLUGS = { "కైకలూరు": "kaikaluru", "భీమవరం": "bhimavaram", "ఏలూరు": "eluru", "గుడివాడ": "gudivada", "గన్నవరం": "gannavaram", "నూజివీడు": "nuzvid", "ఆకివీడు": "akividu", "తాడేపల్లిగూడెం": "tadepalligudem", "మచిలీపట్నం": "machilipatnam", "ఒంగోలు": "ongole" };
+  const sendLead = (payload) => {
+    try {
+      const params = new URLSearchParams(location.search);
+      const body = Object.assign({ page: location.href, utm_source: params.get("utm_source"), utm_campaign: params.get("utm_campaign"), utm_content: params.get("utm_content") }, payload);
+      fetch("/api/lead", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body), keepalive: true }).catch(() => {});
+    } catch (_) { /* never block the WhatsApp hand-off */ }
+  };
+  window.medicareSendLead = sendLead;
   const form = $("#bookingForm");
   if (form) {
     form.addEventListener("submit", (e) => {
@@ -104,6 +115,9 @@
       const service = data.get("service");
       const msg = (data.get("message") || "").toString().trim();
 
+      sendLead({ kind: "appointment_form", name, phone, branch, service, message: msg });
+
+      const slug = BRANCH_SLUGS[branch] || "any";
       const lines = [
         "నమస్తే మెడికేర్ స్కిన్ & హెయిర్ క్లినిక్,",
         "నేను అపాయింట్‌మెంట్ బుక్ చేసుకోవాలనుకుంటున్నాను.",
@@ -114,6 +128,8 @@
         "💆 సేవ: " + service,
       ];
       if (msg) lines.push("📝 సందేశం: " + msg);
+      // Attribution tag the WhatsApp agent reads: which branch the website visitor picked.
+      lines.push("", "(from=web-" + slug + ")");
 
       const url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(lines.join("\n"));
       window.open(url, "_blank", "noopener");

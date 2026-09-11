@@ -524,6 +524,11 @@
         state.result = r.json.result;
         state.remaining = (typeof r.json.remaining === "number") ? r.json.remaining : null;
         if (!DEMO && r.json.usageToken) lsSet(LS_KEY, { phone: state.phone, token: r.json.usageToken });
+        // The person gave a phone number and a concern: that is a lead for the clinic desk.
+        if (!DEMO && typeof window.medicareSendLead === "function") {
+          var rs = state.result;
+          window.medicareSendLead({ kind: "ai_analysis", phone: state.phone, age: state.age, concern: state.concern, severity: rs.severity, seeDoctorSoon: !!rs.seeDoctorSoon, summary: rs.summary });
+        }
         saveHistory(state.result, function () { setView("result"); });
         return;
       }
