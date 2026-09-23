@@ -171,6 +171,14 @@
         acts([act("#services", "వ్యాధులు", { close: true }), act("#treatments", "చికిత్సలు &amp; ధరలు", { close: true })]);
     } },
 
+    /* Asked more shyly than anything else on this site, and usually once. Answer the worry
+       (is it private? is it a real doctor?) before answering the question, and never name a
+       medicine or promise a result – the reply is an invitation to be examined, nothing more. */
+    { id: "sexualhealth", keys: ["sexual", "sex", "erectile", "\u0c05\u0c02\u0c17\u0c38\u0c4d\u0c24\u0c02\u0c2d\u0c28", "\u0c32\u0c48\u0c02\u0c17\u0c3f\u0c15", "std", "sti", "\u0c38\u0c41\u0c16\u0c35\u0c4d\u0c2f\u0c3e\u0c27", "\u0c17\u0c41\u0c2a\u0c4d\u0c24", "premature", "libido", "\u0c15\u0c4b\u0c30\u0c3f\u0c15", "impotence", "\u0c35\u0c40\u0c30\u0c4d\u0c2f", "herpes", "\u0c39\u0c46\u0c30\u0c4d\u0c2a\u0c3f\u0c38\u0c4d", "syphilis", "\u0c17\u0c4b\u0c2a\u0c4d\u0c2f"], fn: function () {
+      return "\u0c07\u0c26\u0c3f \u0c2e\u0c40\u0c30\u0c41 \u0c05\u0c21\u0c17\u0c17\u0c32\u0c3f\u0c17\u0c3f\u0c28 \u0c2a\u0c4d\u0c30\u0c36\u0c4d\u0c28\u0c47 \ud83d\ude4f \u0c2a\u0c41\u0c30\u0c41\u0c37\u0c41\u0c32\u0c41, \u0c38\u0c4d\u0c24\u0c4d\u0c30\u0c40\u0c32\u0c41 \u0c07\u0c26\u0c4d\u0c26\u0c30\u0c3f\u0c15\u0c40 \u2014 <strong>\u0c05\u0c02\u0c17\u0c38\u0c4d\u0c24\u0c02\u0c2d\u0c28 \u0c38\u0c2e\u0c38\u0c4d\u0c2f (ED), \u0c36\u0c40\u0c18\u0c4d\u0c30 \u0c38\u0c4d\u0c16\u0c32\u0c28\u0c02, \u0c15\u0c4b\u0c30\u0c3f\u0c15 \u0c24\u0c17\u0c4d\u0c17\u0c21\u0c02, \u0c28\u0c4a\u0c2a\u0c4d\u0c2a\u0c3f, \u0c38\u0c41\u0c16\u0c35\u0c4d\u0c2f\u0c3e\u0c27\u0c41\u0c32\u0c41</strong> \u2014 \u0c2e\u0c3e MD (DVL) \u0c35\u0c48\u0c26\u0c4d\u0c2f\u0c41\u0c32\u0c41 \u0c1a\u0c42\u0c38\u0c4d\u0c24\u0c3e\u0c30\u0c41.<br><br>\ud83d\udd12 <strong>\u0c2a\u0c42\u0c30\u0c4d\u0c24\u0c3f \u0c17\u0c4b\u0c2a\u0c4d\u0c2f\u0c24:</strong> \u0c30\u0c3f\u0c38\u0c46\u0c2a\u0c4d\u0c37\u0c28\u0c4d\u200c\u0c32\u0c4b \u0c2e\u0c40 \u0c38\u0c2e\u0c38\u0c4d\u0c2f \u0c1a\u0c46\u0c2a\u0c4d\u0c2a\u0c15\u0c4d\u0c15\u0c30\u0c4d\u0c32\u0c47\u0c26\u0c41 \u2014 \u201c\u0c21\u0c3e\u0c15\u0c4d\u0c1f\u0c30\u0c4d \u0c17\u0c3e\u0c30\u0c3f\u0c28\u0c3f \u0c15\u0c32\u0c35\u0c3e\u0c32\u0c3f\u201d \u0c05\u0c02\u0c1f\u0c47 \u0c1a\u0c3e\u0c32\u0c41. \u0c2a\u0c4d\u0c30\u0c24\u0c4d\u0c2f\u0c47\u0c15 \u0c17\u0c26\u0c3f\u0c32\u0c4b \u0c21\u0c3e\u0c15\u0c4d\u0c1f\u0c30\u0c4d\u0c24\u0c4b \u0c12\u0c02\u0c1f\u0c30\u0c3f\u0c17\u0c3e \u0c2e\u0c3e\u0c1f\u0c4d\u0c32\u0c3e\u0c21\u0c35\u0c1a\u0c4d\u0c1a\u0c41.<br><br>\u26a0\ufe0f ED \u0c1a\u0c3e\u0c32\u0c3e\u0c38\u0c3e\u0c30\u0c4d\u0c32\u0c41 <strong>\u0c37\u0c41\u0c17\u0c30\u0c4d, \u0c2c\u0c40\u0c2a\u0c40, \u0c25\u0c48\u0c30\u0c3e\u0c2f\u0c3f\u0c21\u0c4d \u0c32\u0c47\u0c26\u0c3e \u0c17\u0c41\u0c02\u0c21\u0c46 \u0c38\u0c2e\u0c38\u0c4d\u0c2f\u0c15\u0c41 \u0c2e\u0c4a\u0c26\u0c1f\u0c3f \u0c38\u0c02\u0c15\u0c47\u0c24\u0c02</strong> \u2014 \u0c05\u0c02\u0c26\u0c41\u0c15\u0c47 \u0c2a\u0c30\u0c40\u0c15\u0c4d\u0c37 \u0c2e\u0c41\u0c16\u0c4d\u0c2f\u0c02. \u0c2a\u0c30\u0c40\u0c15\u0c4d\u0c37 \u0c32\u0c47\u0c15\u0c41\u0c02\u0c21\u0c3e \u0c2e\u0c02\u0c26\u0c41\u0c32\u0c41 \u0c35\u0c3e\u0c21\u0c4a\u0c26\u0c4d\u0c26\u0c41." +
+        acts([act("#sexual-health", "\u0c35\u0c3f\u0c35\u0c30\u0c3e\u0c32\u0c41 \u0c1a\u0c42\u0c21\u0c02\u0c21\u0c3f", { close: true }), act("https://wa.me/" + WA, "WhatsApp \u0c32\u0c4b \u0c05\u0c21\u0c17\u0c02\u0c21\u0c3f", { primary: true, blank: true })]);
+    } },
+
     { id: "thanks", keys: ["thank", "thanks", "ధన్యవాద", "thank you", "tq", "thx", "super", "బాగుంది"], fn: function () { return "మీకు సహాయం చేయగలిగినందుకు సంతోషం! 😊 మరేదైనా సందేహం ఉంటే అడగండి. ఆరోగ్యంగా ఉండండి! 🌸"; } }
   ];
 
@@ -182,6 +190,7 @@
     // strong specific routing so the generic "price" intent doesn't steal these
     if (/transplant|ట్రాన్స్‌ప్లాంట్|బట్టతల|\bfue\b|\bdhi\b/.test(t)) return intentById("hairtransplant").fn(t);
     if (/\btele|teleconsult|ఆన్‌లైన్|వీడియో|టెలీ/.test(t)) return intentById("teleconsult").fn(t);
+    if (/sexual|erectile|\bed\b|impotence|premature|libido|\bstd\b|\bsti\b|herpes|syphilis|gonorrh|అంగస్తంభన|లైంగిక|సుఖవ్యాధ|సుఖ వ్యాధ|గుప్త|స్ఖలన|వీర్య/.test(t)) return intentById("sexualhealth").fn(t);
     if (/technology|equipment|machine|us-?fda|\bfda\b|alma|quanta|q-?switch|qswitch|follirich|\bco2\b|laser brand|టెక్నాలజీ|పరికర|మెషిన్/.test(t)) return intentById("technology").fn(t);
     var b = findBranch(t);
     var best = null, bestScore = 0;
@@ -195,7 +204,7 @@
     return fallback();
   }
 
-  var CHIPS = ["ధరలు", "శాఖలు", "హెయిర్ ట్రాన్స్‌ప్లాంట్", "అపాయింట్‌మెంట్", "టెలీకన్సల్టేషన్", "వైద్యులు", "సమయాలు"];
+  var CHIPS = ["ధరలు", "శాఖలు", "హెయిర్ ట్రాన్స్‌ప్లాంట్", "లైంగిక ఆరోగ్యం (గోప్యం)", "అపాయింట్‌మెంట్", "టెలీకన్సల్టేషన్", "వైద్యులు", "సమయాలు"];
 
   /* ---------- UI ---------- */
   function el(html) { var d = document.createElement("div"); d.innerHTML = html.trim(); return d.firstChild; }

@@ -25,7 +25,12 @@
     ["డాక్టర్", "doctor"], ["వైద్య", "doctor"], ["శాఖ", "branch"], ["సమయ", "timings hours"],
     ["అపాయింట్", "appointment book"], ["ట్రాన్స్", "transplant"], ["ముడత", "wrinkle ageing"],
     ["వార్ట్", "wart"], ["పుట్టుమచ్చ", "mole"], ["సన్", "sun tan"], ["టాన్", "tan"],
-    ["దురద", "itch allergy"], ["అలర్జీ", "allergy"], ["ఫంగల్", "fungal"], ["కెమికల్", "chemical peel"]
+    ["దురద", "itch allergy"], ["అలర్జీ", "allergy"], ["ఫంగల్", "fungal"], ["కెమికల్", "chemical peel"],
+    ["లైంగిక", "sexual health ed erectile confidential"], ["అంగస్తంభన", "erectile dysfunction ed sexual"],
+    ["స్ఖలన", "premature ejaculation sexual"], ["సుఖవ్యాధ", "std sti confidential sexual"],
+    ["సుఖ వ్యాధ", "std sti confidential sexual"], ["గుప్త", "sexual std confidential"],
+    ["గోప్య", "confidential sexual std private"], ["కోరిక", "libido desire sexual"],
+    ["వీర్య", "semen sexual"], ["భార్య", "women sexual health"], ["మగ", "men sexual health"]
   ];
 
   var INDEX = null;
@@ -61,6 +66,20 @@
       ["Children's Skin Care", "పిల్లల చర్మ children scabies"]
     ].forEach(function (c) {
       INDEX.push({ t: c[0], te: "", extra: c[1], price: null, tag: "Conditions", go: { type: "anchor", href: "#services" } });
+    });
+
+    /* sexual health – searched for in more spellings, and more shyly, than anything else here */
+    [
+      ["Men's Sexual Health", "పురుషుల లైంగిక ఆరోగ్యం men sexual health confidential"],
+      ["Erectile Dysfunction (ED)", "అంగస్తంభన సమస్య erectile dysfunction ed napunsakatvam lingika"],
+      ["Premature Ejaculation", "శీఘ్ర స్ఖలనం premature ejaculation pe"],
+      ["Low Libido / Low Desire", "లైంగిక కోరిక తగ్గడం low libido desire men women"],
+      ["Women's Sexual Health", "స్త్రీల లైంగిక ఆరోగ్యం women sexual health dryness pain"],
+      ["Painful Intercourse", "సంభోగ నొప్పి painful intercourse dyspareunia women"],
+      ["Vulvar Itching / Lichen Sclerosus", "తీవ్రమైన దురద తెల్లమచ్చలు vulvar itching lichen sclerosus"],
+      ["STD / STI Confidential Testing", "సుఖవ్యాధులు గోప్యమైన పరీక్షలు std sti testing hiv syphilis herpes warts gonorrhoea"]
+    ].forEach(function (c) {
+      INDEX.push({ t: c[0], te: "", extra: c[1] + " గోప్యం confidential private", price: null, tag: "Sexual Health", go: { type: "anchor", href: "#sexual-health" } });
     });
 
     /* key sections */

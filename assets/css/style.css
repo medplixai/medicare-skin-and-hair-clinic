@@ -1628,3 +1628,101 @@ tr.search-hit td{ background:#fff3c9; transition:background 2.5s var(--ease) .5s
 .careers-done__ic{ font-size:2.6rem; margin-bottom:.4rem; }
 .careers-done h3{ font-size:1.25rem; font-weight:800; }
 .careers-done p{ color:var(--ink-2); margin:.6rem 0 0; }
+
+/* =====================================================================
+   SEXUAL HEALTH (#sexual-health)
+   Quieter than the rest of the site on purpose. Somebody reading this
+   section is often doing it with the phone tilted away from the room,
+   so it gets calm surfaces and no pink shouting – the privacy promise
+   leads, the scare tactics that fill this corner of the market are
+   named and refused at the bottom.
+   ===================================================================== */
+.shealth{ position:relative; }
+.shealth__grid{ margin-top:22px; }
+
+/* privacy promise */
+.shealth__privacy{
+  display:flex; gap:18px; align-items:flex-start;
+  background:var(--pink-tint2); border:1px solid var(--line);
+  border-radius:var(--r-lg); padding:22px 24px; box-shadow:var(--shadow-sm);
+}
+.shealth__privacy-icon{
+  flex:0 0 auto; width:52px; height:52px; border-radius:16px;
+  background:var(--grad); display:grid; place-items:center; box-shadow:var(--glow-soft);
+}
+.shealth__privacy-icon svg{ width:26px; height:26px; fill:none; stroke:#fff; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+.shealth__privacy-title{ margin:2px 0 10px; font-size:1.08rem; color:var(--ink); }
+.shealth__privacy-title i{ display:block; font-style:normal; font-weight:500; font-size:.82rem; color:var(--muted); font-family:var(--font-en); }
+.shealth__privacy-list{ list-style:none; margin:0; padding:0; display:grid; gap:8px; }
+.shealth__privacy-list li{ position:relative; padding-left:24px; color:var(--ink-2); font-size:.95rem; line-height:1.6; }
+.shealth__privacy-list li::before{
+  content:""; position:absolute; left:0; top:.55em; width:13px; height:8px;
+  border-left:2.2px solid var(--pink); border-bottom:2.2px solid var(--pink);
+  transform:rotate(-45deg);
+}
+
+/* "this may not be only a sexual problem" */
+.shealth__alert{
+  display:flex; gap:14px; align-items:flex-start; margin-top:22px;
+  background:#FFF8EC; border:1px solid #F3DFB8; border-left:5px solid #E8A33D;
+  border-radius:var(--r); padding:18px 20px;
+}
+.shealth__alert-ic{ flex:0 0 auto; width:26px; height:26px; fill:none; stroke:#C9801F; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.shealth__alert p{ margin:0; color:#6B4A15; font-size:.95rem; line-height:1.7; }
+.shealth__alert i{ display:block; margin-top:6px; font-style:normal; color:#94702F; font-size:.84rem; font-family:var(--font-en); }
+
+/* what the visit looks like */
+.shealth__steps{ margin-top:26px; }
+.shealth__steps-title{ text-align:center; font-size:1.15rem; margin:0 0 18px; color:var(--ink); }
+.shealth__steps-title i{ display:block; font-style:normal; font-weight:500; font-size:.84rem; color:var(--muted); font-family:var(--font-en); }
+.shealth__steps-list{ list-style:none; margin:0; padding:0; display:grid; gap:14px; grid-template-columns:repeat(4,1fr); counter-reset:s; }
+.shealth__steps-list li{
+  background:var(--white); border:1px solid var(--line); border-radius:var(--r);
+  padding:20px 18px 18px; box-shadow:var(--shadow-sm); position:relative;
+}
+.shealth__step-n{
+  position:absolute; top:-14px; left:18px; width:30px; height:30px; border-radius:50%;
+  background:var(--grad); color:#fff; display:grid; place-items:center;
+  font-weight:700; font-size:.92rem; box-shadow:var(--glow-soft);
+}
+.shealth__steps-list strong{ display:block; margin:6px 0 6px; color:var(--ink); font-size:.98rem; }
+.shealth__steps-list span:not(.shealth__step-n){ display:block; color:var(--ink-2); font-size:.88rem; line-height:1.6; }
+
+/* the quack warning */
+.shealth__warn{
+  margin-top:26px; background:#FFF5F6; border:1px solid #F6D3D8;
+  border-radius:var(--r-lg); padding:22px 24px;
+}
+.shealth__warn h3{ margin:0 0 12px; font-size:1.05rem; color:#9B2C3A; }
+.shealth__warn h3 i{ display:block; font-style:normal; font-weight:500; font-size:.82rem; color:#B5707A; font-family:var(--font-en); }
+.shealth__warn ul{ list-style:none; margin:0; padding:0; display:grid; gap:8px; }
+.shealth__warn li{ position:relative; padding-left:26px; color:#7A3B45; font-size:.94rem; line-height:1.6; }
+.shealth__warn li::before{
+  content:"✕"; position:absolute; left:2px; top:0; color:#C9485A; font-weight:700; font-size:.9rem;
+}
+.shealth__warn-note{ margin:14px 0 0; padding-top:14px; border-top:1px dashed #F0C4CB; color:#7A3B45; font-size:.92rem; line-height:1.7; }
+
+/* closing call to action */
+.shealth__cta{
+  margin-top:26px; display:flex; flex-wrap:wrap; gap:18px; align-items:center; justify-content:space-between;
+  background:var(--grad-soft); border:1px solid var(--line); border-radius:var(--r-lg); padding:24px 26px;
+}
+.shealth__cta h3{ margin:0 0 6px; font-size:1.1rem; color:var(--ink); }
+.shealth__cta p{ margin:0; color:var(--ink-2); font-size:.93rem; }
+.shealth__cta-btns{ display:flex; flex-wrap:wrap; gap:10px; }
+.shealth__cta-btns i{ font-style:normal; font-weight:500; opacity:.85; font-size:.82rem; }
+
+.shealth__disc{
+  margin:18px 0 0; text-align:center; color:var(--muted);
+  font-size:.8rem; line-height:1.7; max-width:860px; margin-inline:auto;
+}
+
+@media (max-width:980px){
+  .shealth__steps-list{ grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:640px){
+  .shealth__privacy{ flex-direction:column; gap:14px; padding:20px; }
+  .shealth__steps-list{ grid-template-columns:1fr; }
+  .shealth__cta{ padding:20px; }
+  .shealth__cta-btns .btn{ width:100%; justify-content:center; }
+}
