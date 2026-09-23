@@ -9,3 +9,5 @@
 assets/img/before-after/*.PNG
 assets/img/before-after/*.HEIC
 assets/img/before-after/*.JPG
+.vercel
+.env*
