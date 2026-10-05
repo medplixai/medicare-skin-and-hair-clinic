@@ -44,9 +44,9 @@ window.MEDICARE_PRICING = {
       "name": "Laser Hair Reduction",
       "nameTe": "లేజర్ హెయిర్ రిడక్షన్",
       "from": 2000,
-      "badge": "Painless",
+      "badge": "",
       "icon": "laser",
-      "desc": "Laser Hair Reduction అనేది USFDA-approved diode laser సాంకేతికత. అవాంఛిత రోమాలను long-term తగ్గించడంలో సహాయపడుతుంది; ముఖం, చేతులు, కాళ్లు సహా అన్ని body areas కు అనుకూలం. పలు sessions అవసరం; ఫలితాలు చర్మం, వెంట్రుకల రకాన్ని బట్టి మారవచ్చు."
+      "desc": "Laser Hair Reduction అనేది USFDA 510(k)-cleared diode laser సాంకేతికత. అవాంఛిత రోమాలను long-term తగ్గించడంలో సహాయపడుతుంది; ముఖం, చేతులు, కాళ్లు సహా అన్ని body areas కు అనుకూలం. పలు sessions అవసరం; ఫలితాలు చర్మం, వెంట్రుకల రకాన్ని బట్టి మారవచ్చు."
     },
     {
       "slug": "hair",
@@ -475,7 +475,7 @@ window.MEDICARE_PRICING = {
       "titleEn": "Laser Hair Reduction",
       "icon": "laser",
       "gstAll": true,
-      "blurb": "USFDA ఆమోదిత diode laser సాంకేతికతతో అన్ని శరీర భాగాలలోని అవాంఛిత రోమాలను దీర్ఘకాలికంగా (long-term reduction) తగ్గించడంలో సహాయపడుతుంది. ప్రతి సెషన్‌లో laser కిరణాలు రోమ కుదుళ్ళను లక్ష్యంగా చేసుకుంటాయి; ఫలితాలు వ్యక్తిని బట్టి మారతాయి, నిపుణుల పర్యవేక్షణలో పలు సెషన్లు సిఫార్సు చేయబడతాయి.",
+      "blurb": "USFDA 510(k)-cleared diode laser సాంకేతికతతో అన్ని శరీర భాగాలలోని అవాంఛిత రోమాలను దీర్ఘకాలికంగా (long-term reduction) తగ్గించడంలో సహాయపడుతుంది. ప్రతి సెషన్‌లో laser కిరణాలు రోమ కుదుళ్ళను లక్ష్యంగా చేసుకుంటాయి; ఫలితాలు వ్యక్తిని బట్టి మారతాయి, నిపుణుల పర్యవేక్షణలో పలు సెషన్లు సిఫార్సు చేయబడతాయి.",
       "columns": [
         "1 session",
         "5+1",

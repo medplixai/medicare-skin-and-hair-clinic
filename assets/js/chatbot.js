@@ -128,7 +128,7 @@
 
     { id: "laser", keys: ["laser", "లేజర్", "cosmetic", "కాస్మెటిక్", "botox", "బొటాక్స్", "filler", "ఫిల్లర్", "peel", "పీల్", "hydrafacial", "హైడ్రా", "glutathione", "గ్లూటా", "aesthetic", "laser hair removal", "tattoo"], fn: function (t) {
       var p = priceLookup(t), px = p && p.length ? "<br>" + p.map(function (h) { return "• " + esc(h.name) + " — <strong>" + inr(h.price) + " నుండి</strong>"; }).join("<br>") : "";
-      return "✨ మాకు USFDA ఆమోదిత యంత్రాలతో అన్ని రకాల <strong>lasers, cosmetic &amp; aesthetic</strong> చికిత్సలు ఉన్నాయి — Botox, fillers, chemical peels, HydraFacial, glutathione, laser hair reduction, advanced lasers." + px + "<br><small>* cosmetic procedures పై 18% GST అదనం.</small>" +
+      return "✨ మాకు USFDA 510(k)-cleared యంత్రాలతో అన్ని రకాల <strong>lasers, cosmetic &amp; aesthetic</strong> చికిత్సలు ఉన్నాయి — Botox, fillers, chemical peels, HydraFacial, glutathione, laser hair reduction, advanced lasers." + px + "<br><small>* cosmetic procedures పై 18% GST అదనం.</small>" +
         acts([act("#treatments", "పూర్తి ధరలు", { close: true }), act("#contact", "అపాయింట్‌మెంట్", { primary: true, close: true })]);
     } },
 
