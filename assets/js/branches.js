@@ -213,7 +213,7 @@ window.MEDICARE_BRANCHES = [
     address: "#2-6-6, 1st Floor, Upstairs to Twills, JP Road, beside Zudio, opposite Jai Srinivasa Hospital, Bhimavaram, Andhra Pradesh 534202",
     mapEmbed: "https://maps.google.com/maps?q=16.5441794,81.5156267&z=16&output=embed",
     mapsUrl: "https://maps.app.goo.gl/jtQiq29Td5WY8kuQ9",
-    phones: ["9573124777", "9573125777"],
+    phones: ["9573124777"],
     whatsapp: "919573124777",
     instagram: "https://www.instagram.com/medicare_skin_bhimavaram",
     clinicPhoto: "assets/img/branches/bhimavaram.jpg",

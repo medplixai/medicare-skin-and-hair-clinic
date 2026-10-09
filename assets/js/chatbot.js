@@ -135,7 +135,9 @@
     { id: "price", keys: ["price", "cost", "fee", "charge", "rate", "ధర", "ధరలు", "ఖర్చు", "ఫీజు", "రేటు", "ఎంత", "how much", "consultation fee"], fn: function (t) {
       var p = priceLookup(t);
       if (p && p.length) return "ధరల వివరాలు:<br>" + p.map(function (h) { return "• " + esc(h.name) + " — <strong>" + inr(h.price) + " నుండి</strong>"; }).join("<br>") + "<br><small>* అన్నీ \"నుండి\" ధరలు; cosmetic procedures పై 18% GST.</small>" + acts([act("#treatments", "అన్ని ధరలు", { close: true })]);
-      return "💰 Consultation <strong>₹999 నుండి</strong>. మిగతా చికిత్సలు విభాగాల వారీగా \"నుండి\" ధరలతో ఉన్నాయి (85+ procedures). హెయిర్ ట్రాన్స్‌ప్లాంట్ ₹59,999 నుండి.<br>👉 ఏ treatment ధర కావాలో పేరు టైప్ చేయండి (ఉదా: \"botox ధర\")." +
+      // The fee is a flat ₹200 at every branch (VIP ₹500), not a "నుండి" price. This chip used
+      // to answer "₹999 నుండి" — a figure no branch has ever charged for a consultation.
+      return "💰 కన్సల్టేషన్ ఫీజు <strong>₹200</strong> · VIP కన్సల్టేషన్ <strong>₹500</strong> — అన్ని శాఖల్లోనూ ఒకటే. మిగతా చికిత్సలు విభాగాల వారీగా \"నుండి\" ధరలతో ఉన్నాయి (85+ procedures). హెయిర్ ట్రాన్స్‌ప్లాంట్ ₹59,999 నుండి.<br>👉 ఏ treatment ధర కావాలో పేరు టైప్ చేయండి (ఉదా: \"botox ధర\")." +
         acts([act("#treatments", "ధరల పేజీ చూడండి", { primary: true, close: true })]);
     } },
 
