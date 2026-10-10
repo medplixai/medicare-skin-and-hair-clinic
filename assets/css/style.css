@@ -1720,3 +1720,36 @@ tr.search-hit td{ background:#fff3c9; transition:background 2.5s var(--ease) .5s
   .shealth__cta{ padding:20px; }
   .shealth__cta-btns .btn{ width:100%; justify-content:center; }
 }
+
+
+/* ---- Condition gallery ------------------------------------------------------
+   A picture of the disease is patient information; a picture of a result is an
+   advertisement. These show the condition only, they are AI illustrations and
+   not photographs of our patients, and the page says so on every tile — NMC
+   Guidelines 6 Oct 2026 cl. 7.2 (AI content carries a source mark) and cl.
+   8.1(v) (no case published for promotion). The mark is drawn by the page, not
+   baked into the file, so it stays legible and cannot be cropped off. */
+.cond__grid{
+  display:grid; gap:1rem; margin-top:1.6rem;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+}
+.cond{
+  margin:0; background:#fff; border:1px solid var(--line); border-radius:var(--r);
+  overflow:hidden; box-shadow:var(--shadow-sm);
+}
+.cond__media{ position:relative; aspect-ratio:1/1; overflow:hidden; }
+.cond__media img{ width:100%; height:100%; object-fit:cover; display:block; }
+.cond__ai{
+  position:absolute; top:.5rem; left:.5rem;
+  background:rgba(17,17,17,.74); color:#fff; backdrop-filter:blur(2px);
+  font-size:.66rem; font-weight:700; letter-spacing:.02em;
+  padding:.2rem .5rem; border-radius:var(--r-pill);
+}
+.cond figcaption{ padding:.6rem .7rem .75rem; }
+.cond figcaption b{ display:block; font-size:.92rem; }
+.cond figcaption i{ font-style:normal; font-size:.76rem; color:var(--muted); }
+.cond__note{
+  margin:1rem 0 0; font-size:.84rem; color:var(--muted); line-height:1.6;
+  border-top:1px solid var(--line); padding-top:.9rem;
+}
+@media (max-width:520px){ .cond__grid{ grid-template-columns:repeat(2,1fr); gap:.7rem; } }

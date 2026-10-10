@@ -76,6 +76,48 @@ const IMAGES = [
     prompt: "A dermatology laser console beside a treatment couch in a bright uncluttered room, its display switched off, white linen, soft daylight through a blind." },
 ];
 
+/**
+ * CONDITION ILLUSTRATIONS — a different rule, deliberately.
+ *
+ * A picture of the disease is patient information, not an advertisement: it shows what a problem
+ * looks like so somebody recognises their own and comes in. What the rules forbid is a RESULT —
+ * a before-and-after, a cleared patch, a case published to persuade (cl. 8.1(v), 8.1(vi)). So
+ * these show the condition and never its treatment or its outcome.
+ *
+ * Three things keep them honest, and all three are required together:
+ *   - no face, ever. A dermatology picture with a face reads as a patient, and these are nobody;
+ *   - AI-generated and SAID to be, on the page itself (cl. 7.2 — AI content carries a source mark);
+ *   - a clinical illustration, not a photograph of a real person's disease.
+ * The mark is rendered by the page, not drawn into the picture, so it stays legible, translatable
+ * and impossible to crop off in a forward.
+ */
+const CONDITION_RULES = [
+  "A clinical dermatology teaching illustration of the condition only.",
+  "Absolutely no text, no lettering, no numbers, no watermark in any language or script.",
+  "No face, no eyes, no mouth, no identifiable person: the frame holds only the affected area of skin, scalp or nail.",
+  "Show the condition as it presents, untreated. Not a result, not healed skin, not a comparison, not two panels.",
+  "Indian skin tone, even clinical daylight, plain neutral background, respectful and matter-of-fact, no drama and no beauty styling.",
+].join(" ");
+
+const CONDITIONS = [
+  { slug: "psoriasis", te: "సోరియాసిస్", en: "Psoriasis",
+    prompt: "A close clinical view of an adult elbow with well-defined raised red plaques covered in silvery-white scale, typical of plaque psoriasis." },
+  { slug: "vitiligo", te: "బొల్లి", en: "Vitiligo",
+    prompt: "A close clinical view of the back of an adult hand and wrist with sharply defined milk-white depigmented patches of vitiligo against brown skin." },
+  { slug: "eczema", te: "తామర (ఎగ్జిమా)", en: "Eczema",
+    prompt: "A close clinical view of the inner elbow crease with dry, thickened, reddened and lightly cracked skin typical of atopic eczema." },
+  { slug: "fungal", te: "ఫంగల్ ఇన్ఫెక్షన్", en: "Fungal infection",
+    prompt: "A close clinical view of a forearm with a ring-shaped fungal infection: a raised scaly advancing border with clearer skin at the centre." },
+  { slug: "acne", te: "మొటిమలు", en: "Acne",
+    prompt: "A tight macro of the skin of a cheek and jawline showing inflamed acne papules, pustules and open comedones, cropped so that no eye, nose or mouth is in the frame." },
+  { slug: "hairfall", te: "జుట్టు రాలడం", en: "Hair loss",
+    prompt: "Photographic close view, shot from directly behind and above an adult head: the crown and parting, where the dark hair is visibly thinned and the scalp shows through. Real photograph, natural daylight, not an illustration or drawing. No face, no forehead, no ear in frame." },
+  { slug: "nail-fungus", te: "గోళ్ళ ఫంగస్", en: "Nail infection",
+    prompt: "A close clinical view of adult fingernails that are thickened, yellowed, crumbling at the free edge and lifting from the nail bed, typical of fungal nail infection." },
+  { slug: "melasma", te: "మచ్చలు (మెలస్మా)", en: "Melasma",
+    prompt: "Extreme close-up of ONE side of an adult face: the skin of a single left cheek and temple only, filling the whole frame at a slight angle, showing blotchy brown-grey melasma pigmentation. Not symmetrical, not a portrait, not mirrored. No eye, no eyebrow, no nose, no mouth, no ear, no chin, no jawline edge anywhere in the frame — skin only." },
+].map((c) => ({ ...c, out: `assets/img/conditions/${c.slug}.jpg`, aspect: "1:1", rules: CONDITION_RULES }));
+
 const want = process.argv.slice(2).filter((a) => !a.startsWith("--"));
 const force = process.argv.includes("--force");
 
@@ -84,7 +126,7 @@ async function draw(spec) {
     method: "POST",
     headers: { "x-goog-api-key": KEY, "Content-Type": "application/json" },
     body: JSON.stringify({
-      contents: [{ parts: [{ text: `${spec.prompt} ${RULES}` }] }],
+      contents: [{ parts: [{ text: `${spec.prompt} ${spec.rules ?? RULES}` }] }],
       generationConfig: {
         responseModalities: ["IMAGE"],
         imageConfig: { aspectRatio: spec.aspect, ...(MODEL.includes("pro") ? { imageSize: "2K" } : {}) },
@@ -99,7 +141,7 @@ async function draw(spec) {
 }
 
 let made = 0;
-for (const spec of IMAGES) {
+for (const spec of [...IMAGES, ...CONDITIONS]) {
   const name = spec.out.split("/").pop().replace(/\.jpg$/, "");
   if (want.length && !want.includes(name)) continue;
   if (!force && existsSync(spec.out)) {
