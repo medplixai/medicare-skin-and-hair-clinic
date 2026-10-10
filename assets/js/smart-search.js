@@ -1,6 +1,16 @@
 /* =====================================================================
    MEDICARE — Smart Search (hero)
-   Instant client-side search across 84+ treatments & prices
+   LEGAL: these index entries are site copy and are caught by the same rules
+   as the page body (NMC Guidelines on Ethical Advertising, 06/10/2026, cl.
+   3.2 — search-based communications count as advertisement). So: no "free"
+   (cl. 8.1(x)), no superlatives (8.1(ix)), no before/after section (8.1(v)),
+   and a price shown here is the charge for the unit named on the price
+   sheet. The one exception is hair transplant, where the published figure
+   is a minimum and not a charge, so it is shown as "₹59,999 నుండి" — the
+   same wording as the price sheet. A minimum must never be shown as a flat
+   figure, and a flat figure must never be shown as a minimum (CCPA 2022
+   cl. 12(e)(i)).
+   Instant client-side search across the treatments & prices
    (window.MEDICARE_PRICING), signature treatments, conditions, FAQs and
    site sections. Telugu + English queries supported (alias map).
    Selecting a treatment deep-links: opens its price category, scrolls
@@ -84,16 +94,15 @@
 
     /* key sections */
     [
-      ["Hair Transplant (FUE/DHI)", "బట్టతల హెయిర్ ట్రాన్స్‌ప్లాంట్ transplant fue dhi baldness", "#hair-transplant", 59999],
-      ["AI Skin & Hair Analysis", "ఉచిత ai విశ్లేషణ free analysis photo", "#ai-analysis", null],
+      ["Hair Transplant (FUE/DHI)", "బట్టతల హెయిర్ ట్రాన్స్‌ప్లాంట్ transplant fue dhi baldness", "#hair-transplant", 59999, true],
+      ["AI Photo Description (not a diagnosis)", "ai ఫోటో వివరణ analysis photo స్కాన్", "#ai-analysis", null],
       ["Online Consultation", "టెలీ ఆన్‌లైన్ tele video consultation", "#teleconsultation", null],
       ["Our Doctors", "వైద్యులు డాక్టర్ dermatologist specialist", "#doctors", null],
-      ["Branches (10+ locations)", "శాఖలు kaikaluru bhimavaram eluru gudivada gannavaram nuzvid akividu tadepalligudem machilipatnam ongole branch near", "#branches", null],
+      ["Branches (10 locations)", "శాఖలు kaikaluru bhimavaram eluru gudivada gannavaram nuzvid akividu tadepalligudem machilipatnam ongole branch near", "#branches", null],
       ["Equipment & Technology", "usfda laser machines technology పరికరాలు", "#technology", null],
-      ["Before & After Results", "ఫలితాలు results before after", "#results", null],
       ["Book Appointment / Contact", "అపాయింట్‌మెంట్ బుక్ contact whatsapp call timings సమయాలు hours", "#contact", null]
     ].forEach(function (s) {
-      INDEX.push({ t: s[0], te: "", extra: s[1], price: s[3], tag: "Section", go: { type: "anchor", href: s[2] } });
+      INDEX.push({ t: s[0], te: "", extra: s[1], price: s[3], from: !!s[4], tag: "Section", go: { type: "anchor", href: s[2] } });
     });
 
     /* FAQs from the DOM */
@@ -179,7 +188,9 @@
       panel.hidden = false; return;
     }
     panel.innerHTML = list.map(function (e, i) {
-      var price = e.price ? '<b>from ₹' + Number(e.price).toLocaleString("en-IN") + "</b>" : '<i>' + e.tag + "</i>";
+      var price = e.price
+        ? '<b>₹' + Number(e.price).toLocaleString("en-IN") + (e.from ? " నుండి" : "") + "</b>"
+        : '<i>' + e.tag + "</i>";
       return '<button type="button" class="hsearch__item" data-i="' + i + '">' +
         "<span>" + e.t + (e.te ? ' <em>' + e.te + "</em>" : "") + "</span>" + price + "</button>";
     }).join("");

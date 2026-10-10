@@ -164,11 +164,20 @@
   const leadEl = $("#heroLead"), rot = $("#heroRotate");
   if (leadEl && rot) {
     const LEAD = { te: "మీ చర్మం, జుట్టు & గోళ్ళ ఆరోగ్యానికి", en: "Your skin, hair & nail health —" };
+    /* NMC Guidelines on Ethical Advertising, 06/10/2026:
+         • "a trusted name" / "నమ్మదగిన చిరునామా" — an unverifiable trust claim;
+           cl. 8.1(ix) lists "most trusted" among the prohibited comparatives.
+         • "beautiful results" / "అందమైన ఫలితాలు" — an outcome promise in the
+           site's largest type; cl. 8.1(vi) (unrealistic expectations,
+           misrepresenting outcomes) and 8.1(iii).
+       Replaced with facts the clinic can stand behind: what it treats, how many
+       branches it has, and that its doctors are qualified — all inside the
+       permitted institutional-information list at cl. 9.1. Keep it that way. */
     const PAIRS = [
-      { te: "నమ్మదగిన చిరునామా", en: "a trusted name" },
+      { te: "చర్మవైద్య చికిత్సలు", en: "dermatology treatments" },
       { te: "ఆధునిక చికిత్సలు", en: "modern treatments" },
-      { te: "నిపుణుల సంరక్షణ", en: "expert care" },
-      { te: "అందమైన ఫలితాలు", en: "beautiful results" }
+      { te: "అర్హత కలిగిన వైద్యులు", en: "qualified doctors" },
+      { te: "ఆంధ్రప్రదేశ్‌లో 10 శాఖలు", en: "10 branches in Andhra Pradesh" }
     ];
     // alternate Telugu then English -> Telugu shown first & on every other slide
     const order = [];

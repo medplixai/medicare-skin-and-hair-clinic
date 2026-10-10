@@ -1,13 +1,54 @@
 /* =====================================================================
-   MEDICARE — AI Skin & Hair Analysis  (v4 — advanced)
-   DermaLuxe-style flow + advanced extras:
+   MEDICARE — AI Skin & Hair Photo Information Tool  (v5 — compliance)
+   ---------------------------------------------------------------------
+   WHAT THIS MAY AND MAY NOT DO.  Read before changing anything here.
+
+   Telemedicine Practice Guidelines 2020 (Appendix 5 to the IMC (PCEE)
+   Regulations 2002, in force), clause 5.4:
+     "Technology platforms based on Artificial Intelligence/Machine
+      Learning are not allowed to counsel the patients or prescribe any
+      medicines to a patient. Only a RMP is entitled to counsel or
+      prescribe and has to directly communicate with the patient."
+   NMC Act 2019, s.34: only a person on the State/National Register may
+   practise medicine — interpreting a clinical photograph and telling
+   the patient what it shows is practising medicine.
+   NMC Guidelines on Ethical Advertising, 06/10/2026: clause 7.2(c) —
+   AI output must carry a source mark stating its origin is AI; 7.2(a) —
+   no misleading representation about diagnosis, treatment or clinical
+   outcomes; 7.2(d) — patient data fed to AI must meet privacy and
+   data-protection duties; 8.1(x) — no "free" procedure or similar
+   inducement; 8.1(i) — nothing built to create unnecessary demand or
+   to market by fear.
+   IT (Reasonable Security Practices … Sensitive Personal Data) Rules
+   2011: a photograph of a skin or scalp condition is SENSITIVE personal
+   data (rule 3(iii), 3(v)) — rule 5(1) written consent stating the
+   purpose before collection, rule 5(3) notice of recipients, rule 6(1)
+   prior permission for disclosure to a third party, rule 5(4)/(5)
+   retention and purpose limitation.
+
+   SO, DELIBERATELY REMOVED IN v5 — DO NOT PUT BACK:
+     • the word "free"/"ఉచిత" anywhere (8.1(x) inducement; CCPA 2022 cl.7)
+     • 0-100 appearance gauges  (numeric scoring of a patient's photo is
+       screening output — unlicensed medical-device software under MDR
+       2017 / CDSCO MDSW guidance — and claims an accuracy that cannot
+       be substantiated: cl. 3.2 Explanation II)
+     • the 3-step severity scale (AI grading = triage/counselling, 5.4)
+     • "suggested treatments" tags  (AI recommending priced procedures:
+       5.4 counselling + 8.1(i) demand creation)
+     • "self-care tips"  (personalised advice from AI = counselling, 5.4)
+     • "possible factors"  (etiology = diagnostic reasoning, 7.2(a))
+     • the on-device score history / before-vs-now comparison (depended
+       on the scores, and stored a copy of the photograph)
+
+   WHAT REMAINS: the patient's details reach the clinic desk as an
+   enquiry, the photograph is described in plain language, the output is
+   marked AI-generated and non-diagnostic, and the patient is routed to
+   a doctor.  The safety escalation ("please see a doctor soon") is kept
+   — it only ever escalates, it never tells anyone they are fine.
      • dual photo (main + optional hair/close-up)
-     • 3D face analysis: MediaPipe FaceMesh point-cloud spins while the
-       AI works (client-side & private; graceful fallback to scan line)
-     • 0-100 appearance scores rendered as animated circular gauges
-     • branded PDF report download (html2canvas + jsPDF, lazy-loaded)
-     • on-device progress tracking: last 5 reports in localStorage with
-       old-vs-new score comparison (nothing leaves the phone)
+     • 3D face mesh animation while the request runs (MediaPipe,
+       client-side only; graceful fallback to a scan line)
+     • branded PDF copy of the report (html2canvas + jsPDF, lazy-loaded)
    Limit: 5 analyses / number / 90 days (server-enforced).  ?aidemo=1 = demo.
    ===================================================================== */
 (function () {
@@ -20,11 +61,15 @@
   var WA = "919141247777";
   var REDUCE = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var LS_KEY = DEMO ? "medicareAiUsageDemo" : "medicareAiUsage";
-  var HIST_KEY = DEMO ? "medicareAiHistoryDemo" : "medicareAiHistory";
+  // No HIST_KEY in v5: the old on-device history kept a copy of the patient's
+  // photograph plus appearance scores in localStorage. SPDI Rules 2011 r.5(4)
+  // (no retention beyond the purpose) and the removal of the score gauges both
+  // make it unnecessary. One stale key is cleaned up at start-up below.
 
   var state = {
     view: "details",
     name: "", phone: "", age: "", gender: "", concern: "",
+    consented: false, guardian: false,
     image: "", image2: "", dim: false,
     result: null, remaining: null, limitMsg: "",
     cleanup: null
@@ -47,6 +92,11 @@
   function digits(s) { return (s || "").replace(/\D/g, ""); }
   function lsGet(k, d) { try { return JSON.parse(localStorage.getItem(k) || "null") || d; } catch (e) { return d; } }
   function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  function needGuardian(age) { var n = parseInt(age, 10); return !isNaN(n) && n > 0 && n < 18; }
+  // v4 stored a thumbnail of the patient's photograph + appearance scores on the
+  // device. v5 does not keep either, so clear anything v4 left behind
+  // (SPDI Rules 2011 r.5(4) — no retention beyond the purpose).
+  try { localStorage.removeItem("medicareAiHistory"); localStorage.removeItem("medicareAiHistoryDemo"); } catch (e) {}
 
   var loadedScripts = {};
   function loadScript(src) {
@@ -71,21 +121,17 @@
       setTimeout(function () {
         var u = lsGet(LS_KEY, {});
         var used = (u.phone === body.phone && u.used) ? u.used : 0;
-        if (used >= 5) { res({ ok: false, status: 429, json: { error: "limit_reached", remaining: 0, message: "ఈ నంబర్‌కు 90 రోజుల్లో 5 ఉచిత AI విశ్లేషణలు పూర్తయ్యాయి. మా వైద్యులను సంప్రదించండి 🌸" } }); return; }
+        if (used >= 5) { res({ ok: false, status: 429, json: { error: "limit_reached", remaining: 0, message: "ఈ నంబర్‌కు 90 రోజుల్లో అనుమతించిన 5 AI విశ్లేషణలు పూర్తయ్యాయి. మా వైద్యులను సంప్రదించండి 🌸" } }); return; }
         lsSet(LS_KEY, { phone: body.phone, used: used + 1, token: "demo" });
-        var hair = body.patient && body.patient.type === "hair";
+        // The demo payload mirrors what v5 actually renders: a plain description of
+        // what is visible, and nothing that reads as a diagnosis, a grade, a
+        // prognosis or a treatment recommendation (TPG 2020 cl. 5.4; NMC 7.2(a)).
         res({ ok: true, status: 200, json: { ok: true, usageToken: "demo", remaining: 5 - (used + 1), result: {
           imageUsable: true,
-          summary: "మీ ఫోటోలో మొటిమలు (acne) & స్వల్ప మచ్చలు కనిపిస్తున్నాయి — ఇది సాధారణంగా చికిత్సతో మెరుగుపడుతుంది. Your photo shows mild acne with a few marks; commonly manageable with care.",
-          scores: hair
-            ? [{ label: "జుట్టు సాంద్రత", labelEn: "Density look", value: 62 }, { label: "స్కాల్ప్ ఆరోగ్యం", labelEn: "Scalp health", value: 71 }, { label: "వాల్యూమ్", labelEn: "Volume", value: 58 }, { label: "మెరుపు", labelEn: "Shine", value: 66 }]
-            : [{ label: "తేమ", labelEn: "Hydration", value: 64 }, { label: "ఆయిల్ బ్యాలెన్స్", labelEn: "Oil balance", value: 52 }, { label: "సమాన ఛాయ", labelEn: "Even tone", value: 58 }, { label: "ఆకృతి", labelEn: "Texture", value: 61 }, { label: "క్లారిటీ", labelEn: "Clarity", value: 55 }],
+          summary: "ఫోటోలో మొటిమలు (acne) లాంటి మచ్చలు, కొంత ఎరుపు కనిపిస్తున్నాయి. ఇది ఫోటోలో ఏమి కనిపిస్తోందో చెప్పే వివరణ మాత్రమే — వ్యాధి నిర్ధారణ కాదు. దయచేసి మా వైద్యులను కలవండి.",
           observations: ["కొన్ని active మొటిమలు & రెడ్‌నెస్ · a few active pimples with redness", "స్వల్ప post-acne మచ్చలు · mild post-acne marks"],
-          possibleFactors: ["ఆయిల్ స్కిన్ / hormonal మార్పులు · oily skin or hormonal changes", "సరిపడని skincare · irregular skincare routine"],
-          selfCareTips: ["రోజుకు 2 సార్లు మృదువైన cleanser వాడండి", "బయటికి వెళ్ళేటప్పుడు sunscreen తప్పనిసరి", "మొటిమలను గిల్లవద్దు / పిండవద్దు"],
-          suggestedTreatments: ["Acne & acne-scar treatment", "Chemical peels", "HydraFacial"],
-          severity: "recommend-consult", seeDoctorSoon: false,
-          disclaimer: "ఇది AI సాధారణ సమాచారం మాత్రమే — వైద్య నిర్ధారణ కాదు. ఖచ్చితమైన అంచనా కోసం మా వైద్యులను సంప్రదించండి."
+          seeDoctorSoon: false,
+          disclaimer: ""
         }}});
       }, path === "/api/analyze" ? 4200 : 300);
     });
@@ -112,18 +158,8 @@
     fr.onload = function (e) { img.src = e.target.result; };
     fr.readAsDataURL(file);
   }
-  function makeThumb(dataUrl, cb) {
-    var img = new Image();
-    img.onload = function () {
-      var max = 240, w = img.width, h = img.height;
-      if (w > h) { h = Math.round(h * max / w); w = max; } else { w = Math.round(w * max / h); h = max; }
-      var c = document.createElement("canvas"); c.width = w; c.height = h;
-      c.getContext("2d").drawImage(img, 0, 0, w, h);
-      cb(c.toDataURL("image/jpeg", 0.55));
-    };
-    img.onerror = function () { cb(""); };
-    img.src = dataUrl;
-  }
+  /* makeThumb() was removed in v5 — it existed only to store a copy of the
+     patient's photograph on the device for the retired comparison view. */
 
   /* ------------------------------ frame ------------------------------ */
   function stepsBar() {
@@ -168,8 +204,21 @@
             '<div class="aiskin__fld"><select id="aiConcern" required><option value="" disabled' + (state.concern ? "" : " selected") + " hidden></option>" + opts +
             '</select><label for="aiConcern">Main Concern · ప్రధాన సమస్య *</label></div>' +
           "</div>" +
+          '<div class="aiskin__notice">' +
+            '<b>మీ ఫోటో ఏమవుతుంది — దయచేసి చదవండి</b>' +
+            '<ul>' +
+              '<li>మీరు ఇచ్చే ఫోటో <b>బయటి AI సేవకు (Anthropic — Claude API)</b> పంపి, అందులో ఏమి కనిపిస్తోందో వివరణ తయారవుతుంది.</li>' +
+              '<li>ఈ వివరణ <b>వ్యాధి నిర్ధారణ కాదు, చికిత్స సలహా కాదు</b> — దీని ఆధారంగా మందులు ఇవ్వబడవు. <b>నమోదిత వైద్యుడు</b> మాత్రమే వైద్య అభిప్రాయం చెప్పగలరు.</li>' +
+              '<li>ఫోటో మా సర్వర్‌లో <b>నిల్వ చేయబడదు</b> — ఆ request వరకే ఉంటుంది.</li>' +
+              '<li>మీరు ఇచ్చిన <b>పేరు, మొబైల్, వయసు, లింగం, సమస్య</b> మరియు ఈ వివరణ <b>మా క్లినిక్ డెస్క్‌కు విచారణగా (enquiry)</b> చేరతాయి, తద్వారా మా సిబ్బంది మిమ్మల్ని సంప్రదించగలరు.</li>' +
+              '<li>ఈ ఫోటోను ప్రకటనలకు, before/after చిత్రాలకు, రివ్యూలకు లేదా AI శిక్షణకు <b>ఎప్పుడూ వాడము</b>.</li>' +
+              '<li>పూర్తి వివరాలు: <a href="privacy.html#ai" target="_blank" rel="noopener">Privacy Policy — AI photo analysis</a></li>' +
+            '</ul>' +
+          '</div>' +
           '<label class="aiskin__check"><input type="checkbox" id="aiConsent"' + (state.consented ? " checked" : "") + '>' +
-            '<span>నా ఫోటోను AI విశ్లేషణ కోసం ప్రాసెస్ చేయడానికి సమ్మతిస్తున్నాను — ఇది <b>వైద్య నిర్ధారణ కాదు</b>, ఫోటో <b>save అవదు</b>. <a href="privacy.html" target="_blank" rel="noopener">Privacy</a></span></label>' +
+            '<span>పైన రాసినవన్నీ చదివాను. నా ఫోటోను ఆ విధంగా ప్రాసెస్ చేయడానికి <b>సమ్మతిస్తున్నాను</b>.</span></label>' +
+          '<label class="aiskin__check" id="aiGuardWrap"' + (needGuardian(state.age) ? "" : " hidden") + '><input type="checkbox" id="aiGuard"' + (state.guardian ? " checked" : "") + '>' +
+            '<span>ఈ ఫోటో <b>18 ఏళ్ల లోపు వ్యక్తి</b>ది. నేను ఆ పిల్లవాడి/పిల్ల <b>తల్లి / తండ్రి / సంరక్షకుడిని</b>, నా సమ్మతితోనే ఇస్తున్నాను.</span></label>' +
           '<p class="aiskin__err" id="aiErr1">' + esc(state.limitMsg || "") + "</p>" +
           '<button class="btn btn--primary aiskin__full" id="aiNext1">Continue to Photo →</button>' +
         "</div>"
@@ -187,9 +236,22 @@
         if (!state.gender) { err.textContent = "లింగం ఎంచుకోండి."; return; }
         if (!state.concern) { err.textContent = "ప్రధాన సమస్య ఎంచుకోండి."; return; }
         if (!v.querySelector("#aiConsent").checked) { err.textContent = "దయచేసి సమ్మతి ✓ ఇవ్వండి."; return; }
+        // Telemedicine Practice Guidelines 2020, cl. 3.2.3: a minor may be dealt with
+        // only along with an identified adult. DPDP Act 2023 s.9 (from 13 May 2027)
+        // will require verifiable parental consent; this is the step that prepares it.
+        var guard = v.querySelector("#aiGuard");
+        if (needGuardian(state.age)) {
+          if (!guard || !guard.checked) { err.textContent = "18 ఏళ్ల లోపు వారి ఫోటోకు తల్లి/తండ్రి/సంరక్షకుని సమ్మతి ✓ తప్పనిసరి."; return; }
+          state.guardian = true;
+        } else { state.guardian = false; }
         state.consented = true;
         setView("photo");
       });
+      // reveal the guardian consent line as soon as an under-18 age is typed
+      var ageEl = v.querySelector("#aiAge"), guardWrap = v.querySelector("#aiGuardWrap");
+      if (ageEl && guardWrap) {
+        ageEl.addEventListener("input", function () { guardWrap.hidden = !needGuardian(ageEl.value); });
+      }
       return v;
     },
 
@@ -272,11 +334,11 @@
         '<div class="aiskin__step aiskin__center">' +
           '<div class="aiskin__scanwrap" id="aiScanWrap"><img src="' + state.image + '" alt=""><span class="aiskin__scanline" aria-hidden="true"></span></div>' +
           '<div class="aiskin__mesh" id="aiMesh" hidden><canvas id="aiMeshCanvas" width="320" height="320"></canvas><span class="aiskin__meshtag">3D ఫేస్ మ్యాప్ · on-device</span></div>' +
-          '<h3 class="aiskin__h" style="margin-top:1.1rem">AI is Analyzing… <i>AI విశ్లేషిస్తోంది</i></h3>' +
-          '<p class="aiskin__scanmsg" id="aiScanMsg">ఫోటోను పరిశీలిస్తోంది…</p>' +
+          '<h3 class="aiskin__h" style="margin-top:1.1rem">AI is reading your photo… <i>AI ఫోటోను చూస్తోంది</i></h3>' +
+          '<p class="aiskin__scanmsg" id="aiScanMsg">ఫోటోను చూస్తోంది…</p>' +
         "</div>"
       );
-      var msgs = ["ఫోటోను పరిశీలిస్తోంది…", "3D ఫేస్ మ్యాప్ తయారవుతోంది…", "చర్మం / జుట్టు లక్షణాలను గుర్తిస్తోంది…", "స్కోర్లు లెక్కిస్తోంది…", "సూచనలు సిద్ధం చేస్తోంది…"];
+      var msgs = ["ఫోటోను చూస్తోంది…", "3D ఫేస్ మ్యాప్ తయారవుతోంది…", "ఫోటోలో ఏమి కనిపిస్తోందో రాస్తోంది…", "వివరణ సిద్ధం చేస్తోంది…"];
       var i = 0, m = v.querySelector("#aiScanMsg");
       var msgTimer = setInterval(function () { i = (i + 1) % msgs.length; m.textContent = msgs[i]; }, 1900);
 
@@ -329,8 +391,8 @@
       return el(
         '<div class="aiskin__step aiskin__center">' +
           '<div class="aiskin__limitic">🌸</div>' +
-          '<h3 class="aiskin__h">Free Analyses Used Up <i>ఉచిత విశ్లేషణలు పూర్తయ్యాయి</i></h3>' +
-          '<p class="aiskin__summary" style="text-align:left">' + esc(state.limitMsg || "ఈ నంబర్‌కు 90 రోజుల్లో 5 ఉచిత AI విశ్లేషణలు పూర్తయ్యాయి. ఖచ్చితమైన అంచనా & చికిత్స కోసం మా వైద్యులను సంప్రదించండి.") + "</p>" +
+          '<h3 class="aiskin__h">Analysis Limit Reached <i>విశ్లేషణల పరిమితి పూర్తయింది</i></h3>' +
+          '<p class="aiskin__summary" style="text-align:left">' + esc(state.limitMsg || "ఈ నంబర్‌కు 90 రోజుల్లో అనుమతించిన 5 AI విశ్లేషణలు పూర్తయ్యాయి. మీ సమస్యను పరీక్షించి చెప్పడానికి దయచేసి మా వైద్యులను కలవండి.") + "</p>" +
           '<div class="aiskin__cta">' +
             '<a class="btn btn--primary" href="#contact">📅 Book Appointment</a>' +
             '<a class="btn btn--ghost" target="_blank" rel="noopener" href="https://wa.me/' + WA + "?text=" + encodeURIComponent("నమస్తే Medicare 🌸 AI analysis limit అయిపోయింది — consultation కావాలి.") + '">💬 WhatsApp</a>' +
@@ -346,7 +408,7 @@
       function section(ic, te, en, inner) { return '<section class="aiskin__sec"><h4><span>' + ic + "</span>" + en + " <i>" + te + "</i></h4>" + inner + "</section>"; }
 
       var remainNote = (state.remaining != null)
-        ? '<p class="aiskin__remain">మిగిలిన ఉచిత విశ్లేషణలు: <b>' + state.remaining + "/5</b> (90 రోజుల్లో)</p>" : "";
+        ? '<p class="aiskin__remain">మిగిలిన విశ్లేషణలు: <b>' + state.remaining + "/5</b> (90 రోజుల్లో)</p>" : "";
 
       if (r.imageUsable === false) {
         var vb = el(
@@ -359,69 +421,55 @@
         return vb;
       }
 
-      /* gauges */
-      var gauges = "";
-      if (r.scores && r.scores.length) {
-        gauges = '<div class="aiskin__gauges">' + r.scores.slice(0, 6).map(function (s) {
-          var val = Math.max(0, Math.min(100, s.value | 0));
-          var cls = val >= 70 ? "g-good" : val >= 45 ? "g-mid" : "g-low";
-          var C = 2 * Math.PI * 26;
-          return '<div class="aiskin__gauge ' + cls + '" data-val="' + val + '">' +
-            '<svg viewBox="0 0 64 64"><circle class="gbg" cx="32" cy="32" r="26"/><circle class="gfg" cx="32" cy="32" r="26" stroke-dasharray="' + C.toFixed(1) + '" stroke-dashoffset="' + C.toFixed(1) + '"/></svg>' +
-            '<b>' + val + "</b><span>" + esc(s.label) + "<i>" + esc(s.labelEn) + "</i></span></div>";
-        }).join("") + "</div>";
-      }
+      /* The appearance gauges, the 3-step severity scale, "possible factors",
+         "self-care tips", the "suggested treatments" tags and the before-vs-now
+         comparison were all removed in v5. See the header of this file for the
+         clause behind each one. They are not rebuilt below — if a future server
+         response still carries those fields, they are simply ignored. */
 
-      var sev = r.severity === "see-soon" ? 2 : r.severity === "recommend-consult" ? 1 : 0;
-      var sevRow = ["సాధారణ సంరక్షణ", "వైద్య సలహా మంచిది", "త్వరగా సంప్రదించండి"].map(function (s, i2) {
-        return '<span class="' + (i2 === sev ? "on s" + i2 : "") + '">' + s + "</span>";
-      }).join("");
-      var waText = "నమస్తే Medicare 🌸 " + (state.name ? state.name + " — " : "") + "నేను website లో AI Skin & Hair Analysis చేసాను.\nఫలితం: " + (r.summary || "").slice(0, 220) + "\nConsultation కావాలి.";
-      var hist = lsGet(HIST_KEY, []);
-      var compareBtn = hist.length >= 2 ? '<button class="btn btn--ghost aiskin__compare">📈 Compare Progress</button>' : "";
+      var waText = "నమస్తే Medicare 🌸 " + (state.name ? state.name + " — " : "") + "నేను website లో AI photo description చేసాను.\nఫోటోలో కనిపించినది: " + (r.summary || "").slice(0, 220) + "\nవైద్యుల సంప్రదింపు కావాలి.";
+
+      /* Fixed, always-present legal block. It must NOT depend on the server's
+         `disclaimer` field, which can come back empty on an error path.
+         NMC 06/10/2026 cl. 7.2(c) (AI source mark), 7.2(a) (no diagnosis /
+         outcome representation); TPG 2020 cl. 5.4 (AI may not counsel or
+         prescribe) and 3.5.1 (physical examination may be essential);
+         NMC Act 2019 s.34 (only a registered practitioner may form the opinion). */
+      var AI_MARK = '<p class="aiskin__aimark">🤖 <b>AI-generated content</b> · ఈ వివరణను <b>కృత్రిమ మేధ (AI)</b> తయారు చేసింది — వైద్యుడు రాసినది కాదు.</p>';
+      var LEGAL =
+        '<div class="aiskin__legal">' +
+          '<b>దయచేసి గమనించండి</b>' +
+          '<ul>' +
+            '<li>ఇది <b>వ్యాధి నిర్ధారణ (diagnosis) కాదు</b>, చికిత్స సలహా కాదు, ఫలితాల అంచనా కాదు.</li>' +
+            '<li>ఫోటో చూసి <b>వైద్య అభిప్రాయం చెప్పగలిగేది నమోదిత వైద్యుడు (Registered Medical Practitioner) మాత్రమే</b> — సాఫ్ట్‌వేర్ కాదు.</li>' +
+            '<li>చర్మం, జుట్టు సమస్యలకు చాలాసార్లు <b>స్వయంగా పరీక్ష</b> (dermoscopy, trichoscopy, scraping, biopsy) అవసరం. ఫోటో దానికి ప్రత్యామ్నాయం కాదు.</li>' +
+            '<li>ఈ వివరణ ఆధారంగా <b>మందులు వాడొద్దు</b>. వైద్యుని సలహా లేకుండా ఏ క్రీము, మాత్ర, ఇంజెక్షన్ వాడటం ప్రమాదకరం.</li>' +
+          '</ul>' +
+        '</div>';
 
       var v = el(
         '<div class="aiskin__step">' +
           '<div id="aiReport">' +
-            '<div class="aiskin__pdfhead"><b>MEDICARE</b> Skin &amp; Hair Clinic — AI Report · ' + new Date().toLocaleDateString("en-IN") + "</div>" +
-            '<h3 class="aiskin__h">Your AI Result <i>మీ AI ఫలితం</i></h3>' +
-            gauges +
-            '<div class="aiskin__sev">' + sevRow + "</div>" +
-            (r.seeDoctorSoon ? '<div class="aiskin__soon">⚕️ దయచేసి త్వరగా మా వైద్యులను స్వయంగా కలవండి. <i>Please visit our dermatologist soon.</i></div>' : "") +
+            '<div class="aiskin__pdfhead"><b>MEDICARE</b> Skin &amp; Hair Clinic — AI photo description (not a diagnosis) · ' + new Date().toLocaleDateString("en-IN") + "</div>" +
+            '<h3 class="aiskin__h">What the AI saw in your photo <i>మీ ఫోటోలో AI కి కనిపించినవి</i></h3>' +
+            AI_MARK +
+            (r.seeDoctorSoon ? '<div class="aiskin__soon">⚕️ దయచేసి <b>త్వరగా</b> మా వైద్యులను స్వయంగా కలవండి. <i>Please see our dermatologist soon.</i></div>' : "") +
             (r.summary ? '<p class="aiskin__summary">' + esc(r.summary) + "</p>" : "") +
-            (r.observations && r.observations.length ? section("👁️", "కనిపించినవి", "Observations", list(r.observations)) : "") +
-            (r.possibleFactors && r.possibleFactors.length ? section("🔎", "సాధ్య కారణాలు", "Possible factors", list(r.possibleFactors)) : "") +
-            (r.selfCareTips && r.selfCareTips.length ? section("🌿", "సంరక్షణ చిట్కాలు", "Self-care", list(r.selfCareTips)) : "") +
-            (r.suggestedTreatments && r.suggestedTreatments.length
-              ? section("💠", "Medicare లో తగిన చికిత్సలు", "Suggested treatments",
-                  '<div class="aiskin__tags">' + r.suggestedTreatments.map(function (t) { return "<span>" + esc(t) + "</span>"; }).join("") + "</div>")
-              : "") +
-            '<p class="aiskin__disc">' + esc(r.disclaimer || "") + "</p>" +
+            (r.observations && r.observations.length ? section("👁️", "ఫోటోలో కనిపించినవి", "Visible in the photo", list(r.observations)) : "") +
+            LEGAL +
+            (r.disclaimer ? '<p class="aiskin__disc">' + esc(r.disclaimer) + "</p>" : "") +
           "</div>" + remainNote +
           '<div class="aiskin__cta">' +
-            '<a class="btn btn--primary" href="#contact">📅 Book Appointment</a>' +
+            '<a class="btn btn--primary" href="#contact">📅 వైద్యుల అపాయింట్‌మెంట్</a>' +
             '<a class="btn btn--ghost" target="_blank" rel="noopener" href="https://wa.me/' + WA + "?text=" + encodeURIComponent(waText) + '">💬 WhatsApp</a>' +
-            '<button class="btn btn--ghost aiskin__pdf">📄 PDF Report</button>' +
-            compareBtn +
+            '<button class="btn btn--ghost aiskin__pdf">📄 PDF కాపీ</button>' +
             ((state.remaining == null || state.remaining > 0) ? '<button class="btn btn--ghost aiskin__retry">📷 New Photo</button>' : "") +
           "</div>" +
         "</div>"
       );
 
-      /* animate gauges after paint (setTimeout fallback for throttled tabs) */
-      function fillGauges() {
-        [].forEach.call(v.querySelectorAll(".aiskin__gauge"), function (g) {
-          var val = +g.getAttribute("data-val"), C = 2 * Math.PI * 26;
-          g.querySelector(".gfg").style.strokeDashoffset = (C * (1 - val / 100)).toFixed(1);
-        });
-      }
-      requestAnimationFrame(function () { requestAnimationFrame(fillGauges); });
-      setTimeout(fillGauges, 250);
-
       var rt = v.querySelector(".aiskin__retry");
       if (rt) rt.addEventListener("click", function () { state.image = ""; state.image2 = ""; state.result = null; setView("photo"); });
-      var cp = v.querySelector(".aiskin__compare");
-      if (cp) cp.addEventListener("click", function () { setView("compare"); });
 
       v.querySelector(".aiskin__pdf").addEventListener("click", function () {
         var btn = this; btn.disabled = true; btn.textContent = "Preparing…";
@@ -448,64 +496,24 @@
               pdf.addImage(pageCanvas.toDataURL("image/jpeg", 0.92), "JPEG", 10, 10, pw, slice * pw / canvas.width);
               y += slice; page++;
             }
-            var d = new Date(), fn = "Medicare-AI-Report-" + d.getFullYear() + ("0" + (d.getMonth() + 1)).slice(-2) + ("0" + d.getDate()).slice(-2) + ".pdf";
+            var d = new Date(), fn = "Medicare-AI-photo-description-" + d.getFullYear() + ("0" + (d.getMonth() + 1)).slice(-2) + ("0" + d.getDate()).slice(-2) + ".pdf";
             pdf.save(fn);
           });
         }).catch(function () { alert("PDF తయారు చేయలేకపోయాం — దయచేసి మళ్ళీ ప్రయత్నించండి."); })
-          .then(function () { btn.disabled = false; btn.textContent = "📄 PDF Report"; });
+          .then(function () { btn.disabled = false; btn.textContent = "📄 PDF కాపీ"; });
       });
       return v;
     },
 
-    /* ---- compare (on-device history) ---- */
-    compare: function () {
-      var hist = lsGet(HIST_KEY, []);
-      var a = hist[1], b = hist[0];   // previous vs latest
-      function dt(ms) { return new Date(ms).toLocaleDateString("en-IN"); }
-      var rows = "";
-      if (a && b && a.scores && b.scores) {
-        rows = b.scores.map(function (s) {
-          var prev = null;
-          a.scores.forEach(function (p) { if ((p.labelEn || "").toLowerCase() === (s.labelEn || "").toLowerCase()) prev = p; });
-          if (!prev) return "";
-          var d = s.value - prev.value;
-          var cls = d > 2 ? "up" : d < -2 ? "down" : "flat";
-          var arrow = d > 2 ? "▲" : d < -2 ? "▼" : "—";
-          return "<tr><td>" + esc(s.label) + " <i>" + esc(s.labelEn) + "</i></td><td>" + prev.value + "</td><td>" + s.value + '</td><td class="' + cls + '">' + arrow + " " + (d > 0 ? "+" : "") + d + "</td></tr>";
-        }).join("");
-      }
-      var v = el(
-        '<div class="aiskin__step">' +
-          '<h3 class="aiskin__h">Progress Comparison <i>పురోగతి పోలిక · మీ ఫోన్‌లోనే</i></h3>' +
-          '<div class="aiskin__cmp">' +
-            '<figure><img src="' + (a && a.thumb || "") + '" alt=""><figcaption>Before · ' + (a ? dt(a.d) : "") + "</figcaption></figure>" +
-            '<span class="aiskin__cmparrow">➜</span>' +
-            '<figure><img src="' + (b && b.thumb || "") + '" alt=""><figcaption>Now · ' + (b ? dt(b.d) : "") + "</figcaption></figure>" +
-          "</div>" +
-          (rows ? '<table class="aiskin__cmptable"><thead><tr><th>Parameter · పరామితి</th><th>Before · మునుపు</th><th>Now · ఇప్పుడు</th><th>Change</th></tr></thead><tbody>' + rows + "</tbody></table>"
-                : '<p class="aiskin__scanmsg">పోల్చదగిన స్కోర్లు లేవు.</p>') +
-          '<p class="aiskin__disc">ఈ పోలిక మీ ఫోన్‌లో మాత్రమే భద్రం — server కి వెళ్ళదు. ఫోటో పరిస్థితులు (వెలుతురు, angle) మారితే స్కోర్లు మారవచ్చు.</p>' +
-          '<div class="aiskin__actions"><button class="btn btn--ghost aiskin__backres">← Back to Result</button><a class="btn btn--primary" href="#contact">📅 Book Appointment</a></div>' +
-        "</div>"
-      );
-      v.querySelector(".aiskin__backres").addEventListener("click", function () { setView("result"); });
-      return v;
-    }
+    /* The "compare" view (Before · / Now · thumbnails + score deltas) was
+       removed in v5. It depended on the appearance scores, which are gone, and
+       it required keeping a copy of the patient's photograph in localStorage,
+       which SPDI Rules 2011 r.5(4) does not allow beyond the purpose. */
   };
 
   /* ----------------------------- analyze ----------------------------- */
-  function saveHistory(r, done) {
-    if (!r || r.imageUsable === false) { done(); return; }
-    var finished = false;
-    function fin() { if (!finished) { finished = true; done(); } }
-    setTimeout(fin, 700);                       // never block the result on a slow thumb
-    makeThumb(state.image, function (thumb) {
-      var hist = lsGet(HIST_KEY, []);
-      hist.unshift({ d: Date.now(), concern: state.concern, scores: r.scores || [], summary: (r.summary || "").slice(0, 180), thumb: thumb });
-      lsSet(HIST_KEY, hist.slice(0, 5));
-      fin();
-    });
-  }
+  /* saveHistory() was removed in v5 — nothing about the analysis is kept on the
+     device any more. */
 
   function runAnalysis() {
     var type = "skin";
@@ -524,20 +532,22 @@
         state.result = r.json.result;
         state.remaining = (typeof r.json.remaining === "number") ? r.json.remaining : null;
         if (!DEMO && r.json.usageToken) lsSet(LS_KEY, { phone: state.phone, token: r.json.usageToken });
-        // The person gave a phone number and a concern: that is a lead for the clinic desk.
+        // The person gave a phone number and a concern, with notice and consent at
+        // the details step, so it reaches the clinic desk as an enquiry. `guardian`
+        // records that an adult submitted an under-18's photo (TPG 2020 cl. 3.2.3).
         if (!DEMO && typeof window.medicareSendLead === "function") {
           var rs = state.result;
-          window.medicareSendLead({ kind: "ai_analysis", phone: state.phone, age: state.age, concern: state.concern, severity: rs.severity, seeDoctorSoon: !!rs.seeDoctorSoon, summary: rs.summary });
+          window.medicareSendLead({ kind: "ai_analysis", phone: state.phone, age: state.age, concern: state.concern, guardianConsent: !!state.guardian, seeDoctorSoon: !!rs.seeDoctorSoon, summary: rs.summary });
         }
-        saveHistory(state.result, function () { setView("result"); });
+        setView("result");
         return;
       }
       if (r.status === 429) { state.limitMsg = (r.json && r.json.message) || ""; setView("limit"); return; }
       if (r.status === 400 && r.json && r.json.error === "phone_required") { state.limitMsg = r.json.message || ""; setView("details"); return; }
-      state.result = { imageUsable: true, scores: [], summary: (r.json && r.json.message) || "AI విశ్లేషణ విఫలమైంది — దయచేసి మళ్ళీ ప్రయత్నించండి, లేదా మా వైద్యులను నేరుగా సంప్రదించండి.", observations: [], possibleFactors: [], selfCareTips: [], suggestedTreatments: [], severity: "recommend-consult", seeDoctorSoon: false, disclaimer: "" };
+      state.result = { imageUsable: true, summary: (r.json && r.json.message) || "AI వివరణ తయారు కాలేదు — దయచేసి మళ్ళీ ప్రయత్నించండి, లేదా మా వైద్యులను నేరుగా సంప్రదించండి.", observations: [], seeDoctorSoon: false, disclaimer: "" };
       setView("result");
     }).catch(function () {
-      state.result = { imageUsable: true, scores: [], summary: "నెట్‌వర్క్ సమస్య — దయచేసి మళ్ళీ ప్రయత్నించండి.", observations: [], possibleFactors: [], selfCareTips: [], suggestedTreatments: [], severity: "recommend-consult", seeDoctorSoon: false, disclaimer: "" };
+      state.result = { imageUsable: true, summary: "నెట్‌వర్క్ సమస్య — దయచేసి మళ్ళీ ప్రయత్నించండి.", observations: [], seeDoctorSoon: false, disclaimer: "" };
       setView("result");
     });
   }

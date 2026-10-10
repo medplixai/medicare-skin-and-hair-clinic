@@ -59,7 +59,13 @@ module.exports = async (req, res) => {
     parts.push("AI skin/hair analysis on the website");
     if (b.concern) parts.push("concern: " + clip(b.concern, 80));
     if (b.age) parts.push("age " + clip(b.age, 3));
-    if (b.severity) parts.push("severity: " + clip(b.severity, 30) + (b.seeDoctorSoon ? " (see doctor soon)" : ""));
+    /* `severity` was the AI's 3-step grade. It is gone from the tool (an AI/ML
+       platform may not triage or counsel — Telemedicine Practice Guidelines
+       2020 cl. 5.4), so it is no longer read here. What the tool now sends is
+       the safety flag and, for an under-18, the guardian attestation (cl.
+       3.2.3) — both belong on the desk's record of the enquiry. */
+    if (b.seeDoctorSoon) parts.push("AI safety flag: see a doctor soon");
+    if (b.guardianConsent) parts.push("under-18 — parent/guardian confirmed they are submitting the photo");
     if (b.summary) parts.push(clip(b.summary, 300));
   }
 

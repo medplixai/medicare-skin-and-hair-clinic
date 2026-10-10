@@ -1,51 +1,55 @@
 /* =====================================================================
-   MEDICARE — Before / After results (glossy auto-scroll carousel)
+   MEDICARE — Before / After results  →  WITHDRAWN (legal)
    ---------------------------------------------------------------------
-   Branded before/after cards scroll smoothly left → right (auto, infinite).
-   👉 ఫోటోలు పెట్టండి: assets/img/before-after/<slug>.jpg
-   ఒక్క ఫోటో కూడా లోడ్ కాకపోతే "Before & After" section మొత్తం దాగి ఉంటుంది.
-   కొత్త result add చేయాలంటే ఈ list లో ఒక slug చేర్చండి.
+   This file used to render an auto-scrolling before/after photo carousel
+   from assets/img/before-after/<slug>.jpg.  That display is prohibited.
+
+   NMC Guidelines on Ethical Advertising and Public Communication
+   (No. R-13014/01/2024-Ethics, 06/10/2026 — in force with immediate
+   effect), clause 8.1(v):
+     "Shall not publish cases for promotional purposes, advertise
+      surgical results, display 'before and after' photographs ...
+      unless published strictly for scientific or educational purposes
+      with anonymized patient consent."
+   A marketing carousel on a clinic home page is not a scientific or
+   educational publication, so the exception does not reach it.  Clause
+   6.2 closes the usual workaround: patient consent does NOT by itself
+   make a before-and-after depiction permissible.  The same conduct was
+   already caught by IMC (PCEE) Regulations 2002, reg. 6.1.1 ("nor shall
+   he boast of cases, operations, cures or remedies or permit the
+   publication of report thereof through any mode").
+
+   This script therefore renders nothing and actively keeps the section
+   and its navigation links hidden, so that stale markup or image files
+   left anywhere in the tree cannot republish the gallery.
+   DO NOT reinstate the carousel.  Clinical images may be retained for
+   genuine scientific or educational use only, de-identified per clause
+   6.4, and not on a public marketing page.
    ===================================================================== */
-window.MEDICARE_RESULTS = [
-  "melasma", "alopecia", "acne", "chemical-peel", "laser-hair", "skin-tags",
-  "botox", "botox-2", "xanthelasma", "psoriasis", "burns", "ear-lobe",
-  "ear", "drug-allergy", "hair-mesotherapy", "childrens-skin", "hair-prp"
-];
+window.MEDICARE_RESULTS = [];
 
 (function () {
   "use strict";
-  var section = document.getElementById("results");
-  var list = document.getElementById("resultsList");
-  if (!section || !list || !window.MEDICARE_RESULTS || !window.MEDICARE_RESULTS.length) return;
 
-  var DIR = "assets/img/before-after/";
-
-  // one glossy slide — full branded before/after image, height-fixed (width auto)
-  function slide(slug) {
-    return '<figure class="ba-slide">' +
-      '<img class="ba-img" src="' + DIR + slug + '.jpg" alt="Medicare — Before & After ' + slug +
-      '" decoding="async" onerror="this.closest(\'.ba-slide\').style.display=\'none\'">' +
-      '</figure>';
+  function suppress() {
+    var section = document.getElementById("results");
+    if (section) {
+      section.classList.remove("results--ready");
+      section.hidden = true;
+      section.setAttribute("aria-hidden", "true");
+      section.style.display = "none";
+      var list = document.getElementById("resultsList");
+      if (list) list.innerHTML = "";
+    }
+    // hide every link that points at the withdrawn section
+    Array.prototype.forEach.call(
+      document.querySelectorAll('a[href="#results"], a[href$="#results"]'),
+      function (a) { a.style.display = "none"; a.setAttribute("aria-hidden", "true"); }
+    );
   }
 
-  // render the set TWICE so the marquee can loop seamlessly
-  var set = window.MEDICARE_RESULTS.map(slide).join("");
-  list.innerHTML =
-    '<div class="ba-marquee">' +
-      '<div class="ba-track" aria-label="Before and after results">' + set + set + '</div>' +
-    '</div>';
-
-  // Reveal the section ONLY once at least one image actually loads
-  var imgs = Array.prototype.slice.call(list.querySelectorAll(".ba-img"));
-  var revealed = false;
-  function reveal() {
-    if (revealed) return;
-    revealed = true;
-    section.classList.add("results--ready");
-    document.querySelectorAll('a[href="#results"]').forEach(function (a) { a.style.display = ""; });
-  }
-  imgs.forEach(function (im) {
-    if (im.complete && im.naturalWidth > 0) reveal();
-    else im.addEventListener("load", reveal);
-  });
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", suppress);
+  else suppress();
+  // run once more after other scripts have built their markup
+  setTimeout(suppress, 120);
 })();

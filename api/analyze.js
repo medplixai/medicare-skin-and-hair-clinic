@@ -1,8 +1,23 @@
 // =====================================================================
-//  /api/analyze  —  AI Skin & Hair Analysis (Claude Opus 4.8 vision)
+//  /api/analyze  —  AI photo DESCRIPTION, skin & hair (Claude Opus 4.8 vision)
 //  Serverless function (Vercel Node runtime). No dependencies: uses the
 //  built-in fetch + crypto. The uploaded photo is analyzed in-memory and
 //  is NEVER stored (privacy-first).
+//
+//  LEGAL — Telemedicine Practice Guidelines 2020 cl. 5.4: a platform based
+//  on artificial intelligence or machine learning may NOT counsel a patient
+//  or prescribe. Only a registered medical practitioner may form a clinical
+//  opinion (s.34, National Medical Commission Act, 2019). So this endpoint
+//  asks the model for, and returns, ONLY:
+//      imageUsable · summary · observations · seeDoctorSoon · disclaimer
+//  DO NOT reinstate (removed to match the UI, assets/js/ai-analysis.js v5):
+//      scores            0-100 gauges = screening output, unsubstantiable
+//      severity          a 3-step grade = triage
+//      possibleFactors   etiology = diagnostic reasoning
+//      selfCareTips      personalised advice = counselling
+//      suggestedTreatments  AI recommending priced procedures
+//  Nor the word "free"/"ఉచిత" in anything shown to a patient (NMC
+//  Guidelines on Ethical Advertising, 06/10/2026, cl. 8.1(x) inducement).
 //
 //  Access control (OTP-less until an SMS provider is wired):
 //    - consent flag (checkbox attestation) + 10-digit mobile number
@@ -20,7 +35,7 @@ const crypto = require("crypto");
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const CONSENT_SECRET = process.env.CONSENT_SECRET || "DEV_INSECURE_change_me_set_CONSENT_SECRET";
 const MODEL = "claude-opus-4-8";
-const LIMIT = 5;                                   // free analyses…
+const LIMIT = 5;                                   // analyses allowed…
 const WINDOW_MS = 90 * 24 * 60 * 60 * 1000;        // …per 90 days per number
 
 /* ---- stateless per-number usage token (HMAC-signed) ---- */
@@ -43,13 +58,6 @@ function signUsage(phone, start, count) {
   return body + "." + hmac(body);
 }
 
-const TREATMENTS =
-  "Acne & acne-scar treatment, chemical peels, pigmentation/melasma treatment, " +
-  "lasers (pigmentation, hair reduction, tattoo removal), MNRF/skin tightening, " +
-  "HydraFacial, anti-wrinkle & fillers, hair-fall treatment, PRP & GFC therapy, " +
-  "hair transplant (FUE/DHI), dandruff & scalp treatment, nail-disease treatment, " +
-  "vitiligo care, wart/mole/skin-tag removal";
-
 const SYSTEM =
 `You are "Medicare AI", an educational skin & hair photo-observation assistant on the website of Medicare Skin & Hair Clinic — a dermatology clinic chain in Andhra Pradesh, India. Most users read Telugu.
 
@@ -58,34 +66,27 @@ CRITICAL SAFETY RULES — follow every one, without exception:
 - NEVER claim to detect, confirm, or rule out cancer, tumours, or any serious or urgent condition. If anything looks potentially serious, do NOT name it — instead set seeDoctorSoon=true and gently recommend a prompt in-person check-up.
 - Do NOT name prescription medicines, dosages, or specific drug regimens.
 - No guarantees, no "permanent cure", no "100%", no "shashwatam". Results vary from person to person.
-- If the image is not a clear photo of human skin, scalp, hair, or nails (e.g. blurry, dark, unrelated object, or a face-only selfie with no visible concern), set imageUsable=false, leave the analysis arrays empty, and politely ask in the summary for a clearer, well-lit close-up of the affected area.
+- If the image is not a clear photo of human skin, scalp, hair, or nails (e.g. blurry, dark, unrelated object, or a face-only selfie with no visible concern), set imageUsable=false, leave observations empty, and politely ask in the summary for a clearer, well-lit close-up of the affected area.
 - Keep everything general, supportive and educational. Always recommend an in-person consultation with Medicare's dermatologists for an accurate assessment.
 
-SCORES: Also return 4-6 appearance scores (0-100, HIGHER = healthier-looking) relevant to the focus — e.g. for skin: Hydration look, Oil balance, Even tone, Texture, Clarity; for hair/scalp: Density look, Scalp health, Volume, Shine. These are rough visual impressions from a photo, NOT measurements — be conservative, avoid extremes (stay within 25-90 unless truly obvious), and never present them as clinical readings. label = short Telugu, labelEn = short English.
+YOU DESCRIBE WHAT IS VISIBLE — NOTHING MORE. You are not permitted to counsel or to prescribe. So:
+- Do NOT score, grade, rate or measure anything, and do NOT return numbers about the person's skin or hair.
+- Do NOT state how severe it is, or how urgent, beyond the single seeDoctorSoon flag.
+- Do NOT give causes, triggers or reasons for what you see.
+- Do NOT give self-care, skincare, diet, lifestyle or home-remedy advice.
+- Do NOT name, suggest or recommend any treatment, procedure, product or service.
+The one thing you always say is: please see one of Medicare's dermatologists in person.
 
-STYLE: Write summary, observations, possibleFactors and selfCareTips BILINGUALLY — Telugu first, then a short English phrase — in a warm, simple, reassuring tone. suggestedTreatments must be chosen ONLY from services Medicare actually offers: ${TREATMENTS}. Return ONLY the JSON described by the schema.`;
+STYLE: Write summary and observations BILINGUALLY — Telugu first, then a short English phrase — in a warm, simple, reassuring tone. Return ONLY the JSON described by the schema.`;
 
 const SCHEMA = {
   type: "object",
   additionalProperties: false,
-  required: ["imageUsable", "summary", "scores", "observations", "possibleFactors", "selfCareTips", "suggestedTreatments", "severity", "seeDoctorSoon", "disclaimer"],
+  required: ["imageUsable", "summary", "observations", "seeDoctorSoon", "disclaimer"],
   properties: {
     imageUsable: { type: "boolean" },
     summary: { type: "string" },
-    scores: { type: "array", items: {
-      type: "object", additionalProperties: false,
-      required: ["label", "labelEn", "value"],
-      properties: {
-        label: { type: "string" },
-        labelEn: { type: "string" },
-        value: { type: "integer" }
-      }
-    } },
     observations: { type: "array", items: { type: "string" } },
-    possibleFactors: { type: "array", items: { type: "string" } },
-    selfCareTips: { type: "array", items: { type: "string" } },
-    suggestedTreatments: { type: "array", items: { type: "string" } },
-    severity: { type: "string", enum: ["general-care", "recommend-consult", "see-soon"] },
     seeDoctorSoon: { type: "boolean" },
     disclaimer: { type: "string" }
   }
@@ -95,6 +96,23 @@ const SAFE_DISCLAIMER =
   "ఇది AI ద్వారా ఇచ్చిన సాధారణ, విద్యాపరమైన సమాచారం మాత్రమే — వైద్య నిర్ధారణ (diagnosis) కాదు. " +
   "ఖచ్చితమైన అంచనా & చికిత్స కోసం దయచేసి మా అర్హత గల చర్మవైద్య నిపుణులను సంప్రదించండి. " +
   "This is AI-generated general guidance, not a medical diagnosis — please consult our dermatologists.";
+
+/* Whatever the model returns, only these five fields ever leave this server —
+   so a counselling field can never reach a patient even if the model emits one. */
+const ALLOWED = ["imageUsable", "summary", "observations", "seeDoctorSoon", "disclaimer"];
+function describeOnly(r) {
+  const out = {};
+  if (!r || typeof r !== "object") return out;
+  for (const k of ALLOWED) if (r[k] !== undefined) out[k] = r[k];
+  out.imageUsable = r.imageUsable !== false;
+  out.summary = typeof r.summary === "string" ? r.summary : "";
+  out.observations = Array.isArray(r.observations)
+    ? r.observations.filter(o => typeof o === "string")
+    : [];
+  out.seeDoctorSoon = r.seeDoctorSoon === true;
+  if (!out.disclaimer || typeof out.disclaimer !== "string") out.disclaimer = SAFE_DISCLAIMER;
+  return out;
+}
 
 module.exports = async (req, res) => {
   if (req.method !== "POST") { res.status(405).json({ error: "method_not_allowed" }); return; }
@@ -113,7 +131,7 @@ module.exports = async (req, res) => {
     const usage = readUsage(usageToken, ph);
     if (usage.count >= LIMIT) {
       res.status(429).json({ error: "limit_reached", remaining: 0,
-        message: "ఈ నంబర్‌కు 90 రోజుల్లో " + LIMIT + " ఉచిత AI విశ్లేషణలు పూర్తయ్యాయి. ఖచ్చితమైన అంచనా కోసం మా వైద్యులను సంప్రదించండి 🌸" });
+        message: "ఈ నంబర్‌కు 90 రోజుల్లో అనుమతించిన " + LIMIT + " AI ఫోటో వివరణలు పూర్తయ్యాయి. మీ సమస్యను పరీక్షించి చెప్పడానికి దయచేసి మా వైద్యులను కలవండి 🌸" });
       return;
     }
 
@@ -173,17 +191,16 @@ Provide general, educational observations of ${imgBlocks.length > 1 ? "THESE pho
     }
     const data = await r.json();
 
-    /* each successful Claude call consumes one of the 5 free uses */
+    /* each successful Claude call consumes one of the 5 allowed uses */
     const newCount = usage.count + 1;
     const newToken = signUsage(ph, usage.start, newCount);
     const remaining = Math.max(0, LIMIT - newCount);
 
     if (data.stop_reason === "refusal") {
       res.status(200).json({ ok: true, usageToken: newToken, remaining: remaining, result: {
-        imageUsable: false, scores: [],
-        summary: "క్షమించండి, ఈ ఫోటోను విశ్లేషించలేకపోయాం. దయచేసి మా వైద్యులను నేరుగా సంప్రదించండి. Sorry, we couldn't analyze this photo — please consult our doctors directly.",
-        observations: [], possibleFactors: [], selfCareTips: [], suggestedTreatments: [],
-        severity: "recommend-consult", seeDoctorSoon: false, disclaimer: SAFE_DISCLAIMER
+        imageUsable: false,
+        summary: "క్షమించండి, ఈ ఫోటోను వివరించలేకపోయాం. దయచేసి మా వైద్యులను నేరుగా సంప్రదించండి. Sorry, we couldn't describe this photo — please consult our doctors directly.",
+        observations: [], seeDoctorSoon: false, disclaimer: SAFE_DISCLAIMER
       }});
       return;
     }
@@ -194,9 +211,8 @@ Provide general, educational observations of ${imgBlocks.length > 1 ? "THESE pho
     try { result = JSON.parse(textBlock.text); }
     catch (e) { console.error("parse_error", textBlock.text && textBlock.text.slice(0, 200)); res.status(502).json({ error: "parse_error" }); return; }
 
-    if (!result.disclaimer) result.disclaimer = SAFE_DISCLAIMER;
     // Privacy: the image is never persisted — it lived only in this request.
-    res.status(200).json({ ok: true, usageToken: newToken, remaining: remaining, result: result });
+    res.status(200).json({ ok: true, usageToken: newToken, remaining: remaining, result: describeOnly(result) });
   } catch (e) {
     console.error("server_error", e && e.message);
     res.status(500).json({ error: "server_error", message: "సర్వర్ లోపం. దయచేసి మళ్ళీ ప్రయత్నించండి." });

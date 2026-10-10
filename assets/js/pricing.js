@@ -9,6 +9,36 @@
                   Row format: { n:"name", d:"చిన్న description", p:[price1, price2,...] }
                   Sub-header row: { sub:"..." }
    Prices are in INR (₹). Edit here to update.
+
+   LEGAL — publishing the tariff is EXPRESSLY PERMITTED and worth keeping:
+   IMC (PCEE) Regulations 2002, reg. 6.1.1 proviso (7) "Public declaration
+   of charges"; reg. 7.12 allows an institution to publish "the fees";
+   NMC Guidelines 06/10/2026 cl. 8.2(ii)(g) and 9.1 carry that forward.
+   Andhra Pradesh Allopathic Private Medical Care Establishments Rules
+   2007, r.9(a) positively REQUIRES the rates for each service to be
+   displayed in Telugu and English.  So the price list stays.
+
+   What is NOT permitted, and was therefore changed here:
+     • "from ₹X" on every cell — CCPA Guidelines 2022 cl. 12(e)(i) does
+       not allow "Prices from as low as Rs. Y"; a fixed amount, or a
+       stated range with what drives it, is required.  Each cell now
+       states the charge for the unit named in its column header.
+     • any "offer", "deal", "limited period", countdown or urgency
+       framing — cl. 8.1(x) and the CCPA Dark Patterns Guidelines 2023
+       (false urgency).  There is none; do not add any.
+
+   The laser-hair column headers "5+1" and "6+2" are the clinic's own
+   published price-list terms and are left exactly as published.  What they
+   include is NOT established anywhere in this repository, so they are not
+   restated as a session count here — that would be a guess about a
+   commercial term.  The clinic must confirm what they cover: if either
+   includes a session at no charge, NMC cl. 8.1(x) ("discounts … free
+   procedures or similar inducements") requires the column to go, and it is
+   for the clinic, not this file, to say so.
+
+   Claims inside the descriptions must stay inside cl. 3.2 Explanation II
+   (equipment as plain fact, no superiority, no guaranteed accuracy or
+   outcome) and cl. 8.1(iii)/(vi) (no guarantee, no concealed risk).
    ===================================================================== */
 window.MEDICARE_PRICING = {
   "signature": [
@@ -17,18 +47,18 @@ window.MEDICARE_PRICING = {
       "name": "Botox & Anti-Wrinkle",
       "nameTe": "బొటాక్స్",
       "from": 17000,
-      "badge": "Popular",
+      "badge": "",
       "icon": "spark",
-      "desc": "Botox అనేది ముఖ కండరాల కదలికను తాత్కాలికంగా సడలించే anti-wrinkle treatment. ముఖ ముడతలు, నుదుటి frown lines, కంటి చివర crow's feet వంటి వాటిని తగ్గించడంలో సహాయపడుతుంది. నిపుణుల పర్యవేక్షణలో సహజమైన, యవ్వన రూపాన్ని పొందవచ్చు; ఫలితాలు ఒక్కొక్కరికీ మారవచ్చు."
+      "desc": "Botox అనేది ముఖ కండరాల కదలికను తాత్కాలికంగా సడలించే anti-wrinkle treatment. ముఖ ముడతలు, నుదుటి frown lines, కంటి చివర crow's feet వంటి వాటిని తగ్గించడంలో సహాయపడుతుంది. వైద్య నిపుణుల పర్యవేక్షణలో మాత్రమే ఇవ్వాలి. ప్రభావం తాత్కాలికం (సాధారణంగా కొన్ని నెలలు); ఫలితాలు ఒక్కొక్కరికీ మారతాయి, ఏ ఫలితానికీ హామీ లేదు."
     },
     {
       "slug": "glutathione",
       "name": "Glutathione IV Drip",
       "nameTe": "గ్లూటాతియాన్ డ్రిప్",
       "from": 5000,
-      "badge": "Glow",
+      "badge": "",
       "icon": "drop",
-      "desc": "Glutathione IV Drip అనేది శక్తివంతమైన antioxidant therapy, ఇది శరీరానికి సిరల ద్వారా అందించబడుతుంది. చర్మ కాంతిని పెంచి, brightening, లోపలి నుండి glow పొందడంలో సహాయపడుతుంది. వైద్య నిపుణుల పర్యవేక్షణలో మాత్రమే; ఫలితాలు వ్యక్తిని బట్టి మారవచ్చు."
+      "desc": "Glutathione IV Drip అనేది యాంటీఆక్సిడెంట్ Glutathione ను సిర ద్వారా అందించే ప్రక్రియ, వైద్య నిపుణుల పర్యవేక్షణలో మాత్రమే ఇవ్వబడుతుంది. చర్మ ఛాయ మెరుగుపడుతుందని కొందరు చెబుతారు, కానీ <strong>దీనికి శాస్త్రీయ ఆధారాలు పరిమితం</strong> మరియు నిపుణుల్లో అభిప్రాయ భేదం ఉంది — కాబట్టి ఎలాంటి ఫలితానికీ మేము హామీ ఇవ్వము. మీకు ఇది అవసరమా, సురక్షితమా అన్నది వైద్యుడు పరీక్ష తర్వాతే నిర్ణయిస్తారు."
     },
     {
       "slug": "hydrafacial",
@@ -321,7 +351,7 @@ window.MEDICARE_PRICING = {
       "title": "ఇంజెక్షన్లు",
       "titleEn": "Injections",
       "icon": "syringe",
-      "blurb": "ముడతలు తగ్గించే Botox, చర్మానికి తేమ-గ్లో ఇచ్చే skin boosters, చర్మ కాంతిని పెంచే Glutathione drips, మచ్చలు/కెలాయిడ్‌లకు ILS, కొవ్వు కరిగించే lipolysis నుండి అలర్జీ-ఇన్ఫెక్షన్‌లకు మెడికల్ ఇంజెక్షన్ల వరకు — అన్నీ నిపుణుల పర్యవేక్షణలో అందిస్తాము. ప్రతి ఇంజెక్షన్ మీ చర్మ-ఆరోగ్య అవసరాలను బట్టి సురక్షితంగా, శుభ్రమైన పద్ధతిలో ఇవ్వబడుతుంది; ఫలితాలు వ్యక్తికి వ్యక్తికి మారవచ్చు.",
+      "blurb": "ముడతలు తగ్గించే Botox, చర్మానికి తేమ ఇచ్చే skin boosters, Glutathione drips (చర్మ ఛాయపై ప్రభావానికి ఆధారాలు పరిమితం), మచ్చలు/కెలాయిడ్‌లకు ILS, కొవ్వు కరిగించే lipolysis నుండి అలర్జీ-ఇన్ఫెక్షన్‌లకు మెడికల్ ఇంజెక్షన్ల వరకు — అన్నీ నిపుణుల పర్యవేక్షణలో అందిస్తాము. ప్రతి ఇంజెక్షన్ మీ చర్మ-ఆరోగ్య అవసరాలను బట్టి సురక్షితంగా, శుభ్రమైన పద్ధతిలో ఇవ్వబడుతుంది; ఫలితాలు వ్యక్తికి వ్యక్తికి మారవచ్చు.",
       "columns": [
         "Amount"
       ],
@@ -453,7 +483,7 @@ window.MEDICARE_PRICING = {
         },
         {
           "n": "Glutathione IV Drip (1 sitting)",
-          "d": "యాంటీఆక్సిడెంట్ Glutathione ను సిర ద్వారా అందించే ఒక IV drip, చర్మ కాంతిని పెంచి మెరుపును మెరుగుపరచడంలో నిపుణుల పర్యవేక్షణలో సహాయపడుతుంది; ఫలితాలు వ్యక్తికి మారవచ్చు.",
+          "d": "యాంటీఆక్సిడెంట్ Glutathione ను సిర ద్వారా అందించే ఒక IV drip, వైద్య నిపుణుల పర్యవేక్షణలో ఇవ్వబడుతుంది. చర్మ ఛాయపై దీని ప్రభావానికి శాస్త్రీయ ఆధారాలు పరిమితం; ఫలితాలకు హామీ లేదు.",
           "p": [
             5000
           ],
@@ -461,7 +491,7 @@ window.MEDICARE_PRICING = {
         },
         {
           "n": "Glutathione IV Drip (8 sittings)",
-          "d": "ఎనిమిది sittings Glutathione IV drip పూర్తి కోర్సు, క్రమంగా చర్మ కాంతి-సమతుల్యతను మెరుగుపరిచి దీర్ఘకాలిక గ్లోకు సహాయపడుతుంది; ఫలితాలు వ్యక్తి చర్మాన్ని బట్టి మారవచ్చు.",
+          "d": "ఎనిమిది sittings Glutathione IV drip పూర్తి కోర్సు, వైద్య నిపుణుల పర్యవేక్షణలో. చర్మ ఛాయపై దీని ప్రభావానికి శాస్త్రీయ ఆధారాలు పరిమితం; దీర్ఘకాలిక ఫలితానికి హామీ లేదు.",
           "p": [
             38000
           ],
@@ -746,7 +776,7 @@ window.MEDICARE_PRICING = {
       "blurb": "అత్యాధునిక లేజర్ టెక్నాలజీతో పిగ్మెంటేషన్, మచ్చలు, టాటూ తొలగింపు, మొటిమ గుంటలు మరియు చర్మ బిగువు (HIFU, CO2, MNRF) వంటి సమస్యలకు నిపుణుల పర్యవేక్షణలో చికిత్స అందిస్తాం. ప్రతి వ్యక్తి చర్మ రకాన్ని బట్టి ఫలితాలు మారవచ్చు, సురక్షితమైన ప్రణాళికతో దశలవారీగా మెరుగుదల సాధించడంలో సహాయపడతాం.",
       "columns": [
         "1 session",
-        "Package"
+        "Full course (sittings as listed)"
       ],
       "rows": [
         {
@@ -858,14 +888,41 @@ window.MEDICARE_PRICING = {
     if (isNaN(n)) return String(v);
     return "₹" + n.toLocaleString("en-IN");
   }
-  // price cell with a small "starts from" qualifier
-  function priceFrom(v) {
+  /* The charge for the unit named in the column header. The "from " qualifier
+     that used to sit on every cell is gone — CCPA Guidelines 2022 cl. 12(e)(i).
+     What can move the total is stated once, in the note under each table. */
+  function priceCell(v) {
     if (v === "—" || v == null || v === "") return "—";
     var n = Number(v);
     if (isNaN(n)) return String(v);
-    return '<span class="ptable__from">from </span>₹' + n.toLocaleString("en-IN");
+    return "₹" + n.toLocaleString("en-IN");
   }
   function esc(t){ var d=document.createElement("div"); d.textContent=t==null?"":t; return d.innerHTML; }
+
+  /* One honest note under every price table, in both languages, in the same
+     size as the figures it qualifies — CCPA Guidelines 2022 cl. 11(2)(a)/(b)
+     (a disclaimer must be in the same language and legible, and may clarify
+     but not contradict), cl. 5(c)(iii)/5(d) (availability and geographic
+     limits must be disclosed, or the advertisement is a bait advertisement),
+     cl. 12(e) (a fixed amount, with what varies stated) and the Dark Patterns
+     Guidelines 2023 (no drip pricing: GST is shown, not hidden). */
+  var PRICE_NOTE =
+    /* Deliberately rendered at normal body size, not as small print: CCPA
+       Guidelines 2022 cl. 11(2)(a)/(e) require a disclaimer to be in the same
+       language and font as the claim it qualifies, and clearly legible. Styled
+       inline so it does not depend on a stylesheet rule that may not exist. */
+    '<p class="ptable__note" style="margin:1rem 0 .25rem;padding-top:.9rem;border-top:1px solid rgba(0,0,0,.12);">' +
+      '<strong>ధరల గురించి:</strong> పైన ఇచ్చిన మొత్తం — ఆ వరుసలో/కాలమ్‌లో చెప్పిన సెషన్ లేదా కోర్సుకు క్లినిక్ ధర. ' +
+      'చికిత్స చేసే ప్రాంతం, విస్తీర్ణం, అవసరమైన సెషన్ల సంఖ్య బట్టి మొత్తం మారుతుంది — ' +
+      '<strong>మీకు వర్తించే ఖచ్చితమైన మొత్తం చికిత్స మొదలు పెట్టే ముందే</strong> చెప్పబడుతుంది. ' +
+      '“+ GST” గుర్తు ఉన్న వాటిపై 18% GST అదనం. ' +
+      '<strong>కొన్ని ప్రక్రియలు కొన్ని శాఖల్లోనే</strong> అందుబాటులో ఉంటాయి — బయలుదేరే ముందు మీ శాఖకు ఫోన్ చేసి నిర్ధారించుకోండి. ' +
+      'కన్సల్టేషన్ ఫీజు ₹200 (VIP ₹500), అన్ని శాఖల్లోనూ ఒకటే.' +
+      '<br><span class="ptable__note-en">The amount shown is the clinic charge for the session or course named in that column. ' +
+      'The total varies with the area treated and the number of sessions needed; the exact amount that applies to you is told to you before treatment begins. ' +
+      '18% GST is additional where marked “+ GST”. Some procedures are available only at some branches — please confirm with your branch before travelling. ' +
+      'Consultation fee ₹200 (VIP ₹500), the same at every branch.</span>' +
+    '</p>';
 
   /* ---- Signature showcase ---- */
   if (sig) {
@@ -879,7 +936,7 @@ window.MEDICARE_PRICING = {
         '<div class="tx__body">' +
           '<h3 class="tx__name">' + esc(s.name) + (s.nameTe ? ' <span>' + esc(s.nameTe) + '</span>' : '') + '</h3>' +
           '<p class="tx__desc">' + s.desc + '</p>' +
-          '<div class="tx__from"><span>Starts from</span> ' + inr(s.from) + '</div>' +
+          '<div class="tx__from"><span>ధర · Charge</span> ' + inr(s.from) + '</div>' +
         '</div>' +
       '</article>';
     }).join("");
@@ -894,7 +951,8 @@ window.MEDICARE_PRICING = {
         if (r.sub) return;
         var v = Number(r.p[0]); if (!isNaN(v) && v > 0) nums.push(v);
       });
-      var from = nums.length ? Math.min.apply(null, nums) : null;
+      var lo = nums.length ? Math.min.apply(null, nums) : null;
+      var hi = nums.length ? Math.max.apply(null, nums) : null;
       var count = c.rows.filter(function (r) { return !r.sub; }).length;
 
       var head = '<tr><th>Procedure</th>' + c.columns.map(function (col) { return '<th class="ptable__num">' + esc(col) + '</th>'; }).join("") + '</tr>';
@@ -904,7 +962,7 @@ window.MEDICARE_PRICING = {
         var tds = '<td class="ptable__name">' + esc(r.n) +
           (isGst ? ' <span class="ptable__gst">+ GST</span>' : '') +
           (r.d ? '<span class="ptable__desc">' + esc(r.d) + '</span>' : '') + '</td>';
-        for (var i = 0; i < priceCols; i++) tds += '<td class="ptable__num">' + priceFrom(r.p[i]) + '</td>';
+        for (var i = 0; i < priceCols; i++) tds += '<td class="ptable__num">' + priceCell(r.p[i]) + '</td>';
         return '<tr>' + tds + '</tr>';
       }).join("");
 
@@ -912,12 +970,13 @@ window.MEDICARE_PRICING = {
         '<summary class="pcat__sum">' +
           '<span class="pcat__ic">' + ic(c.icon) + '</span>' +
           '<span class="pcat__meta"><span class="pcat__title">' + esc(c.titleEn) + ' <i>' + esc(c.title) + '</i></span>' +
-            '<span class="pcat__sub">' + count + ' procedures' + (from ? ' · from ' + inr(from) : '') + '</span></span>' +
+            '<span class="pcat__sub">' + count + ' procedures' + (lo ? ' · ' + (hi > lo ? inr(lo) + ' – ' + inr(hi) : inr(lo)) : '') + '</span></span>' +
           '<span class="pcat__chev" aria-hidden="true">+</span>' +
         '</summary>' +
         '<div class="pcat__body">' +
           (c.blurb ? '<p class="pcat__blurb">' + c.blurb + '</p>' : '') +
           '<div class="ptable-wrap"><table class="ptable"><thead>' + head + '</thead><tbody>' + body + '</tbody></table></div>' +
+          PRICE_NOTE +
         '</div>' +
       '</details>';
     }).join("");
