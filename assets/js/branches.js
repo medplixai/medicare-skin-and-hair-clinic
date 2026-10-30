@@ -25,7 +25,7 @@ window.MEDICARE_REVIEWS = {
   manual: {
     "kaikaluru": {
       "rating": 5,
-      "count": 1175,
+      "count": 1344,
       "uri": "https://maps.google.com/?cid=8597805686661747061&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
       "reviews": [
         {
@@ -42,7 +42,7 @@ window.MEDICARE_REVIEWS = {
     },
     "bhimavaram": {
       "rating": 5,
-      "count": 179,
+      "count": 285,
       "uri": "https://maps.google.com/?cid=2002755678754971695&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
       "reviews": [
         {
@@ -59,7 +59,7 @@ window.MEDICARE_REVIEWS = {
     },
     "gannavaram": {
       "rating": 5,
-      "count": 1032,
+      "count": 1251,
       "uri": "https://maps.google.com/?cid=10518838838044526321&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
       "reviews": [
         {
@@ -76,7 +76,7 @@ window.MEDICARE_REVIEWS = {
     },
     "nuzvid": {
       "rating": 5,
-      "count": 1778,
+      "count": 1989,
       "uri": "https://maps.google.com/?cid=6998569486237193630&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
       "reviews": [
         {
@@ -93,7 +93,7 @@ window.MEDICARE_REVIEWS = {
     },
     "eluru": {
       "rating": 4.9,
-      "count": 527,
+      "count": 823,
       "uri": "https://maps.google.com/?cid=16388861404867468831&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
       "reviews": [
         {
@@ -110,7 +110,7 @@ window.MEDICARE_REVIEWS = {
     },
     "tadepalligudem": {
       "rating": 4.9,
-      "count": 585,
+      "count": 710,
       "uri": "https://maps.google.com/?cid=6185955461385324687&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
       "reviews": [
         {
@@ -126,8 +126,8 @@ window.MEDICARE_REVIEWS = {
       ]
     },
     "ongole": {
-      "rating": 5,
-      "count": 330,
+      "rating": 4.9,
+      "count": 540,
       "uri": "https://maps.google.com/?cid=17822404562664864366&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
       "reviews": [
         {
@@ -144,7 +144,7 @@ window.MEDICARE_REVIEWS = {
     },
     "machilipatnam": {
       "rating": 5,
-      "count": 1586,
+      "count": 1642,
       "uri": "https://maps.google.com/?cid=16382434566017921767&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
       "reviews": [
         {
@@ -161,7 +161,7 @@ window.MEDICARE_REVIEWS = {
     },
     "gudivada": {
       "rating": 4.9,
-      "count": 857,
+      "count": 1019,
       "uri": "https://maps.google.com/?cid=17073748168329911574&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
       "reviews": [
         {
@@ -178,7 +178,7 @@ window.MEDICARE_REVIEWS = {
     },
     "akividu": {
       "rating": 5,
-      "count": 826,
+      "count": 964,
       "uri": "https://maps.google.com/?cid=11408780748580307112&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
       "reviews": [
         {
