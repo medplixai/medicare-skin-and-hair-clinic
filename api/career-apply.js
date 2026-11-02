@@ -3,7 +3,7 @@
 //  Uses Resend (https://resend.com) REST API via built-in fetch.
 //
 //  Setup (one time):
-//    1. Sign up at resend.com USING the recipient inbox (nagaraj@medicare247.in)
+//    1. Sign up at resend.com USING the recipient inbox (b.n.raaz@gmail.com)
 //       — free tier: 100 emails/day, no domain verification needed when
 //       sending to your own account email from onboarding@resend.dev.
 //    2. Resend dashboard → API Keys → Create → copy (starts "re_").
@@ -14,7 +14,7 @@
 //       endpoint (it falls back to FormSubmit/WhatsApp until then).
 // =====================================================================
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const TO = process.env.CAREERS_TO || "nagaraj@medicare247.in";
+const TO = process.env.CAREERS_TO || "b.n.raaz@gmail.com";
 
 function esc(s) {
   return (s == null ? "" : String(s)).slice(0, 600)
