@@ -261,7 +261,7 @@
        SPDI Rules 2011 r.5(9) gives one month to redress a data grievance. */
     { id: "grievance", keys: ["complaint", "complain", "grievance", "ఫిర్యాదు", "సమస్య ఉంది", "బాధ", "refund", "రీఫండ్", "డబ్బు వాపస్", "cancel", "రద్దు", "data", "డేటా", "privacy", "గోప్యత", "delete my", "ఫోటో తొలగించ"], fn: function () {
       return "🙏 మీ ఫిర్యాదు మాకు ముఖ్యం. ఎలా చేయాలో ఇక్కడ ఉంది:<br>" +
-        "• <strong>చికిత్స / సేవ గురించి ఫిర్యాదు</strong> — కైకలూరు హెల్ప్‌లైన్ <a href='" + telHref("9141247777") + "'>9141 247 777</a> కి కాల్ చేయండి, లేదా <a href='mailto:bnrmedicalagency@gmail.com'>bnrmedicalagency@gmail.com</a> కి మెయిల్ చేయండి.<br>" +
+        "• <strong>చికిత్స / సేవ గురించి ఫిర్యాదు</strong> — కైకలూరు హెల్ప్‌లైన్ <a href='" + telHref("9141247777") + "'>9141 247 777</a> కి కాల్ చేయండి, లేదా <a href='mailto:nagaraj@medicare247.in'>nagaraj@medicare247.in</a> కి మెయిల్ చేయండి.<br>" +
         "• <strong>మీ సమాచారం / ఫోటో గురించి</strong> (చూడాలి, సరిదిద్దాలి, తొలగించాలి) — అదే చిరునామాకు రాయండి. అలాంటి ఫిర్యాదును <strong>ఒక నెలలోపు</strong> పరిష్కరిస్తాం.<br>" +
         "• <strong>అపాయింట్‌మెంట్ రద్దు / డబ్బు వాపసు</strong> — నియమాలు policy పేజీల్లో ఉన్నాయి." +
         acts([
