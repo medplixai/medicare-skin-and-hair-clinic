@@ -270,7 +270,7 @@ window.MEDICARE_BRANCHES = [
     address: "Lambadi Donka Road, opposite New Samata Hospital, Ongole, Andhra Pradesh 523003",
     mapEmbed: "https://maps.google.com/maps?q=15.5116371,80.0387788&z=16&output=embed",
     mapsUrl: "https://maps.app.goo.gl/R3EpNzh8KvWarq7K7",
-    phones: ["9515830777", "9515831777"],
+    phones: ["9515830777"],
     whatsapp: "919515830777",
     instagram: "https://www.instagram.com/medicare_skin_clinic_ongole",
     clinicPhoto: "assets/img/branches/ongole.jpg",
