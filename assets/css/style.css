@@ -254,8 +254,8 @@ input,select,textarea{ font-family:inherit; font-size:1rem; }
 .topbar__item{ display:flex; align-items:center; gap:.5rem; }
 .topbar__item .ic{ width:15px; height:15px; stroke:var(--pink); opacity:.95; }
 .topbar__phones{ display:flex; align-items:center; gap:.5rem; }
-.topbar__phone{ display:inline-flex; align-items:center; gap:.4rem; font-weight:600; transition:color .2s; }
-.topbar__phone:hover{ color:#fff; }
+.topbar__phone,.topbar__link{ display:inline-flex; align-items:center; gap:.4rem; font-weight:600; transition:color .2s; }
+.topbar__phone:hover,.topbar__link:hover{ color:#fff; }
 .topbar__sep{ opacity:.4; }
 
 /* =====================================================================
@@ -1162,7 +1162,8 @@ html{ overflow-x:clip; }
 
 @media (max-width:760px){
   .topbar__item:first-child{ display:none; }
-  .topbar__inner{ justify-content:center; }
+  /* hours drop out, but the phones and the staff link both stay reachable – let them wrap. */
+  .topbar__inner{ justify-content:center; flex-wrap:wrap; row-gap:.25rem; }
   .brand__logo, .header.scrolled .brand__logo{ height:48px; }
 
   .stats__grid{ grid-template-columns:repeat(2,1fr); gap:1.4rem 1rem; }
