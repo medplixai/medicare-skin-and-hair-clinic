@@ -15,7 +15,6 @@
   "use strict";
 
   var CASES = [
-    { slug: "melasma",          te: "మచ్చలు · మెలస్మా",        en: "Melasma & pigmentation", tab: "మచ్చలు" },
     { slug: "chemical-peel",    te: "మొటిమలు · మచ్చలు",         en: "Acne & acne marks",      tab: "మొటిమలు" },
     { slug: "hair-mesotherapy", te: "జుట్టు రాలడం",             en: "Hair fall & thinning",   tab: "జుట్టు" },
     { slug: "laser-hair",       te: "అవాంఛిత రోమాలు · లేజర్",   en: "Unwanted hair · laser",  tab: "లేజర్" },

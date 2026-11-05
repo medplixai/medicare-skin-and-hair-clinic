@@ -2014,6 +2014,39 @@ tr.search-hit td{ background:#fff3c9; transition:background 2.5s var(--ease) .5s
    who did it in the same glance, and every face links to the full card with
    the qualification and the council registration number on it. */
 .hdocs{ width:100%; margin-top:1.05rem; }
+
+/* The founder gets his own line above the doctors rather than a slot in their
+   grid: the row below it says MD (DVL) and his degree is an MBA. */
+.hdocs__founder{
+  display:flex; align-items:center; gap:.7rem; width:100%;
+  margin:0 0 .8rem; padding:.42rem .95rem .42rem .42rem;
+  background:linear-gradient(135deg, var(--pink-tint2) 0%, var(--pink-tint) 100%);
+  border:1px solid var(--pink-soft); border-radius:var(--r-pill);
+  box-shadow:0 8px 20px -14px rgba(178,46,120,.55);
+  transition:transform .25s var(--ease), box-shadow .25s var(--ease);
+}
+.hdocs__founder:hover,
+.hdocs__founder:focus-visible{
+  transform:translateY(-2px);
+  box-shadow:0 15px 28px -14px rgba(178,46,120,.7);
+}
+.hdocs__founder:focus-visible{ outline:2px solid var(--pink); outline-offset:2px; }
+.hdocs__founder img{
+  width:52px; height:auto; aspect-ratio:1; flex:none; border-radius:50%;
+  object-fit:cover; background:#fff; border:2px solid #fff;
+  box-shadow:0 0 0 2px var(--pink), 0 6px 14px -8px rgba(178,46,120,.7);
+}
+.hdocs__founder span{
+  display:flex; flex-direction:column; gap:.06rem;
+  min-width:0; line-height:1.3; text-align:left;
+}
+.hdocs__founder strong{ font-size:.82rem; font-weight:700; color:var(--ink); }
+.hdocs__founder strong em{ font-style:normal; font-weight:600; font-size:.93em; color:var(--ink-2); }
+.hdocs__founder small{
+  display:flex; align-items:center; gap:.3rem;
+  font-size:.68rem; font-weight:700; color:var(--pink-700);
+}
+.hdocs__crown{ width:13px; height:13px; flex:none; fill:currentColor; stroke:none; }
 .hdocs__head{
   display:flex; align-items:center; justify-content:center; gap:.4rem;
   margin:0 .15rem .6rem; font-size:.78rem; line-height:1.5; color:var(--ink-2);
@@ -2050,7 +2083,7 @@ tr.search-hit td{ background:#fff3c9; transition:background 2.5s var(--ease) .5s
 }
 .hdocs__all:hover{ border-bottom-color:var(--pink); }
 
-@media (prefers-reduced-motion: reduce){ .hdocs__grid img{ transition:none; } }
+@media (prefers-reduced-motion: reduce){ .hdocs__grid img, .hdocs__founder{ transition:none; } }
 
 /* Left-aligned once the hero is two columns (the rest of the hero is centred
    below 961px, and these inherit that). */
