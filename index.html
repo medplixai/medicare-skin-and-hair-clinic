@@ -193,61 +193,98 @@
 
   <main id="main">
 
-    <!-- ============ HERO ============ -->
     <!-- ============ HERO ============
-         No photograph. The two that stood here were stock models, and a stranger's face
-         under "your skin, hair and nail health" says nothing a patient can check. What is
-         left is what the clinic can stand behind: who sees you, where, when and for how
-         much — the institutional information cl. 9.1 of the NMC Guidelines expressly
-         permits, and nothing beyond it. -->
-    <section class="hero hero--brand" id="home">
+         Two columns: what the clinic can be held to on the left, what it has actually
+         done on the right. The right-hand card is a drag-to-compare before/after built
+         from the clinic's own patient photographs (assets/img/hero/, cropped out of the
+         branded cards in assets/img/before-after/). Reinstated on the owner's explicit
+         instruction, 5 Nov 2026. Consent for publication is the clinic's to hold.
+         Under 960px the two columns stack and the card sits under the call buttons. -->
+    <section class="hero hero--brand hero--split" id="home">
       <span class="blob blob--1" aria-hidden="true"></span>
       <span class="blob blob--2" aria-hidden="true"></span>
       <div class="container hero__inner">
-        <img src="assets/img/logo.png" alt="మెడికేర్ స్కిన్ &amp; హెయిర్ క్లినిక్ — Medicare Skin &amp; Hair Clinic" class="hero__logo reveal" width="2437" height="736" fetchpriority="high" />
 
-        <span class="eyebrow eyebrow--center reveal">చర్మం · జుట్టు · గోళ్ళు · లేజర్ · సౌందర్యం</span>
+        <div class="hero__copy">
+          <img src="assets/img/logo.png" alt="మెడికేర్ స్కిన్ &amp; హెయిర్ క్లినిక్ — Medicare Skin &amp; Hair Clinic" class="hero__logo reveal" width="2437" height="736" fetchpriority="high" />
 
-        <h1 class="hero__title reveal"><span class="hero__lead" id="heroLead">మీ చర్మం, జుట్టు &amp; గోళ్ళ ఆరోగ్యానికి</span><br><span class="grad hero__rotate" id="heroRotate">ఆంధ్రప్రదేశ్‌లో 10 శాఖలు</span><span class="hero__caret" aria-hidden="true"></span></h1>
+          <span class="eyebrow eyebrow--center reveal">చర్మం · జుట్టు · గోళ్ళు · లేజర్ · సౌందర్యం</span>
 
-        <p class="hero__sub reveal">చర్మం, జుట్టు, గోళ్ళ సమస్యలకు MD (DVL) అర్హత ఉన్న వైద్యుల దగ్గర పరీక్ష. ఏ శాఖలో ఎవరు కూర్చుంటారో, ఏ చికిత్సకు ఎంతో — అన్నీ ఈ సైట్‌లోనే రాసి ఉన్నాయి.</p>
+          <h1 class="hero__title reveal"><span class="hero__lead" id="heroLead">మీ చర్మం, జుట్టు &amp; గోళ్ళ ఆరోగ్యానికి</span><br><span class="grad hero__rotate" id="heroRotate">ఆంధ్రప్రదేశ్‌లో 10 శాఖలు</span><span class="hero__caret" aria-hidden="true"></span></h1>
 
-        <ul class="hero__facts reveal" aria-label="Medicare Skin &amp; Hair Clinic at a glance">
-          <li><strong>10</strong><span>శాఖలు · ఆంధ్రప్రదేశ్</span></li>
-          <li><strong>MD (DVL)</strong><span>అర్హత ఉన్న వైద్యులు</span></li>
-          <li><strong>₹200</strong><span>కన్సల్టేషన్ · VIP ₹500</span></li>
-          <li><strong>10–2 · 5–9</strong><span>సోమ–శని · ఆదివారం సెలవు</span></li>
-        </ul>
+          <p class="hero__sub reveal">చర్మం, జుట్టు, గోళ్ళ సమస్యలకు MD (DVL) అర్హత ఉన్న వైద్యుల దగ్గర పరీక్ష. ఏ శాఖలో ఎవరు కూర్చుంటారో, ఏ చికిత్సకు ఎంతో — అన్నీ ఈ సైట్‌లోనే రాసి ఉన్నాయి.</p>
 
-        <div class="hero__badges reveal">
-          <span class="hero__badge hero__badge--g">
-            <span class="hero__badge-top"><span class="stars" aria-hidden="true">★★★★★</span> <strong>4.9</strong></span>
-            <span class="hero__badge-sub"><strong>10,567+</strong> Google reviews</span>
-          </span>
-          <span class="hero__badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 11 4.6-2.5 8-6 8-11V5l-8-3z"/><path d="M9 12l2 2 4-4"/></svg> USFDA-cleared</span>
+          <div class="hero__badges reveal">
+            <span class="hero__badge hero__badge--g">
+              <span class="hero__badge-top"><span class="stars" aria-hidden="true">★★★★★</span> <strong>4.9</strong></span>
+              <span class="hero__badge-sub"><strong>10,567+</strong> Google reviews</span>
+            </span>
+            <span class="hero__badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 11 4.6-2.5 8-6 8-11V5l-8-3z"/><path d="M9 12l2 2 4-4"/></svg> USFDA-cleared</span>
+          </div>
+
+          <p class="hero__offer">🎉 <strong>First online consultation FREE</strong> · clinic consultation just <strong>₹200</strong></p>
+
+          <div class="hero__actions hero__actions--center reveal">
+            <a href="https://wa.me/919573125777?text=%E0%B0%A8%E0%B0%AE%E0%B0%B8%E0%B1%8D%E0%B0%95%E0%B0%BE%E0%B0%B0%E0%B0%82" class="btn btn--primary" rel="noopener" target="_blank">
+              <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.9 7L4 20l1.1-4A8 8 0 1 1 20 12z"/></svg>
+              WhatsApp లో అడగండి
+            </a>
+            <a href="tel:+919573125777" class="btn btn--ghost">
+              <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
+              కాల్ చేయండి
+            </a>
+          </div>
         </div>
 
-        <p class="hero__offer">🎉 <strong>First online consultation FREE</strong> · clinic consultation just <strong>₹200</strong></p>
+        <!-- Drag-to-compare. The range input is the real control: it carries keyboard,
+             touch and screen-reader support for free, and sits invisible over the card. -->
+        <div class="hero__visual reveal">
+          <div class="ba2" id="heroBA">
+            <span class="ba2__badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 11 4.6-2.5 8-6 8-11V5l-8-3z"/><path d="M9 12l2 2 4-4"/></svg> మా క్లినిక్ రోగుల ఫలితాలు</span>
 
-        <div class="hero__actions hero__actions--center reveal">
-          <a href="https://wa.me/919573125777?text=%E0%B0%A8%E0%B0%AE%E0%B0%B8%E0%B1%8D%E0%B0%95%E0%B0%BE%E0%B0%B0%E0%B0%82" class="btn btn--primary" rel="noopener" target="_blank">
-            <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.9 7L4 20l1.1-4A8 8 0 1 1 20 12z"/></svg>
-            WhatsApp లో అడగండి
-          </a>
-          <a href="tel:+919573125777" class="btn btn--ghost">
-            <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
-            కాల్ చేయండి
-          </a>
+            <div class="ba2__stage" id="baStage" style="--p:50%">
+              <img class="ba2__img" id="baAfter" src="assets/img/hero/melasma-after.jpg" width="780" height="1040" alt="చికిత్స తరువాత — మెలస్మా / మచ్చల చికిత్స, Medicare Skin &amp; Hair Clinic" fetchpriority="high" decoding="async">
+              <div class="ba2__clip"><img class="ba2__img" id="baBefore" src="assets/img/hero/melasma-before.jpg" width="780" height="1040" alt="చికిత్సకు ముందు — మెలస్మా / మచ్చలు" fetchpriority="high" decoding="async"></div>
+
+              <span class="ba2__chip ba2__chip--b">BEFORE</span>
+              <span class="ba2__chip ba2__chip--a">AFTER</span>
+
+              <div class="ba2__handle" aria-hidden="true">
+                <span class="ba2__knob"><svg viewBox="0 0 24 24"><path d="M9 6 4 12l5 6M15 6l5 6-5 6"/></svg></span>
+              </div>
+
+              <input class="ba2__range" id="baRange" type="range" min="0" max="100" step="0.1" value="50"
+                     aria-label="ముందు / తరువాత ఫోటోలను పోల్చడానికి లాగండి — drag to compare before and after">
+            </div>
+
+            <div class="ba2__bar">
+              <strong class="ba2__nm" id="baNameTe">మచ్చలు · మెలస్మా</strong>
+              <span class="ba2__sub"><em id="baNameEn">Melasma &amp; pigmentation</em><span class="ba2__doc" id="baDoc">Dr Meghana Valeti · MD (DVL)</span></span>
+            </div>
+
+            <div class="ba2__tabs" id="baTabs" role="tablist" aria-label="ఏ చికిత్స ఫలితాలు చూడాలి"></div>
+
+            <p class="ba2__note">నిజమైన రోగుల ఫోటోలు. <strong>ఫలితాలు ప్రతి ఒక్కరికీ ఒకేలా ఉండవు</strong> — చర్మం, సమస్య తీవ్రత, సిట్టింగ్‌ల సంఖ్యను బట్టి మారతాయి.</p>
+          </div>
         </div>
 
-        <div class="hsearch reveal" id="heroSearch" role="search">
-          <svg class="hsearch__ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-          <input id="hsearchInput" type="search" autocomplete="off" spellcheck="false"
-                 placeholder="చికిత్స / సమస్య వెతకండి · Search treatments &amp; charges" aria-label="Search treatments, charges and conditions" />
-          <div class="hsearch__panel" id="hsearchPanel" hidden></div>
-        </div>
+        <div class="hero__more">
+          <div class="hsearch reveal" id="heroSearch" role="search">
+            <svg class="hsearch__ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input id="hsearchInput" type="search" autocomplete="off" spellcheck="false"
+                   placeholder="చికిత్స / సమస్య వెతకండి · Search treatments &amp; charges" aria-label="Search treatments, charges and conditions" />
+            <div class="hsearch__panel" id="hsearchPanel" hidden></div>
+          </div>
 
-        <p class="hero__note reveal">ఏ చికిత్స మీకు అవసరమో, ఎన్ని సిట్టింగ్‌లు కావాలో వైద్యుల పరీక్ష తర్వాతే నిర్ణయం.</p>
+          <ul class="hero__facts reveal" aria-label="Medicare Skin &amp; Hair Clinic at a glance">
+            <li><strong>10</strong><span>శాఖలు · ఆంధ్రప్రదేశ్</span></li>
+            <li><strong>MD (DVL)</strong><span>అర్హత ఉన్న వైద్యులు</span></li>
+            <li><strong>₹200</strong><span>కన్సల్టేషన్ · VIP ₹500</span></li>
+            <li><strong>10–2 · 5–9</strong><span>సోమ–శని · ఆదివారం సెలవు</span></li>
+          </ul>
+
+          <p class="hero__note reveal">ఏ చికిత్స మీకు అవసరమో, ఎన్ని సిట్టింగ్‌లు కావాలో వైద్యుల పరీక్ష తర్వాతే నిర్ణయం.</p>
+        </div>
       </div>
     </section>
 
@@ -1137,20 +1174,6 @@
       </div>
     </section>
 
-    <!-- ============ BEFORE / AFTER RESULTS — REMOVED 10 Oct 2026 ============
-         The before/after gallery (and its "Real Results" framing) was removed, not
-         reworded. NMC "Guidelines on Ethical Advertising and Public Communication",
-         06/10/2026, clause 8.1(v): a clinic "Shall not publish cases for promotional
-         purposes, advertise surgical results, display 'before and after' photographs
-         ... unless published strictly for scientific or educational purposes with
-         anonymized patient consent." A marketing gallery on a clinic home page is not
-         a scientific or educational publication, and clause 6.2 says patient consent
-         "shall not, by itself, make permissible any ... before-and-after depiction".
-         IMC (PCEE) Regulations 2002 Reg. 6.1.1 independently forbids boasting of
-         "cases, operations, cures or remedies". Do NOT reinstate this section, and do
-         not replace it with stock or illustrative "results" imagery.
-         assets/js/results.js and assets/img/before-after/ are now unreferenced here.
-    -->
 
     <!-- ============ BEFORE / AFTER RESULTS ============ -->
     <section class="section section--soft results" id="results">
@@ -1601,6 +1624,7 @@
   <script src="assets/js/pricing.js?v=202610101200"></script>
   <script src="assets/js/smart-search.js?v=202610101200" defer></script>
   <script src="assets/js/main.js?v=202610101200"></script>
+  <script src="assets/js/hero-ba.js?v=202611051200"></script>
   <script src="assets/js/reviews.js?v=202610101200"></script>
   <script src="assets/js/chatbot.js?v=202610101200"></script>
   <script src="assets/js/ai-analysis.js?v=202610101200" defer></script>

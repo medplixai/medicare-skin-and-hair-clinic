@@ -1819,3 +1819,191 @@ tr.search-hit td{ background:#fff3c9; transition:background 2.5s var(--ease) .5s
   .hero__facts{ grid-template-columns:repeat(2,minmax(0,1fr)); }
   .hero__logo{ width:min(230px,58vw); }
 }
+
+/* ---- Hero, split: the facts on the left, the proof on the right -------------
+   The brand hero above stays exactly as it is up to 960px — centred, stacked,
+   one column. From 961px the same markup becomes two columns and the
+   before/after card takes the right-hand side. Everything below is either a
+   layout override that only applies at that width, or the card itself. */
+.hero--split .hero__copy,
+.hero--split .hero__more{
+  display:flex; flex-direction:column; align-items:center;
+  gap:clamp(.5rem,1.1vw,.8rem); width:100%; min-width:0;
+}
+.hero--split .hero__visual{
+  width:100%; max-width:410px; margin:1.1rem auto .25rem;
+}
+
+/* ---- The card --------------------------------------------------------- */
+.ba2{
+  position:relative;
+  background:#fff;
+  border:1px solid var(--pink-soft);
+  border-radius:calc(var(--r-lg) + 6px);
+  padding:.6rem .6rem .8rem;
+  box-shadow:0 30px 70px -30px rgba(178,46,120,.55), 0 2px 10px rgba(44,26,40,.06);
+}
+/* a soft brand glow bled out behind the card; .hero__inner already makes the
+   stacking context, so z-index:-1 lands above the hero wash and below the card */
+.ba2::before{
+  content:""; position:absolute; inset:-12% -9% -5%; z-index:-1; pointer-events:none;
+  background:radial-gradient(58% 54% at 50% 42%, rgba(255,124,196,.42), transparent 70%);
+  filter:blur(26px);
+}
+.ba2__badge{
+  position:absolute; top:-.82rem; left:50%; transform:translateX(-50%); z-index:4;
+  display:inline-flex; align-items:center; gap:.38rem; white-space:nowrap;
+  background:var(--grad); color:#fff; box-shadow:var(--glow-soft);
+  font-size:.71rem; font-weight:700; letter-spacing:.01em;
+  padding:.38rem .82rem; border-radius:var(--r-pill);
+}
+.ba2__badge .ic{ width:14px; height:14px; stroke:#fff; }
+
+/* ---- The comparison stage --------------------------------------------- */
+.ba2__stage{
+  --p:50%;
+  position:relative; overflow:hidden; isolation:isolate;
+  border-radius:var(--r-lg); aspect-ratio:3/4;
+  background:var(--pink-tint); touch-action:pan-y;
+}
+.ba2__img{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; object-position:center top; display:block;
+  transition:opacity .26s ease;
+}
+/* the "before" sits on top and is wiped away from the right edge inwards */
+.ba2__clip{
+  position:absolute; inset:0; z-index:2;
+  clip-path:inset(0 calc(100% - var(--p)) 0 0);
+  will-change:clip-path;
+}
+.ba2__stage.is-swapping .ba2__img{ opacity:0; }
+
+.ba2__chip{
+  position:absolute; top:.72rem; z-index:3; pointer-events:none;
+  font-family:var(--font-en); font-weight:800; font-size:.64rem; letter-spacing:.14em;
+  padding:.3rem .58rem; border-radius:var(--r-pill); color:#fff;
+}
+.ba2__chip--b{ left:.72rem; background:rgba(20,9,16,.55);
+  backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); }
+.ba2__chip--a{ right:.72rem; background:var(--grad); box-shadow:var(--glow-soft); }
+
+.ba2__handle{
+  position:absolute; top:0; bottom:0; left:var(--p); width:0; z-index:3;
+  transform:translateX(-50%); pointer-events:none;
+}
+.ba2__handle::before{
+  content:""; position:absolute; top:0; bottom:0; left:-1px; width:2px;
+  background:linear-gradient(180deg, rgba(255,255,255,.4), #fff 16%, #fff 84%, rgba(255,255,255,.4));
+  box-shadow:0 0 0 1px rgba(190,47,121,.22), 0 2px 14px rgba(44,26,40,.35);
+}
+.ba2__knob{
+  position:absolute; top:50%; left:0; transform:translate(-50%,-50%);
+  width:46px; height:46px; border-radius:50%; background:#fff; display:grid; place-items:center;
+  box-shadow:0 10px 26px -8px rgba(44,26,40,.55), 0 0 0 1px rgba(190,47,121,.2);
+}
+.ba2__knob svg{ width:22px; height:22px; fill:none; stroke:var(--pink-700);
+  stroke-width:2.1; stroke-linecap:round; stroke-linejoin:round; }
+.ba2__stage.is-sweeping .ba2__knob{ animation:baPulse 1.7s ease-in-out infinite; }
+@keyframes baPulse{
+  0%,100%{ box-shadow:0 10px 26px -8px rgba(44,26,40,.55), 0 0 0 1px rgba(190,47,121,.2), 0 0 0 0 rgba(232,96,168,.5); }
+  55%    { box-shadow:0 10px 26px -8px rgba(44,26,40,.55), 0 0 0 1px rgba(190,47,121,.2), 0 0 0 15px rgba(232,96,168,0); }
+}
+
+/* The range input is the control. It is laid over the whole stage with a
+   transparent track and a wide transparent thumb, so a click anywhere jumps
+   the wipe there and arrow keys nudge it — no pointer maths, and it is
+   announced to screen readers as a slider. */
+.ba2__range{
+  position:absolute; inset:0; z-index:5; width:100%; height:100%;
+  margin:0; padding:0; background:transparent; border:none;
+  -webkit-appearance:none; appearance:none; cursor:ew-resize;
+}
+.ba2__range::-webkit-slider-runnable-track{ background:transparent; border:none; height:100%; }
+.ba2__range::-moz-range-track{ background:transparent; border:none; height:100%; }
+.ba2__range::-webkit-slider-thumb{ -webkit-appearance:none; width:54px; height:100%;
+  background:transparent; border:none; cursor:ew-resize; }
+.ba2__range::-moz-range-thumb{ width:54px; height:100%;
+  background:transparent; border:none; border-radius:0; cursor:ew-resize; }
+.ba2__range:focus{ outline:none; }
+.ba2__range:focus-visible{ outline:3px solid var(--pink); outline-offset:-4px; border-radius:var(--r-lg); }
+
+/* ---- What the card is of ---------------------------------------------- */
+/* Two stacked lines, never a left/right split: at 400-odd pixels the card is
+   too narrow for a treatment name and a credential to share a row without one
+   of them wrapping into the tabs below. */
+.ba2__bar{ display:flex; flex-direction:column; gap:.08rem; padding:.72rem .35rem .1rem; text-align:left; }
+.ba2__nm{ font-size:.95rem; font-weight:700; color:var(--ink); line-height:1.32; }
+.ba2__sub{ display:flex; flex-wrap:wrap; align-items:baseline; gap:0 .5rem;
+  font-family:var(--font-en); font-size:.71rem; line-height:1.5; }
+.ba2__sub em{ font-style:normal; color:var(--muted); }
+.ba2__doc{ font-weight:700; color:var(--pink-700); }
+
+.ba2__tabs{ display:flex; flex-wrap:wrap; gap:.34rem; padding:.5rem .3rem .1rem; }
+.ba2__tab{
+  font-family:inherit; font-size:.76rem; font-weight:600; line-height:1.5; color:var(--ink-2);
+  padding:.32rem .72rem; border-radius:var(--r-pill);
+  background:var(--pink-tint); border:1px solid transparent;
+  transition:background .2s, color .2s, box-shadow .2s, transform .2s var(--ease);
+}
+.ba2__tab:hover{ background:var(--pink-soft); transform:translateY(-1px); }
+.ba2__tab.on{ background:var(--grad); color:#fff; box-shadow:var(--glow-soft); }
+.ba2__tab:focus-visible{ outline:2px solid var(--pink-700); outline-offset:2px; }
+
+.ba2__note{ margin:.45rem .3rem 0; font-size:.71rem; line-height:1.62; color:var(--muted); text-align:left; }
+.ba2__note strong{ color:var(--ink-2); font-weight:700; }
+
+@media (prefers-reduced-motion: reduce){
+  .ba2__stage.is-sweeping .ba2__knob{ animation:none; }
+  .ba2__img, .ba2__tab{ transition:none; }
+}
+
+/* ---- Two columns ------------------------------------------------------- */
+@media (min-width:961px){
+  .hero--split{ text-align:left; padding:clamp(1.6rem,3.2vw,2.8rem) 0 clamp(2rem,4vw,3rem); }
+  .hero--split .hero__inner{
+    display:grid; align-items:start;
+    grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr);
+    column-gap:clamp(1.8rem,3.6vw,3.4rem); row-gap:1.1rem;
+  }
+  .hero--split .hero__copy{ grid-column:1; grid-row:1; }
+  .hero--split .hero__more{ grid-column:1; grid-row:2; }
+  .hero--split .hero__copy,
+  .hero--split .hero__more{ align-items:flex-start; }
+  .hero--split .hero__visual{
+    grid-column:2; grid-row:1 / span 2; align-self:center;
+    max-width:430px; margin:0 0 0 auto;
+  }
+  .hero--split .hero__logo{ margin-inline:0; }
+  .hero--split .eyebrow--center{ margin-inline:0; }
+  .hero--split .hero__title{ max-width:18ch; }
+  .hero--split .hero__sub{ margin:0; max-width:44ch; }
+  .hero--split .hero__badges,
+  .hero--split .hero__actions--center{ justify-content:flex-start; }
+  .hero--split .hero__offer{ margin-inline:0; }
+  .hero--split .hsearch{ width:100%; margin:.2rem 0 0; }
+  .hero--split .hero__facts{ max-width:none; margin:.2rem 0 0; }
+  .hero--split .hero__note{ text-align:left; max-width:46ch; }
+}
+
+/* Between 961px and roughly a laptop the four fact chips get cramped in half
+   the width, so they go two-up there and only spread out again on a wide screen. */
+@media (min-width:961px) and (max-width:1120px){
+  .hero--split .hero__facts{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+
+/* The hero search was painted for the old dark photograph hero — white type,
+   white icon, a translucent white fill. On the pale brand hero that renders as
+   an empty white pill: the icon, the placeholder and anything typed are all
+   white on white. Repainted for a light background. */
+.hero--brand .hsearch__ic{ stroke:var(--pink-700); }
+.hero--brand #hsearchInput{
+  color:var(--ink); background:#fff; border:1px solid var(--pink-soft);
+  box-shadow:0 10px 26px -14px rgba(178,46,120,.45);
+  backdrop-filter:none; -webkit-backdrop-filter:none;
+}
+.hero--brand #hsearchInput::placeholder{ color:var(--muted); }
+.hero--brand #hsearchInput:focus{
+  border-color:var(--pink); background:#fff;
+  box-shadow:0 0 0 4px rgba(232,96,168,.16), 0 10px 26px -14px rgba(178,46,120,.45);
+}
