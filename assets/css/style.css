@@ -2007,3 +2007,54 @@ tr.search-hit td{ background:#fff3c9; transition:background 2.5s var(--ease) .5s
   border-color:var(--pink); background:#fff;
   box-shadow:0 0 0 4px rgba(232,96,168,.16), 0 10px 26px -14px rgba(178,46,120,.45);
 }
+
+/* ---- The doctors, under the before/after card ---------------------------
+   Ten faces in a 5x2 grid. The point of putting them directly under the
+   results is that the two belong together: a patient sees what was done and
+   who did it in the same glance, and every face links to the full card with
+   the qualification and the council registration number on it. */
+.hdocs{ width:100%; margin-top:1.05rem; }
+.hdocs__head{
+  display:flex; align-items:center; justify-content:center; gap:.4rem;
+  margin:0 .15rem .6rem; font-size:.78rem; line-height:1.5; color:var(--ink-2);
+}
+.hdocs__head .ic{ width:15px; height:15px; stroke:var(--pink-700); }
+.hdocs__head strong{ color:var(--pink-700); font-weight:700; }
+
+.hdocs__grid{
+  display:grid; grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:.55rem .3rem; margin:0; padding:0; list-style:none;
+}
+.hdocs__grid a{ display:flex; flex-direction:column; align-items:center; gap:.3rem; }
+.hdocs__grid img{
+  /* height:auto matters: the width/height attributes on the tag are a
+     presentational hint, and without this the 200px height hint beats
+     aspect-ratio and every face comes out an oval. */
+  width:100%; max-width:62px; height:auto; aspect-ratio:1; border-radius:50%;
+  object-fit:cover; background:#fff; border:2px solid #fff;
+  box-shadow:0 6px 16px -8px rgba(178,46,120,.6), 0 0 0 1px var(--pink-soft);
+  transition:transform .25s var(--ease), box-shadow .25s var(--ease);
+}
+.hdocs__grid a:hover img,
+.hdocs__grid a:focus-visible img{
+  transform:translateY(-3px) scale(1.05);
+  box-shadow:0 13px 26px -10px rgba(178,46,120,.75), 0 0 0 2px var(--pink);
+}
+.hdocs__grid a:focus-visible{ outline:none; }
+.hdocs__grid span{ font-size:.67rem; line-height:1.32; color:var(--ink-2); text-align:center; }
+
+.hdocs__all{
+  display:inline-block; margin:.65rem .15rem 0;
+  font-size:.73rem; font-weight:700; color:var(--pink-700);
+  border-bottom:1px solid var(--pink-soft); transition:border-color .2s;
+}
+.hdocs__all:hover{ border-bottom-color:var(--pink); }
+
+@media (prefers-reduced-motion: reduce){ .hdocs__grid img{ transition:none; } }
+
+/* Left-aligned once the hero is two columns (the rest of the hero is centred
+   below 961px, and these inherit that). */
+@media (min-width:961px){
+  .hdocs{ text-align:left; }
+  .hdocs__head{ justify-content:flex-start; }
+}
