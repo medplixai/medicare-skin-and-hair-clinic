@@ -49,6 +49,20 @@
       });
     }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
     reveals.forEach(el => io.observe(el));
+
+    /* Safety net. A .reveal starts at opacity 0, so anything the observer
+       never reports on simply never appears — and the observer is not
+       delivered to a page that is not being painted (a background tab, an
+       occluded window, an embedded preview), nor to an element too tall to
+       put 12% of itself on screen. Nothing above the fold can be left to
+       that, so after load anything already in view is revealed outright. */
+    const sweepIn = () => reveals.forEach(el => {
+      if (el.classList.contains("in")) return;
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom > 0) { io.unobserve(el); el.classList.add("in"); }
+    });
+    setTimeout(sweepIn, 0);
+    window.addEventListener("load", () => setTimeout(sweepIn, 400));
   } else {
     reveals.forEach(el => el.classList.add("in"));
   }
