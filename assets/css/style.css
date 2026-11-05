@@ -2091,3 +2091,24 @@ tr.search-hit td{ background:#fff3c9; transition:background 2.5s var(--ease) .5s
   .hdocs{ text-align:left; }
   .hdocs__head{ justify-content:flex-start; }
 }
+
+/* The card runs by itself, so it needs a way to stop it — WCAG 2.2.2. Dragging
+   the slider already holds it for a few seconds; this stops it for good until
+   it is pressed again. Bottom-left of the stage, out of the way of the two
+   BEFORE/AFTER chips at the top. */
+.ba2__play{
+  position:absolute; left:.72rem; bottom:.72rem; z-index:6;
+  width:30px; height:30px; display:grid; place-items:center;
+  border-radius:50%; background:rgba(20,9,16,.5); color:#fff;
+  backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+  transition:background .2s, transform .2s var(--ease);
+}
+.ba2__play:hover{ background:rgba(20,9,16,.72); transform:scale(1.06); }
+.ba2__play:focus-visible{ outline:2px solid #fff; outline-offset:2px; }
+.ba2__play svg{
+  width:15px; height:15px; fill:none; stroke:currentColor;
+  stroke-width:2.1; stroke-linecap:round; stroke-linejoin:round;
+}
+.ba2__p-play{ display:none; }
+.ba2__play.is-paused .ba2__p-pause{ display:none; }
+.ba2__play.is-paused .ba2__p-play{ display:block; fill:currentColor; stroke:none; }
