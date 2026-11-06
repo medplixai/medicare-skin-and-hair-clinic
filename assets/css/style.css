@@ -65,7 +65,7 @@ input,select,textarea{ font-family:inherit; font-size:1rem; }
 
 /* SVG icon defaults (stroke style) */
 .ic, .card__icon svg, .feature__icon svg{
-  fill:none; stroke:currentColor; stroke-width:1.7;
+  fill:none; stroke:currentColor; stroke-width:1.9;
   stroke-linecap:round; stroke-linejoin:round;
 }
 .ic{ width:18px; height:18px; flex:none; }
@@ -2132,3 +2132,59 @@ tr.search-hit td{ background:#fff3c9; transition:background 2.5s var(--ease) .5s
 @media (max-width:960px){
   .hero--brand .hero__actions--center{ justify-content:center; }
 }
+
+/* =====================================================================
+   ICONS & NUMERALS
+   ---------------------------------------------------------------------
+   The icon set is drawn on a 24x24 grid with round caps and joins at a
+   1.9 stroke — the proportions Lucide and the current crop of interface
+   icon sets use, so they read cleanly at the 15-18px they are shown at.
+   ===================================================================== */
+
+/* A brand mark (WhatsApp) is a filled glyph, not a stroked one: the .ic
+   rule above would erase it, so it opts out here. */
+.ic--brand{ fill:currentColor; stroke:none; }
+
+/* Numerals. The page font is Anek Telugu, whose Latin digits are drawn to
+   sit beside Telugu text rather than to be read as a phone number. Numbers
+   borrow Poppins instead, with tabular lining figures so a column of them
+   lines up and a changing number never shifts the layout around it. */
+.num,
+.topbar__phone,
+.bx__phone,
+.tele-cta__num,
+.ht-cta__from,
+.stat__num,
+.hero__facts strong,
+.contact__list a[href^="tel:"],
+.footer__col a[href^="tel:"],
+.legal__contact a[href^="tel:"]{
+  font-family:var(--font-en);
+  font-variant-numeric:tabular-nums lining-nums;
+  font-feature-settings:"tnum" 1,"lnum" 1;
+  font-variant-ligatures:none;
+  letter-spacing:.012em;
+}
+
+/* A phone number is something to read off a screen and dial, so it gets a
+   little more weight and air than the text around it. */
+.topbar__phone{ font-weight:700; letter-spacing:.035em; }
+.bx__phone{ letter-spacing:.02em; }
+.contact__list a[href^="tel:"],
+.legal__contact a[href^="tel:"]{ font-weight:700; letter-spacing:.02em; }
+.footer__col a[href^="tel:"]{ font-weight:700; font-size:.92rem; letter-spacing:.025em; }
+.ht-cta__from{ letter-spacing:-.01em; }
+
+/* The branch pages are built on the .legal layout, which underlines every
+   link in its body — including the four buttons at the foot of the contact
+   block, which came out underlined like body text. */
+.legal .btn{ text-decoration:none; }
+
+/* The contact rows on those pages used emoji as their icons. They now carry
+   the same stroked set as the rest of the site, sized to sit on the line. */
+.legal__contact .ic{
+  width:16px; height:16px; margin-right:.15rem;
+  vertical-align:-3px; stroke:var(--pink-700);
+}
+/* and the footer's two phone lines */
+.footer__col a[href^="tel:"] .ic{ width:15px; height:15px; vertical-align:-2px; margin-right:.3rem; }
