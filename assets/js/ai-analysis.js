@@ -460,9 +460,9 @@
             (r.disclaimer ? '<p class="aiskin__disc">' + esc(r.disclaimer) + "</p>" : "") +
           "</div>" + remainNote +
           '<div class="aiskin__cta">' +
-            '<a class="btn btn--primary" href="#contact">📅 వైద్యుల అపాయింట్‌మెంట్</a>' +
+            '<a class="btn btn--primary" href="#contact">📅 Book an Appointment</a>' +
             '<a class="btn btn--ghost" target="_blank" rel="noopener" href="https://wa.me/' + WA + "?text=" + encodeURIComponent(waText) + '">💬 WhatsApp</a>' +
-            '<button class="btn btn--ghost aiskin__pdf">📄 PDF కాపీ</button>' +
+            '<button class="btn btn--ghost aiskin__pdf">📄 PDF Copy</button>' +
             ((state.remaining == null || state.remaining > 0) ? '<button class="btn btn--ghost aiskin__retry">📷 New Photo</button>' : "") +
           "</div>" +
         "</div>"
@@ -500,7 +500,7 @@
             pdf.save(fn);
           });
         }).catch(function () { alert("PDF తయారు చేయలేకపోయాం — దయచేసి మళ్ళీ ప్రయత్నించండి."); })
-          .then(function () { btn.disabled = false; btn.textContent = "📄 PDF కాపీ"; });
+          .then(function () { btn.disabled = false; btn.textContent = "📄 PDF Copy"; });
       });
       return v;
     },

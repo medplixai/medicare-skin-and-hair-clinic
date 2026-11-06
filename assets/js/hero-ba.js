@@ -22,12 +22,12 @@
   "use strict";
 
   var CASES = [
-    { slug: "chemical-peel",    te: "మొటిమలు · మచ్చలు",         en: "Acne & acne marks",      tab: "మొటిమలు" },
-    { slug: "melasma",          te: "మచ్చలు · మెలస్మా",         en: "Melasma & pigmentation", tab: "మెలస్మా" },
-    { slug: "hair-mesotherapy", te: "జుట్టు రాలడం",             en: "Hair fall & thinning",   tab: "జుట్టు" },
-    { slug: "laser-hair",       te: "అవాంఛిత రోమాలు · లేజర్",   en: "Unwanted hair · laser",  tab: "లేజర్" },
-    { slug: "skin-tags",        te: "స్కిన్ ట్యాగ్స్ · పుట్టుమచ్చలు", en: "Skin tags & moles",  tab: "ట్యాగ్స్" },
-    { slug: "botox",            te: "ముడతలు · బొటాక్స్",         en: "Wrinkles · Botox",       tab: "ముడతలు" }
+    { slug: "chemical-peel",    te: "మొటిమలు · మచ్చలు",         en: "Acne & acne marks",      tab: "Acne" },
+    { slug: "melasma",          te: "మచ్చలు · మెలస్మా",         en: "Melasma & pigmentation", tab: "Melasma" },
+    { slug: "hair-mesotherapy", te: "జుట్టు రాలడం",             en: "Hair fall & thinning",   tab: "Hair Fall" },
+    { slug: "laser-hair",       te: "అవాంఛిత రోమాలు · లేజర్",   en: "Unwanted hair · laser",  tab: "Laser" },
+    { slug: "skin-tags",        te: "స్కిన్ ట్యాగ్స్ · పుట్టుమచ్చలు", en: "Skin tags & moles",  tab: "Skin Tags" },
+    { slug: "botox",            te: "ముడతలు · బొటాక్స్",         en: "Wrinkles · Botox",       tab: "Wrinkles" }
   ];
   var DOCTOR    = "Dr Meghana Valeti · MD (DVL)";
   var DIR       = "assets/img/hero/";

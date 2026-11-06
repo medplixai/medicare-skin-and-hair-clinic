@@ -417,12 +417,12 @@ window.MEDICARE_BRANCHES = [
           '<iframe title="' + b.town + ' మ్యాప్" src="' + mapSrc(b) + '" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>' +
         '</div>' +
         '<div class="bx__reviews" data-slug="' + b.slug + '"' + (pid ? ' data-place="' + pid + '" data-fallback="' + rHref + '"' : '') + '>' +
-          '<a class="rv__cta" href="' + rHref + '" target="_blank" rel="noopener"><span class="rv__cta-star">★</span> Google Reviews చూడండి</a>' +
+          '<a class="rv__cta" href="' + rHref + '" target="_blank" rel="noopener"><span class="rv__cta-star">★</span> See Google Reviews</a>' +
         '</div>' +
         '<div class="bx__actions">' +
-          '<a class="bx__btn bx__btn--call" href="' + telOf(b.phones[0]) + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>కాల్</a>' +
+          '<a class="bx__btn bx__btn--call" href="' + telOf(b.phones[0]) + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>Call</a>' +
           '<a class="bx__btn bx__btn--wa" href="' + waHref(b) + '" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15l-1 4 4.1-1A10 10 0 1 0 12 2z"/></svg>WhatsApp</a>' +
-          '<a class="bx__btn bx__btn--dir" href="' + dirHref(b) + '" target="_blank" rel="noopener">' + PIN + 'దారి</a>' +
+          '<a class="bx__btn bx__btn--dir" href="' + dirHref(b) + '" target="_blank" rel="noopener">' + PIN + 'Directions</a>' +
           (b.instagram ? '<a class="bx__btn bx__btn--ig" href="' + b.instagram + '" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.3"/></svg>Insta</a>' : '') +
         '</div>' +
       '</div>' +
