@@ -1961,9 +1961,19 @@ tr.search-hit td{ background:#fff3c9; transition:background 2.5s var(--ease) .5s
 /* ---- Two columns ------------------------------------------------------- */
 @media (min-width:961px){
   .hero--split{ text-align:left; padding:clamp(1.6rem,3.2vw,2.8rem) 0 clamp(2rem,4vw,3rem); }
+  /* The card column is taller than the text column, and a grid gives the
+     surplus to the rows the tall item spans — which opened a dead band
+     between the call buttons and the search box. Row two takes the surplus
+     instead, so the text runs on without a hole and the slack lands at the
+     foot of the column where nobody reads. */
   .hero--split .hero__inner{
     display:grid; align-items:start;
-    grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr);
+    /* The card is capped at 430px. A column much wider than that just parks
+       empty space beside it — at 1280 the gutter read as 159px, which pulls
+       the two halves apart. The ratio now sizes the right column close to the
+       card so the gutter stays near the column gap itself. */
+    grid-template-columns:minmax(0,1.18fr) minmax(0,.82fr);
+    grid-template-rows:auto 1fr;
     column-gap:clamp(1.8rem,3.6vw,3.4rem); row-gap:1.1rem;
   }
   .hero--split .hero__copy{ grid-column:1; grid-row:1; }
@@ -2049,14 +2059,14 @@ tr.search-hit td{ background:#fff3c9; transition:background 2.5s var(--ease) .5s
 .hdocs__crown{ width:13px; height:13px; flex:none; fill:currentColor; stroke:none; }
 .hdocs__head{
   display:flex; align-items:center; justify-content:center; gap:.4rem;
-  margin:0 .15rem .6rem; font-size:.78rem; line-height:1.5; color:var(--ink-2);
+  margin:0 0 .6rem; font-size:.78rem; line-height:1.5; color:var(--ink-2);
 }
 .hdocs__head .ic{ width:15px; height:15px; stroke:var(--pink-700); }
 .hdocs__head strong{ color:var(--pink-700); font-weight:700; }
 
 .hdocs__grid{
   display:grid; grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:.55rem .3rem; margin:0; padding:0; list-style:none;
+  gap:.55rem .45rem; margin:0; padding:0; list-style:none;
 }
 .hdocs__grid a{ display:flex; flex-direction:column; align-items:center; gap:.3rem; }
 .hdocs__grid img{
@@ -2077,7 +2087,7 @@ tr.search-hit td{ background:#fff3c9; transition:background 2.5s var(--ease) .5s
 .hdocs__grid span{ font-size:.67rem; line-height:1.32; color:var(--ink-2); text-align:center; }
 
 .hdocs__all{
-  display:inline-block; margin:.65rem .15rem 0;
+  display:inline-block; margin:.65rem 0 0;
   font-size:.73rem; font-weight:700; color:var(--pink-700);
   border-bottom:1px solid var(--pink-soft); transition:border-color .2s;
 }
@@ -2112,3 +2122,13 @@ tr.search-hit td{ background:#fff3c9; transition:background 2.5s var(--ease) .5s
 .ba2__p-play{ display:none; }
 .ba2__play.is-paused .ba2__p-pause{ display:none; }
 .ba2__play.is-paused .ba2__p-play{ display:block; fill:currentColor; stroke:none; }
+
+/* The two call buttons were the one thing in the centred hero that was not
+   centred. .hero__actions--center only ever carried justify-content inside
+   .hero--center, the old dark photo hero, so under this one they sat hard
+   left while the rating pills above them were centred — a visible kink in
+   the middle of the column on every phone. Scoped to the stacked widths so
+   it cannot reach the two-column layout, where they belong on the left. */
+@media (max-width:960px){
+  .hero--brand .hero__actions--center{ justify-content:center; }
+}
