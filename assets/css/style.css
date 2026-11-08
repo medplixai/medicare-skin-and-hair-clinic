@@ -2590,3 +2590,205 @@ tr.search-hit td{ background:#fff3c9; transition:background 2.5s var(--ease) .5s
   background-image:var(--gloss-chip), var(--grad);
 }
 .doctor__crown{ background-image:var(--gloss-chip), var(--grad-gold); }
+
+/* =====================================================================
+   DARK PREMIUM MODE
+   ---------------------------------------------------------------------
+   Not a dark theme for the whole site — a set of BANDS. The page keeps
+   its pale pink voice, and a few sections drop into deep plum so the
+   things that are genuinely premium (the equipment, the transplant, the
+   results, the app) arrive as a change of material rather than as more
+   of the same card on more of the same pink.
+
+   Rules for the band:
+   - the ground is plum, never black: #2A0F24 -> --plum -> #1E0819,
+     lit by a pink haze at the top and a gold haze at the bottom right.
+   - inside a band, gold does the work pink did in the light: the
+     eyebrow, the accented half of the heading, the rails and hairlines.
+     Pink stays only where it is the BRAND — the primary button and the
+     price block — so the band still reads as Medicare.
+   - panels become glass, not paint: a white film at 7% over the plum,
+     a lit top edge, a gold-tinted rim. Photographs keep their white
+     plate, so they read as framed prints hung on a dark wall.
+   - the ink tokens are re-declared on the band itself, so every rule in
+     the sheet that says var(--ink-2) or var(--muted) inverts with it
+     instead of needing its own override.
+   ===================================================================== */
+:root{
+  /* a gold for TEXT on dark: it must not sink at the end of the ramp the
+     way --grad-gold does, so it runs pale -> warm instead of warm -> brown */
+  --grad-gold-lt: linear-gradient(135deg,#FFF6DC 0%,#F6D98C 32%,#EBC264 62%,#DCAC4A 100%);
+  --dark-ground:
+    radial-gradient(62% 52% at 50% 0%,  rgba(232,96,168,.17), transparent 70%),
+    radial-gradient(46rem 24rem at 94% 102%, rgba(217,164,65,.15), transparent 62%),
+    linear-gradient(180deg,#2A0F24 0%, #3A1230 44%, #1E0819 100%);
+  --dark-panel: linear-gradient(180deg, rgba(255,255,255,.095) 0%, rgba(255,255,255,.045) 42%, rgba(255,255,255,.022) 100%);
+  --dark-rim:   rgba(243,210,122,.22);
+  --dark-lift:  inset 0 1px 0 rgba(255,255,255,.14), 0 22px 48px -26px rgba(10,2,8,.95);
+}
+
+/* ---------- The band itself --------------------------------------------- */
+.section--dark{
+  --ink:   #FBF3F8;
+  --ink-2: rgba(246,233,242,.80);
+  --muted: rgba(246,233,242,.56);
+  --line:  rgba(243,210,122,.17);
+  --pink-soft: rgba(243,210,122,.26);
+  color:#F3E4EE;
+  background:var(--dark-ground);
+  box-shadow:
+    inset 0  1px 0 rgba(243,210,122,.26),
+    inset 0 -1px 0 rgba(243,210,122,.20);
+}
+.section--dark .container{ position:relative; z-index:1; }
+/* the decorative blurs were tuned for a pale ground; on plum they only
+   need to glow, not to tint */
+.section--dark .blob{ opacity:.26; }
+
+/* ---------- Type inside a band ------------------------------------------ */
+.section--dark .section__title{ color:#FDF7FB; }
+.section--dark .grad{ background-image:var(--grad-gold-lt); }
+.section--dark .section__title-te{ color:rgba(251,239,210,.58); }
+.section--dark .section__lead{ color:rgba(246,233,242,.80); }
+.section--dark .eyebrow{
+  color:#F6D98C;
+  background-color:rgba(243,210,122,.10);
+  background-image:linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0) 70%);
+  border:1px solid rgba(243,210,122,.34);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16), 0 6px 18px -10px rgba(0,0,0,.8);
+}
+.section--dark .ht-showcase__kicker{ color:#F6D98C; }
+.section--dark .ht-tech-sub,
+.section--dark .tech-card__cat,
+.section--dark .ht-photo figcaption strong{ color:#FFAEDA; }
+
+/* ---------- Panels become glass ----------------------------------------- */
+.section--dark .tech-card,
+.section--dark .feature,
+.section--dark .ht-step,
+.section--dark .ht-photo,
+.section--dark .card,
+.section--dark .ba-slide,
+.section--dark .section__banner{
+  background-color:rgba(44,13,36,.55);
+  background-image:var(--dark-panel);
+  border:1px solid var(--dark-rim);
+  box-shadow:var(--dark-lift);
+  -webkit-backdrop-filter:blur(7px); backdrop-filter:blur(7px);
+}
+.section--dark .tech-card:hover,
+.section--dark .feature:hover,
+.section--dark .ht-photo:hover,
+.section--dark .ba-slide:hover,
+.section--dark .section__banner:hover{
+  border-color:rgba(243,210,122,.46);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.2),
+    0 30px 60px -26px rgba(10,2,8,1),
+    0 0 0 1px rgba(243,210,122,.14);
+}
+.section--dark .tech-card__name{ color:#FDF7FB; }
+/* .ht-photo img is object-fit:contain inside a 3/2 box, so anything that
+   is not exactly 3:2 gets letterboxed. That letterbox was painted white —
+   invisible against a white card, a bright bar across a plum one. It takes
+   the card's own surface instead, and the photograph floats on it. */
+.section--dark .ht-photo img{ background:transparent; }
+
+/* badges on glass need lifting off the plum, not the pale pink they were
+   drawn against */
+.section--dark .tech-card__badge--fda{
+  color:#7BE8AF; background:rgba(32,170,100,.16); border-color:rgba(123,232,175,.32);
+}
+.section--dark .tech-card__badge--fda svg{ fill:#7BE8AF; }
+.section--dark .tech-card__badge--alt{
+  color:#FFB6DD; background:rgba(232,96,168,.15); border-color:rgba(232,96,168,.34);
+}
+
+/* ---------- Where pink is still the brand -------------------------------- */
+/* the price block stays pink — it is the clinic's colour and the one thing
+   on the band that should shout. It only gains a gold rim. */
+.section--dark .ht-cta{
+  box-shadow:
+    inset 0 0 0 1px rgba(243,210,122,.40),
+    inset 0 1px 0 rgba(255,255,255,.3),
+    0 28px 60px -24px rgba(190,47,121,.75);
+}
+.section--dark .badge-free{ box-shadow:var(--lip-dark), 0 10px 26px -10px rgba(0,0,0,.8); }
+
+/* ---------- Controls ------------------------------------------------------ */
+/* the ghost button was a white pill; on plum it becomes a gold-edged one */
+.section--dark .btn--ghost{
+  color:#F6D98C; border-color:rgba(243,210,122,.42);
+  background-color:rgba(255,255,255,.06);
+  background-image:linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.02) 60%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2), 0 12px 28px -16px rgba(0,0,0,.9);
+}
+.section--dark .btn--ghost:hover{
+  color:#FFF2CF; border-color:rgba(243,210,122,.72);
+  background-color:rgba(255,255,255,.11);
+}
+/* the store chips were ink-on-light; on plum they have to become glass or
+   they vanish into the ground */
+.section--dark .store{
+  background:rgba(255,255,255,.085);
+  border:1px solid rgba(243,210,122,.28);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18), 0 14px 32px -18px rgba(0,0,0,.9);
+}
+.section--dark .store:hover{ box-shadow:0 18px 38px -16px rgba(0,0,0,1); }
+.section--dark .store--soon small{ color:#F6D98C !important; }
+
+/* ---------- The stats card ------------------------------------------------ */
+/* this one is not a band — it is a single floating card, so the plum goes
+   on the card and the page around it stays pale. It is the first thing
+   under the hero, and in plum-and-gold it sets the tone for the rest. */
+.stats--dark .stats__grid{
+  background-color:#2A0F24;
+  background-image:
+    radial-gradient(94% 74% at 0% 0%,  rgba(255,255,255,.12), transparent 56%),
+    radial-gradient(72% 64% at 100% 100%, rgba(217,164,65,.20), transparent 62%),
+    linear-gradient(180deg,#361230 0%,#2A0F24 56%,#1E0819 100%);
+  border:1px solid rgba(243,210,122,.30);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    0 34px 74px -30px rgba(26,5,20,.95),
+    0 6px 18px -10px rgba(26,5,20,.6);
+}
+.stats--dark .stats__grid::before{ background:var(--grad-gold); height:3px; }
+.stats--dark .stat__num{ background-image:var(--grad-gold-lt); }
+.stats--dark .stat__small{ -webkit-text-fill-color:rgba(251,239,210,.62); }
+.stats--dark .stat__label{ color:rgba(246,233,242,.72); }
+.stats--dark .stat:not(:last-child)::after{ background:rgba(243,210,122,.22); }
+
+/* ---------- Reduced transparency / older engines -------------------------- */
+/* backdrop-filter is a nicety; without it the panels must still be opaque
+   enough to hold their text, hence the background-color above carries the
+   contrast on its own. */
+@media (prefers-reduced-transparency: reduce){
+  .section--dark .tech-card,
+  .section--dark .feature,
+  .section--dark .ht-step,
+  .section--dark .ht-photo,
+  .section--dark .card,
+  .section--dark .ba-slide,
+  .section--dark .section__banner{ background-color:rgba(44,13,36,.92); -webkit-backdrop-filter:none; backdrop-filter:none; }
+}
+
+/* ---------- The benefit discs ------------------------------------------- */
+/* .ht-benefit__ic sets color:var(--pink-600), but `.ht-benefits span` —
+   one class and one element heavier — sets color:var(--muted) and wins,
+   so the glyph has always been drawn in the muted token rather than pink.
+   On the pale ground that merely looked washed out; on plum --muted is a
+   near-white at 56%, which on a pale-pink disc disappears entirely and
+   leaves four blank circles. The disc becomes gold glass and the stroke
+   is set on the svg itself, where nothing outranks it. */
+.section--dark .ht-benefit__ic{
+  background:rgba(243,210,122,.13);
+  border:1px solid rgba(243,210,122,.30);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2), 0 8px 20px -12px rgba(0,0,0,.9);
+}
+.section--dark .ht-benefit__ic svg{ stroke:#F6D98C; }
+/* the small Telugu glosses sit at 0.76rem; 56% is enough on paper and a
+   little thin on plum */
+.section--dark .ht-benefits span,
+.section--dark .ht-step__txt span,
+.section--dark .tech-card__sub{ color:rgba(246,233,242,.68); }
