@@ -1905,9 +1905,11 @@ tr.search-hit td{ background:#fff3c9; transition:background 2.5s var(--ease) .5s
 .ba2__knob svg{ width:22px; height:22px; fill:none; stroke:var(--pink-700);
   stroke-width:2.1; stroke-linecap:round; stroke-linejoin:round; }
 .ba2__stage.is-sweeping .ba2__knob{ animation:baPulse 1.7s ease-in-out infinite; }
+/* The pulse restates the whole shadow, so it has to carry the knob's lit
+   edges too or the gloss drops out for as long as the sweep runs. */
 @keyframes baPulse{
-  0%,100%{ box-shadow:0 10px 26px -8px rgba(44,26,40,.55), 0 0 0 1px rgba(190,47,121,.2), 0 0 0 0 rgba(232,96,168,.5); }
-  55%    { box-shadow:0 10px 26px -8px rgba(44,26,40,.55), 0 0 0 1px rgba(190,47,121,.2), 0 0 0 15px rgba(232,96,168,0); }
+  0%,100%{ box-shadow:inset 0 1px 0 #fff, inset 0 -1px 0 rgba(190,47,121,.22), 0 2px 4px rgba(44,26,40,.25), 0 12px 28px -8px rgba(44,26,40,.55), 0 0 0 1px rgba(190,47,121,.22), 0 0 0 0 rgba(232,96,168,.5); }
+  55%    { box-shadow:inset 0 1px 0 #fff, inset 0 -1px 0 rgba(190,47,121,.22), 0 2px 4px rgba(44,26,40,.25), 0 12px 28px -8px rgba(44,26,40,.55), 0 0 0 1px rgba(190,47,121,.22), 0 0 0 15px rgba(232,96,168,0); }
 }
 
 /* The range input is the control. It is laid over the whole stage with a
@@ -2188,3 +2190,234 @@ tr.search-hit td{ background:#fff3c9; transition:background 2.5s var(--ease) .5s
 }
 /* and the footer's two phone lines */
 .footer__col a[href^="tel:"] .ic{ width:15px; height:15px; vertical-align:-2px; margin-right:.3rem; }
+
+/* =====================================================================
+   RICH / GLOSS
+   ---------------------------------------------------------------------
+   A finishing layer, kept last on purpose so it can restate shadows and
+   backgrounds without the earlier rules being rewritten. Three ideas run
+   through it: light comes from above, so every raised surface gets a one
+   pixel lip of white along its top edge; shadow is never a single blur
+   but a contact shadow with a wide soft one behind it, tinted pink rather
+   than grey; and a glossy surface shows a specular highlight over its own
+   colour instead of being made lighter.
+   ===================================================================== */
+:root{
+  /* the top-lit sheen laid over a coloured surface */
+  --gloss:       linear-gradient(180deg, rgba(255,255,255,.40) 0%, rgba(255,255,255,.12) 40%, rgba(255,255,255,0) 62%);
+  --gloss-soft:  linear-gradient(180deg, rgba(255,255,255,.75) 0%, rgba(255,255,255,0) 70%);
+  --lip:         inset 0 1px 0 rgba(255,255,255,.92);
+  --lip-dark:    inset 0 1px 0 rgba(255,255,255,.42);
+
+  /* contact + mid + ambient, tinted with the brand rather than black */
+  --shadow-rich:
+     0 1px 1.5px rgba(44,26,40,.045),
+     0 4px 9px -3px rgba(178,46,120,.12),
+     0 18px 34px -14px rgba(178,46,120,.22),
+     0 42px 70px -34px rgba(178,46,120,.28);
+  --shadow-rich-up:
+     0 1px 1.5px rgba(44,26,40,.05),
+     0 8px 18px -5px rgba(178,46,120,.18),
+     0 30px 56px -18px rgba(178,46,120,.32),
+     0 64px 96px -44px rgba(178,46,120,.34);
+
+  /* a hairline that catches the light at the top-left and fades away */
+  --ring: linear-gradient(145deg, rgba(255,255,255,.95) 0%, rgba(255,176,218,.55) 38%, rgba(190,47,121,.16) 100%);
+
+  /* fine paper grain; the alpha is baked into the SVG so it needs no blend mode */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.042'/%3E%3C/svg%3E");
+}
+
+/* ---------- Buttons ---------------------------------------------------- */
+.btn{ position:relative; overflow:hidden; isolation:isolate; }
+/* the specular. z-index:-1 inside an isolated button paints over its own
+   background but under the label. */
+.btn::before{
+  content:""; position:absolute; inset:0; z-index:-1;
+  border-radius:inherit; background:var(--gloss); pointer-events:none;
+}
+/* and the sweep that crosses it once on hover */
+.btn::after{
+  content:""; position:absolute; z-index:-1; top:-20%; bottom:-20%; left:-60%; width:42%;
+  transform:skewX(-18deg); pointer-events:none;
+  background:linear-gradient(100deg, rgba(255,255,255,0), rgba(255,255,255,.5) 50%, rgba(255,255,255,0));
+}
+.btn:hover::after{ animation:btnSheen .9s var(--ease) 1; }
+@keyframes btnSheen{ from{ left:-60%; } to{ left:130%; } }
+
+.btn--primary:not(.btn--on-grad){
+  background:linear-gradient(135deg,#FF8ACA 0%,#F4559F 36%,#D93E91 66%,#BA2D77 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.5),
+    inset 0 -1px 0 rgba(116,16,68,.28),
+    0 2px 5px rgba(178,46,120,.26),
+    0 12px 26px -9px rgba(232,96,168,.55),
+    0 28px 50px -20px rgba(214,69,143,.5);
+}
+.btn--primary:not(.btn--on-grad):hover{
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.55),
+    inset 0 -1px 0 rgba(116,16,68,.3),
+    0 3px 8px rgba(178,46,120,.3),
+    0 20px 40px -10px rgba(232,96,168,.62),
+    0 44px 72px -24px rgba(214,69,143,.55);
+}
+.btn--ghost{
+  background:linear-gradient(180deg,#fff 0%,#FFF7FB 100%);
+  border-color:rgba(232,96,168,.3);
+  box-shadow:var(--lip), 0 1px 2px rgba(44,26,40,.04), 0 10px 24px -13px rgba(178,46,120,.4);
+}
+.btn--ghost:hover{ box-shadow:var(--lip), 0 2px 4px rgba(44,26,40,.05), 0 18px 34px -14px rgba(178,46,120,.5); }
+/* white on pink: the sheen has to be pink, not white */
+.btn--ghost::after,
+.btn--on-grad::after{ background:linear-gradient(100deg, rgba(232,96,168,0), rgba(232,96,168,.16) 50%, rgba(232,96,168,0)); }
+.btn--ghost::before{ background:var(--gloss-soft); }
+.btn--on-grad{ box-shadow:var(--lip), 0 2px 6px rgba(0,0,0,.14), 0 14px 32px -10px rgba(0,0,0,.26); }
+.btn:active{ transform:translateY(-1px) scale(.994); }
+
+.nav__link--btn{
+  background:linear-gradient(135deg,#FF8ACA 0%,#F4559F 38%,#D93E91 70%,#BA2D77 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.45),
+    0 2px 5px rgba(178,46,120,.24),
+    0 10px 22px -8px rgba(214,69,143,.5);
+}
+
+/* ---------- Raised panels ---------------------------------------------- */
+.card, .bx, .medic, .feature, .tech-card, .stats__grid, .hero__facts li, .ba2,
+.doctors .doctor:not(.doctor--featured){
+  background-image:linear-gradient(180deg,#fff 0%,#FFFCFE 52%,#FFF6FB 100%);
+  box-shadow:var(--lip), var(--shadow-rich);
+}
+.card:hover, .bx:hover, .medic:hover, .feature:hover,
+.doctors .doctor:not(.doctor--featured):hover{
+  box-shadow:var(--lip), var(--shadow-rich-up);
+}
+
+/* The two surfaces the eye lands on first get a lit hairline as well. The
+   mask trick paints the gradient in the one pixel border band only. */
+.ba2::after, .stats__grid::after{
+  content:""; position:absolute; inset:0; z-index:3;
+  border-radius:inherit; padding:1px; background:var(--ring);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor; mask-composite:exclude;
+  pointer-events:none;
+}
+.ba2{ border-color:transparent; }
+
+/* A photograph sits better with a hairline of its own colour over the edge
+   than with a border drawn around it. */
+.ba2__stage, .bx__photo, .section__banner, .hdocs__grid img, .hdocs__founder img{
+  box-shadow:inset 0 0 0 1px rgba(190,47,121,.1);
+}
+.hdocs__grid img{
+  box-shadow:inset 0 0 0 1px rgba(190,47,121,.1),
+             0 6px 16px -8px rgba(178,46,120,.6),
+             0 0 0 1px var(--pink-soft);
+}
+
+/* ---------- Glass chrome ------------------------------------------------ */
+.header{
+  background:linear-gradient(180deg, rgba(255,255,255,.93) 0%, rgba(255,255,255,.80) 100%);
+  backdrop-filter:blur(18px) saturate(1.5);
+  -webkit-backdrop-filter:blur(18px) saturate(1.5);
+  border-bottom:none;
+  box-shadow:0 1px 0 rgba(242,221,233,.95), 0 10px 30px -20px rgba(178,46,120,.3);
+}
+.header.scrolled{ box-shadow:0 1px 0 rgba(242,221,233,.95), 0 16px 40px -16px rgba(178,46,120,.32); }
+
+.topbar{
+  position:relative;
+  background:linear-gradient(90deg,#241321 0%,#2C1A28 45%,#3A1F33 100%);
+}
+.topbar::after{
+  content:""; position:absolute; inset:auto 0 0 0; height:1px;
+  background:linear-gradient(90deg, transparent, rgba(232,96,168,.6), transparent);
+}
+
+/* ---------- Washes ------------------------------------------------------ */
+/* Grain over the flat pink keeps the large empty areas from reading as a
+   screen fill. It is 4% alpha — felt rather than seen. */
+.hero--brand{
+  background:
+    var(--grain),
+    radial-gradient(60rem 30rem at 86% -6rem, rgba(255,166,214,.45), transparent 62%),
+    radial-gradient(48rem 26rem at 6% 106%, rgba(255,198,160,.40), transparent 60%),
+    radial-gradient(90rem 42rem at 50% -14rem, #fff 0%, var(--pink-50,#fff5fa) 46%, transparent 72%),
+    linear-gradient(180deg, var(--pink-50,#fff5fa) 0%, #fff 78%);
+}
+.section--soft{
+  background:
+    var(--grain),
+    radial-gradient(70% 50% at 50% 0%, #FFEAF5, transparent 70%),
+    linear-gradient(180deg, var(--pink-tint2), #FCE6F2);
+}
+
+/* ---------- Small glossy things ----------------------------------------- */
+.eyebrow{
+  background-image:var(--gloss-soft);
+  box-shadow:inset 0 1px 0 #fff, 0 2px 6px -3px rgba(178,46,120,.3);
+}
+/* These sit on the brand gradient, and background-image replaces rather than
+   stacks — so the sheen has to be layered ON the gradient, first in the list,
+   or the colour underneath is simply wiped out. */
+.badge-free, .ba2__badge, .doctor__crown, .ba2__chip--a, .ba2__tab.on{
+  background-image:var(--gloss), var(--grad);
+  box-shadow:var(--lip-dark), 0 8px 20px -10px rgba(178,46,120,.6);
+}
+.card__icon, .medic__avatar{
+  background-image:var(--gloss), var(--grad);
+  box-shadow:var(--lip-dark), 0 10px 24px -10px rgba(214,69,143,.55);
+}
+.feature__icon{ background-image:var(--gloss-soft), var(--grad-soft); }
+/* white pills on the pale hero: the gradient is a flat colour, so a plain
+   sheen over it is enough, but the selector has to out-rank .hero--brand's */
+.hero--brand .hero__badge, .hero--brand .hero__offer{
+  background-image:var(--gloss-soft);
+  box-shadow:var(--lip), 0 2px 5px -2px rgba(44,26,40,.05), 0 12px 26px -14px rgba(178,46,120,.45);
+}
+
+/* ---------- Page furniture ---------------------------------------------- */
+::selection{ background:rgba(232,96,168,.24); color:var(--ink); }
+@media (min-width:961px){
+  html{ scrollbar-color:rgba(232,96,168,.5) transparent; scrollbar-width:thin; }
+  ::-webkit-scrollbar{ width:12px; height:12px; }
+  ::-webkit-scrollbar-track{ background:transparent; }
+  ::-webkit-scrollbar-thumb{
+    background:linear-gradient(180deg, rgba(232,96,168,.6), rgba(190,47,121,.6));
+    border-radius:99px; border:3px solid transparent; background-clip:content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover{
+    background:linear-gradient(180deg, rgba(232,96,168,.9), rgba(190,47,121,.9));
+    background-clip:content-box;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .btn:hover::after{ animation:none; }
+}
+
+/* The dark footer gets the same treatment as the bar at the top, so the page
+   is bracketed by the same material rather than by one flat ink block. */
+.footer{
+  position:relative;
+  background:linear-gradient(180deg,#3A1F33 0%,#2C1A28 38%,#241321 100%);
+}
+.footer::before{
+  content:""; position:absolute; inset:0 0 auto 0; height:1px;
+  background:linear-gradient(90deg, transparent, rgba(232,96,168,.65), transparent);
+}
+
+/* The slider handle is the one control a visitor actually grabs, so it is
+   the one place worth making look machined: a lit top edge, a shaded
+   bottom, and a cool rim. */
+.ba2__knob{
+  background-image:linear-gradient(180deg,#fff 0%,#fff 46%,#FFF0F8 100%);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 -1px 0 rgba(190,47,121,.22),
+    0 2px 4px rgba(44,26,40,.25),
+    0 12px 28px -8px rgba(44,26,40,.55),
+    0 0 0 1px rgba(190,47,121,.22);
+}
