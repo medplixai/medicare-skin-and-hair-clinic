@@ -2421,3 +2421,158 @@ tr.search-hit td{ background:#fff3c9; transition:background 2.5s var(--ease) .5s
     0 12px 28px -8px rgba(44,26,40,.55),
     0 0 0 1px rgba(190,47,121,.22);
 }
+
+/* =====================================================================
+   RICH / GLOSS — second pass: a second colour, and more shine
+   ---------------------------------------------------------------------
+   One colour is what was making it read flat. Pink alone has nowhere to
+   go: every surface is the same hue, so nothing feels more precious than
+   anything else. Gold is the classic partner for it, and the page was
+   already half asking for it — the review stars are gold and the hero
+   has a warm radial in the corner.
+
+   The rule for the gold is that it is a METAL, not a fill: it appears in
+   hairlines, in the lit edge of a ring, on the crown, on the flagship
+   branch. Nothing large is ever painted in it. A deep plum sits under the
+   dark surfaces so they read as a colour rather than as near-black.
+   ===================================================================== */
+:root{
+  --gold:      #D9A441;
+  --gold-lt:   #F3D27A;
+  --gold-pale: #FBEFD2;
+  --plum:      #3A1230;
+  --grad-gold: linear-gradient(135deg,#F7DFA0 0%,#E8BC5C 38%,#C9922F 70%,#A97519 100%);
+
+  /* a harder specular: it climbs quickly, then stops — which is what makes
+     a surface read as glass rather than as something merely pale on top */
+  --gloss: linear-gradient(180deg,
+            rgba(255,255,255,.58) 0%,
+            rgba(255,255,255,.30) 26%,
+            rgba(255,255,255,.06) 47%,
+            rgba(255,255,255,0)   52%,
+            rgba(255,255,255,.10) 100%);
+  --gloss-soft: linear-gradient(180deg, rgba(255,255,255,.9) 0%, rgba(255,255,255,.3) 44%, rgba(255,255,255,0) 72%);
+  /* the top-left glint every polished panel catches */
+  --glint: radial-gradient(120% 86% at 0% 0%, rgba(255,255,255,.95) 0%, rgba(255,255,255,.25) 26%, rgba(255,255,255,0) 52%);
+
+  /* the hairline, now pink into gold */
+  --ring: linear-gradient(140deg,
+            rgba(255,255,255,.98) 0%,
+            rgba(255,186,222,.62) 24%,
+            rgba(243,210,122,.80) 54%,
+            rgba(217,164,65,.38)  74%,
+            rgba(190,47,121,.22)  100%);
+}
+
+/* ---------- Buttons: harder shine ---------------------------------------- */
+.btn--primary:not(.btn--on-grad){
+  background-image:
+    var(--glint),
+    linear-gradient(135deg,#FF8ACA 0%,#F4559F 36%,#D93E91 66%,#BA2D77 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.7),
+    inset 0 2px 5px rgba(255,255,255,.3),
+    inset 0 -2px 4px rgba(116,16,68,.35),
+    0 2px 5px rgba(178,46,120,.28),
+    0 14px 28px -9px rgba(232,96,168,.6),
+    0 32px 56px -20px rgba(214,69,143,.55);
+}
+.btn--primary:not(.btn--on-grad):hover{
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.78),
+    inset 0 2px 6px rgba(255,255,255,.35),
+    inset 0 -2px 4px rgba(116,16,68,.38),
+    0 3px 8px rgba(178,46,120,.32),
+    0 22px 42px -10px rgba(232,96,168,.68),
+    0 50px 80px -24px rgba(214,69,143,.6);
+}
+/* the sweep: brighter, and it leaves a gold edge behind it */
+.btn::after{
+  background:linear-gradient(100deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,.72) 46%,
+    rgba(255,240,205,.9) 56%,
+    rgba(255,255,255,0) 100%);
+}
+.btn--ghost::after{
+  background:linear-gradient(100deg, rgba(232,96,168,0), rgba(243,210,122,.45) 48%, rgba(232,96,168,.18) 58%, rgba(232,96,168,0));
+}
+.btn--ghost{
+  background-image:var(--gloss-soft), linear-gradient(180deg,#fff 0%,#FFF7FB 100%);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 0 0 1px rgba(243,210,122,.22),
+    0 1px 2px rgba(44,26,40,.04),
+    0 12px 26px -13px rgba(178,46,120,.45);
+}
+
+/* ---------- Panels: a glint in the corner -------------------------------- */
+.card, .bx, .medic, .feature, .tech-card, .stats__grid, .hero__facts li, .ba2{
+  background-image:
+    var(--glint),
+    linear-gradient(180deg,#fff 0%,#FFFCFE 52%,#FFF6FB 100%);
+}
+/* the two hero surfaces also get a warm floor, so the white is not clinical */
+.ba2, .stats__grid{
+  background-image:
+    var(--glint),
+    radial-gradient(90% 60% at 100% 100%, rgba(251,239,210,.55) 0%, rgba(251,239,210,0) 60%),
+    linear-gradient(180deg,#fff 0%,#FFFCFE 46%,#FFF6FB 100%);
+}
+
+/* ---------- Where the gold is allowed to show ---------------------------- */
+/* a crown should be gold; it never should have been pink */
+.doctor__crown{
+  background-image:var(--gloss), var(--grad-gold);
+  color:#4A2D05;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.75), 0 9px 22px -8px rgba(169,117,25,.65);
+}
+.doctor__crown-ic{ fill:#6B3F06; }
+
+/* the flagship branch reads as the flagship */
+.bx--hq{ border:2px solid transparent; }
+.bx--hq::after{
+  content:""; position:absolute; inset:0; z-index:4; border-radius:inherit; padding:2px;
+  background:var(--grad-gold);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none;
+}
+.bx{ position:relative; }
+
+/* small pills get a warm inner hairline rather than a louder fill */
+.eyebrow, .hero--brand .hero__badge, .hero--brand .hero__offer, .hero__facts li{
+  border:1px solid rgba(243,210,122,.34);
+}
+.hero__badge--g .stars{ filter:drop-shadow(0 1px 1px rgba(169,117,25,.45)); }
+
+/* the thread along the dark bars runs pink into gold and back */
+.topbar::after, .footer::before{
+  background:linear-gradient(90deg, transparent, rgba(232,96,168,.55) 28%, rgba(243,210,122,.85) 50%, rgba(232,96,168,.55) 72%, transparent);
+}
+/* and the dark surfaces get plum under them instead of flat ink */
+.topbar{ background:linear-gradient(90deg,#2A0F24 0%, var(--plum) 45%, #4A1A3C 100%); }
+.footer{ background:linear-gradient(180deg,#4A1A3C 0%, var(--plum) 40%, #250B1F 100%); }
+
+/* ---------- One more stop of shine on the gradient pills ----------------- */
+.badge-free, .ba2__badge, .ba2__chip--a, .ba2__tab.on, .card__icon, .medic__avatar, .nav__link--btn{
+  background-image:var(--gloss), var(--grad);
+}
+
+/* A 58% specular is right for a button the width of a hand. On a 60px icon
+   tile or a small pill it washes the brand colour out and leaves a white
+   glyph sitting on near-white. The small gradient chips get a shorter,
+   gentler version — still glass, still lit from above, but the colour
+   underneath survives it. */
+:root{
+  --gloss-chip: linear-gradient(180deg,
+      rgba(255,255,255,.36) 0%,
+      rgba(255,255,255,.15) 30%,
+      rgba(255,255,255,0)   50%,
+      rgba(255,255,255,.08) 100%);
+}
+.card__icon, .medic__avatar, .badge-free, .ba2__badge,
+.ba2__chip--a, .ba2__tab.on, .nav__link--btn{
+  background-image:var(--gloss-chip), var(--grad);
+}
+.doctor__crown{ background-image:var(--gloss-chip), var(--grad-gold); }
