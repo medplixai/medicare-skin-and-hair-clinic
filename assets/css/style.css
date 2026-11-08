@@ -2792,3 +2792,326 @@ tr.search-hit td{ background:#fff3c9; transition:background 2.5s var(--ease) .5s
 .section--dark .ht-benefits span,
 .section--dark .ht-step__txt span,
 .section--dark .tech-card__sub{ color:rgba(246,233,242,.68); }
+
+/* =====================================================================
+   DARK THEME — the whole page
+   ---------------------------------------------------------------------
+   The five plum bands worked, so the page goes with them. This is not a
+   filter over the light design; it is the same design re-grounded.
+
+   Almost all of it is done by re-declaring tokens rather than by
+   overriding rules. The sheet already says color:var(--ink-2) and
+   background:var(--pink-tint) in a few hundred places; inverted at the
+   root, every one of those follows. Three token groups do the heavy work:
+
+   - --white. Every `background:var(--white)` in this sheet is a card, so
+     the token becomes the card surface and they all turn over at once.
+     body gets its own ground below, and the one place the token meant a
+     photo plate rather than a panel is named explicitly.
+   - --pink-700 / --pink-600. These are the deep pinks, and they were only
+     ever used for TEXT and strokes sitting on pale pink — sixty-seven
+     colour declarations. Inverted, they are the light pinks that sit on
+     plum, and every pill, link and caption comes with them.
+   - --pink-tint / --pink-tint2 / --pink-soft / --grad-soft. The pale pink
+     FILLS. They become films over the plum, so a pill stays a pill.
+
+   What is left is the literal colours — the #fff cards, the amber and red
+   notices, the two white surfaces that must stay white — and those are
+   named one by one below.
+
+   Gold stays what it was: a metal in the hairlines, never a fill. Pink
+   stays the brand — the primary button, the price block, the logo.
+   ===================================================================== */
+:root{
+  /* tells the engine to render scrollbars, spinners, date pickers and the
+     rest of the native furniture dark, which no stylesheet can reach */
+  color-scheme: dark;
+
+  --bg:        #1E0A19;   /* the page */
+  --bg-soft:   #150611;   /* the alternating band, deeper than the page */
+  --panel:     #2B1224;   /* a card */
+  --panel-lit: linear-gradient(180deg, rgba(255,255,255,.075) 0%, rgba(255,255,255,.025) 46%, rgba(255,255,255,0) 100%);
+  --panel-rim: inset 0 1px 0 rgba(255,255,255,.085);
+
+  --white:     #2B1224;
+
+  --ink:       #F8ECF4;
+  --ink-2:     rgba(248,236,244,.80);
+  --muted:     rgba(248,236,244,.56);
+  --line:      rgba(243,210,122,.16);
+
+  --pink-700:  #FFB0DC;
+  --pink-600:  #FF9FD3;
+
+  --pink-soft:  rgba(243,210,122,.20);
+  --pink-tint:  rgba(232,96,168,.13);
+  --pink-tint2: rgba(255,255,255,.055);
+  --pink-50:    rgba(255,255,255,.055);
+  --grad-soft:  linear-gradient(135deg, rgba(255,255,255,.09), rgba(255,255,255,.03));
+
+  /* a pink-tinted shadow is invisible on plum. The lift has to come from
+     black underneath and a lit edge above. */
+  --shadow-sm: 0 2px 10px rgba(6,1,5,.45);
+  --shadow:    0 18px 44px -18px rgba(6,1,5,.9);
+  --shadow-lg: 0 30px 70px -24px rgba(6,1,5,.95);
+}
+
+/* ---------- Grounds ------------------------------------------------------ */
+body{ background:var(--bg); color:var(--ink); }
+
+.section--soft{
+  background:
+    var(--grain),
+    radial-gradient(70% 46% at 50% 0%, rgba(232,96,168,.10), transparent 70%),
+    linear-gradient(180deg,#190713 0%, var(--bg-soft) 100%);
+}
+.hero--brand{
+  background:
+    var(--grain),
+    radial-gradient(60rem 30rem at 86% -6rem, rgba(232,96,168,.22), transparent 62%),
+    radial-gradient(48rem 26rem at 6% 106%, rgba(217,164,65,.15), transparent 60%),
+    radial-gradient(90rem 42rem at 50% -14rem, #311329 0%, #250E20 46%, transparent 72%),
+    linear-gradient(180deg,#260F21 0%, var(--bg) 78%);
+}
+.aiskin{ background:linear-gradient(180deg,#190713 0%, var(--bg) 62%); }
+.careers-hero{ background:linear-gradient(180deg,#190713 0%, var(--bg) 70%); }
+.contact{ background:linear-gradient(180deg,#190713 0%, var(--bg-soft) 100%); }
+.legal{ background:linear-gradient(180deg,#190713 0%, var(--bg) 40%); }
+
+/* ---------- Panels ------------------------------------------------------- */
+/* one surface, everywhere a card appears. It also has to re-state
+   background-image, because the gloss layer paints these same selectors
+   with a white gradient and background-image replaces rather than stacks. */
+.card, .bx, .medic, .feature, .tech-card, .hero__facts li, .ba2, .faq__item,
+.rv__card, .tx, .pcat, .ht-step, .ht-photo, .doctors .doctor, .price,
+.branch, .bcard, .cond, .inclusive, .shealth__steps-list li, .legal__box,
+.crole, .careers-done, .estimator, .aiskin__pane, .ba-slide,
+.section__banner, .section__banner-duo img, .contact__form, .hero__mark,
+.shealth__privacy, .shealth__cta, .cookie, .totop{
+  background-color:var(--panel);
+  background-image:var(--panel-lit);
+  border-color:var(--line);
+  box-shadow:var(--panel-rim), var(--shadow-sm);
+}
+/* the three that were painted with their own light gradient */
+.edge__card--ai,
+.price--featured,
+.bcard--hq,
+.doctors .doctor--featured{
+  background-image:var(--panel-lit);
+  background-color:#33142A;
+}
+.ba2{ box-shadow:var(--panel-rim), var(--shadow-lg); }
+.contact__form{ box-shadow:var(--panel-rim), var(--shadow); }
+/* the letterbox around a contained photo takes the card's surface rather
+   than a white plate (see the hair-transplant gallery) */
+.ht-photo img{ background:transparent; }
+
+/* ---------- The eyebrow pill --------------------------------------------- */
+/* it carries a white sheen from the gloss layer, which on plum reads as a
+   blank chip, so it is restated here in gold */
+.eyebrow{
+  color:#F6D98C;
+  background-color:rgba(243,210,122,.10);
+  background-image:linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0) 70%);
+  border:1px solid rgba(243,210,122,.34);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16), 0 6px 18px -10px rgba(0,0,0,.8);
+}
+
+/* ---------- Header, nav, drawer ------------------------------------------ */
+.header{
+  background:rgba(26,8,21,.82);
+  border-bottom:1px solid var(--line);
+  box-shadow:0 1px 0 rgba(243,210,122,.10), 0 10px 30px -20px rgba(0,0,0,.9);
+}
+.header.scrolled{ box-shadow:0 1px 0 rgba(243,210,122,.14), 0 16px 40px -16px rgba(0,0,0,.95); }
+@media (max-width:1240px){
+  .header{ background:rgba(26,8,21,.98); }
+  .nav{ background:#200B1B; box-shadow:-16px 0 50px rgba(0,0,0,.6); }
+}
+.nav__link:hover{ background:rgba(232,96,168,.14); }
+
+/* ---------- Controls ----------------------------------------------------- */
+.btn--ghost{
+  color:#F6D98C; border-color:rgba(243,210,122,.42);
+  background-color:rgba(255,255,255,.06);
+  background-image:linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.02) 60%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2), 0 12px 28px -16px rgba(0,0,0,.9);
+}
+.btn--ghost:hover{ color:#FFF2CF; border-color:rgba(243,210,122,.72); background-color:rgba(255,255,255,.11); }
+/* .btn--on-grad sits ON the pink gradient block, so it is one of the two
+   surfaces that must STAY white — and its label has to be pinned back to
+   the deep pink, since --pink-700 is now a light pink for use on plum */
+.btn--on-grad{ background:#fff; color:#BE2F79 !important; }
+.btn--on-grad:hover{ background:#fff; }
+.totop{ color:#F6D98C; }
+.fab__label{ background:#2B1224; color:#F8ECF4; box-shadow:0 8px 20px -10px rgba(0,0,0,.9); }
+.fab__label::after{ border-left-color:#2B1224; }
+.store{
+  background:rgba(255,255,255,.085);
+  border:1px solid rgba(243,210,122,.28);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18), 0 14px 32px -18px rgba(0,0,0,.9);
+}
+.store--soon small{ color:#F6D98C !important; }
+.branch__chip--alt, .bx__btn--dir{ background:rgba(255,255,255,.10); color:#F8ECF4; border:1px solid var(--line); }
+
+/* ---------- Inputs ------------------------------------------------------- */
+.field input, .field select, .field textarea,
+.aiskin__fld input, .aiskin__fld select,
+.estimator select, .estimator input,
+.chatbox__input input{
+  background-color:rgba(255,255,255,.055);
+  border-color:rgba(243,210,122,.22);
+  color:var(--ink);
+}
+.field input:focus, .field select:focus, .field textarea:focus,
+.aiskin__fld input:focus, .aiskin__fld select:focus{
+  background-color:rgba(255,255,255,.09);
+  box-shadow:0 0 0 4px rgba(232,96,168,.22);
+}
+::placeholder{ color:rgba(248,236,244,.42); }
+
+/* ---------- The icon discs ----------------------------------------------- */
+/* these were pale-pink tiles with a pink glyph; the gloss layer also lays a
+   white film over them. On plum they have to become lit glass. */
+.feature__icon, .ht-benefit__ic, .tech-card__ic{
+  background-color:rgba(243,210,122,.13);
+  background-image:linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.02) 62%);
+  border:1px solid rgba(243,210,122,.26);
+  color:#F6D98C;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2), 0 8px 20px -12px rgba(0,0,0,.9);
+}
+.ht-benefit__ic svg, .feature__icon svg{ stroke:#F6D98C; }
+.tech-card__ic svg{ stroke:#F6D98C; }
+
+/* ---------- Tables -------------------------------------------------------- */
+.ptable__sub td{ background:rgba(232,96,168,.16); color:#FFB0DC; }
+.ptable tbody tr:hover td{ background:rgba(255,255,255,.04); }
+
+/* ---------- The chat assistant -------------------------------------------- */
+.chatbox{ background:#241020; border-color:rgba(243,210,122,.22); box-shadow:0 30px 70px -20px rgba(0,0,0,.85); }
+.chat-msg--bot{ background:rgba(255,255,255,.07); color:var(--ink); border-color:var(--line); }
+.chat-act:hover{ background:rgba(255,255,255,.14); }
+.chatbox__chips, .chatbox__input{ background:#1E0A19; border-top-color:var(--line); }
+
+/* ---------- The hero search dropdown --------------------------------------*/
+.hsearch__panel{ background:#2B1224; border-color:rgba(243,210,122,.24); box-shadow:var(--shadow-lg); }
+.hsearch__item{ background:transparent; border-bottom-color:var(--line); color:var(--ink); }
+.hsearch__item:hover, .hsearch__item.on{ background:rgba(232,96,168,.16); }
+
+/* ---------- Notices that carried their own colour ------------------------- */
+/* amber and red have to be re-mixed for a dark ground: the hue is kept, the
+   fill becomes a low-alpha wash and the text is lifted to a light tint, or
+   they read as holes punched in the page */
+.shealth__alert, .aiskin__warn, .aiskin__sev span.on.s1{
+  background:rgba(232,163,61,.14); border-color:rgba(232,163,61,.38); color:#F0C987;
+}
+.shealth__alert{ border-left-color:#E8A33D; }
+.shealth__warn, .aiskin__soon, .aiskin__sev span.on.s2{
+  background:rgba(224,38,74,.14); border-color:rgba(224,38,74,.40); color:#FF9DAF;
+}
+.aiskin__soon{ border-left-color:#E0264A; }
+.aiskin__soon i{ color:#E8A6B4; }
+.aiskin__sev span.on.s0{ color:#7BE8AF; background:rgba(32,170,100,.16); border-color:rgba(123,232,175,.36); }
+.tech-card__badge--fda{ color:#7BE8AF; background:rgba(32,170,100,.16); border-color:rgba(123,232,175,.32); }
+.tech-card__badge--fda svg{ fill:#7BE8AF; }
+.tech-card__badge--alt{ color:#FFB6DD; background:rgba(232,96,168,.15); border-color:rgba(232,96,168,.34); }
+tr.search-hit td{ background:rgba(243,210,122,.22); }
+
+/* ---------- Page furniture ------------------------------------------------ */
+::selection{ background:rgba(232,96,168,.38); color:#fff; }
+.footer{ background:linear-gradient(180deg,#2E0F26 0%, #210A1B 46%, #170510 100%); }
+
+/* ---------- Print ---------------------------------------------------------- */
+/* the sheet already had a print block asking for a white page; it sits
+   above this layer, so the ground has to be handed back explicitly or the
+   whole plum page goes to the paper. */
+@media print{
+  body, .section, .section--soft, .section--dark, .hero, .hero--brand,
+  .legal, .contact, .aiskin, .careers-hero, .footer, .topbar{
+    background:#fff !important; color:#2C1A28 !important;
+  }
+  .card, .bx, .cond, .price, .legal__box, .tech-card, .feature, .ht-step,
+  .doctors .doctor, .bcard, .branch, .contact__form, .inclusive{
+    background:#fff !important; border-color:#E6D4DF !important; box-shadow:none !important;
+  }
+}
+
+/* ---------- The hero's own repaints -------------------------------------- */
+/* The hero was converted from a dark photographic hero to a pale brand hero
+   earlier, and that conversion left a block of `.hero--brand ...` rules that
+   pin the badge and the search field to #fff. They outrank the token layer
+   — and one of them is an ID — so inverting the tokens turned their text
+   light while their fill stayed white: an empty pill with invisible type,
+   the exact bug those rules were written to fix, now pointing the other way.
+   Repainted a third time, for plum. */
+.hero--brand .hero__badge{
+  background-color:rgba(255,255,255,.07);
+  background-image:linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,0) 70%);
+  border:1px solid rgba(243,210,122,.26); color:var(--ink);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16), 0 10px 26px -14px rgba(0,0,0,.9);
+}
+.hero--brand .hero__offer{
+  background-color:rgba(255,255,255,.055);
+  background-image:linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,0) 70%);
+  border:1px solid rgba(243,210,122,.26);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14), 0 10px 26px -14px rgba(0,0,0,.9);
+}
+.hero--brand #hsearchInput{
+  color:var(--ink);
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(243,210,122,.28);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12), 0 10px 26px -14px rgba(0,0,0,.9);
+}
+.hero--brand #hsearchInput::placeholder{ color:rgba(248,236,244,.46); }
+.hero--brand #hsearchInput:focus{
+  border-color:var(--pink); background:rgba(255,255,255,.11);
+  box-shadow:0 0 0 4px rgba(232,96,168,.22), 0 10px 26px -14px rgba(0,0,0,.9);
+}
+
+/* ---------- The semantic colours ------------------------------------------ */
+/* Green for "verified", amber for "take care", red for "do not trust this" —
+   these carry meaning, so the HUE has to survive the inversion while the
+   LIGHTNESS flips. Each was written as a dark ink on a pale wash of its own
+   hue; on plum that is a dark ink on a dark wash, which is how a registration
+   number or a fraud warning ends up unreadable. Same hue, lifted. */
+
+/* green — medical council registration, "verified", a good score */
+.medic__reg, .doctor__reg, .bx__reg,
+.aiskin__stepdot.done, .aiskin__gauge.g-good b, .aiskin__cmptable td.up{ color:#7BE8AF; }
+.doctor__reg, .bx__reg{ background:rgba(32,170,100,.16); border-color:rgba(123,232,175,.34); }
+.bx__reg svg{ stroke:#7BE8AF; }
+.aiskin__gauge.g-good .gfg{ stroke:#4FD79A; }
+.aiskin__stepdot.done b{ background:#1D9B5E; color:#fff; }
+
+/* amber — "this may be a symptom of something else" */
+.shealth__alert p{ color:#F0C987; }
+.shealth__alert i{ color:rgba(240,201,135,.76); }
+.shealth__alert-ic{ stroke:#E8A33D; }
+.aiskin__gauge.g-mid b{ color:#F0C987; } .aiskin__gauge.g-mid .gfg{ stroke:#D9A441; }
+
+/* red — the quack warning, and the "see someone now" notice */
+.shealth__warn h3{ color:#FFB3C1; }
+.shealth__warn h3 i{ color:rgba(255,179,193,.70); }
+.shealth__warn li{ color:rgba(255,208,216,.88); }
+.shealth__warn li::before{ color:#FF7E93; }
+.shealth__warn-note{ color:rgba(255,208,216,.82); border-top-color:rgba(224,38,74,.38); }
+.aiskin__soon i{ color:rgba(255,157,175,.78); }
+.aiskin__cmptable td.down{ color:#FF9DAF; }
+.aiskin__gauge.g-low b{ color:#FFA9D6; } .aiskin__gauge.g-low .gfg{ stroke:#E8609F; }
+
+/* ---------- Two leftovers the surface sweep turned up --------------------- */
+/* the keyboard skip-link was `background:var(--ink); color:#fff` — with --ink
+   inverted that is white on white, and it is the first thing a keyboard user
+   reaches */
+.skip-link{ background:#2B1224; color:#F8ECF4; border:1px solid rgba(243,210,122,.34); }
+/* the Google rating pill sits on the branch photograph; it was a white chip
+   and its text came with the inversion, so the chip goes dark instead —
+   which also matches every other chip on the page now */
+.bx__rating{ background:rgba(18,5,14,.80); border:1px solid rgba(243,210,122,.22); }
+.bx__rating-val{ color:#F8ECF4; }
+
+/* ---------- The legal pages' own header ---------------------------------- */
+/* privacy / terms / refund carry a stripped-down sticky header of their own
+   rather than the site header, so it needs the same treatment */
+.legal-head{ background:rgba(26,8,21,.96); border-bottom-color:var(--line); }
