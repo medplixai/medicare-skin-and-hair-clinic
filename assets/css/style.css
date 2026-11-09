@@ -3115,3 +3115,223 @@ tr.search-hit td{ background:rgba(243,210,122,.22); }
 /* privacy / terms / refund carry a stripped-down sticky header of their own
    rather than the site header, so it needs the same treatment */
 .legal-head{ background:rgba(26,8,21,.96); border-bottom-color:var(--line); }
+
+/* ===========================================================================
+   HERO — 2026 pass
+   ---------------------------------------------------------------------------
+   Three things were wrong with it, and none of them were colour.
+
+   1. The logo was on the page twice. The header carries the full lockup, and
+      the hero repeated the same artwork at 268px about 90px below it. Gone.
+      The headline is the hero now.
+   2. Nine blocks stacked down the left column — logo, eyebrow, heading, sub,
+      two rating pills, a boxed offer line, two buttons, a search field, four
+      fact cards, a note. Six of those carried their own border, fill and
+      shadow, so the eye had no idea what to read first. The pills and the
+      offer are now ONE hairline rail, and the fact cards lost their boxes and
+      became a second rail. Same facts, two thin lines instead of six panels.
+   3. Everything was a box, so nothing had a left edge. The fact cards centred
+      their own contents while the heading above them was left-aligned, which
+      is what made the column look loose. The rails are left-aligned on the
+      split layout and centred only when the hero itself centres.
+
+   The accent also changes here: the heading's second line runs pink INTO gold
+   rather than pink into pink, which is the one place the two brand metals meet.
+   =========================================================================== */
+
+/* ---------- Rhythm ------------------------------------------------------- */
+.hero--brand{ padding-top:clamp(2.1rem,4.6vw,3.4rem); }
+.hero--brand .hero__inner{ gap:clamp(.6rem,1.3vw,.95rem); }
+
+/* ---------- The eyebrow gets a live dot ---------------------------------- */
+.hero--brand .eyebrow{
+  display:inline-flex; align-items:center; gap:.55rem;
+  font-size:.74rem; letter-spacing:1.6px; padding:.42rem 1rem;
+}
+.hero--brand .eyebrow::before{
+  content:""; width:6px; height:6px; border-radius:50%; flex:none;
+  background:#F6D98C; animation:heroPulse 2.6s var(--ease) infinite;
+}
+@keyframes heroPulse{
+  0%{   box-shadow:0 0 0 0 rgba(246,217,140,.55); }
+  70%{  box-shadow:0 0 0 7px rgba(246,217,140,0); }
+  100%{ box-shadow:0 0 0 0 rgba(246,217,140,0); }
+}
+@media (prefers-reduced-motion: reduce){ .hero--brand .eyebrow::before{ animation:none; } }
+
+/* ---------- The headline ------------------------------------------------- */
+.hero--brand .hero__title{
+  margin:.45rem 0 .25rem; max-width:21ch;
+  font-size:clamp(1.95rem,4.7vw,3.3rem);
+  line-height:1.08; letter-spacing:-1.1px;
+}
+/* The headline types itself and alternates Telugu <-> English, and the two
+   languages do not wrap to the same number of lines: the Telugu lead takes two
+   lines where the English takes one, and "10 branches in Andhra Pradesh" takes
+   two where its Telugu takes one. Measured at 1440 that was a 57px step, so the
+   buttons, the search field and everything under them hopped down and back
+   roughly twice every cycle, forever. The box is reserved at its tallest state
+   instead. Content stays top-aligned on purpose: the first line then never
+   moves at all, and the slack falls into empty space below the shorter state
+   where there is nothing to see it. Re-measure these if the phrases change. */
+/* Reserving the box is only half of it: the box also has to be the same size
+   at every width, and it was not. At 961 the layout splits and the text column
+   HALVES, but the headline kept scaling at 4.7vw, so it went on growing into a
+   column half the size — 45px type in a 514px column. Measured natural maxima
+   on the old ramp: 4.54em at 961, 4.54em at 1024, 4.54em at 1180, but 3.46em
+   at 1280 — four lines on most laptops, three on a wide monitor, which is both
+   a shifting reserve and simply too big for the column. A 3.4vw ramp inside
+   the split holds it to 3.44-3.46em at 961 / 1024 / 1180 / 1280 / 1440 alike,
+   and still reaches the same 3.3rem cap on a wide screen.
+   Measured maxima below the split: 4.516em at 320 and 375 (the Telugu lead
+   needs three lines in a phone column), 3.436em at 430, 3.447em at 760.
+   Each band reserves just over its own worst case, so a phone does not give
+   up a blank line to make a laptop safe. Re-measure if the phrases change. */
+.hero--brand .hero__title{ min-height:4.55em; }
+@media (min-width:430px){ .hero--brand .hero__title{ min-height:3.50em; } }
+@media (min-width:961px){
+  .hero--split .hero__title{
+    font-size:clamp(1.95rem,3.4vw,3.3rem);
+    min-height:3.47em;
+  }
+}
+/* pink into gold — the accent line is the only place the two metals meet */
+.hero--brand .hero__title .grad{
+  background-image:linear-gradient(100deg,#FF9FD3 0%,#FFC2E4 24%,#F6D98C 62%,#E3B257 100%);
+  filter:drop-shadow(0 6px 26px rgba(246,217,140,.2));
+}
+.hero--brand .hero__caret{ background:#F6D98C; width:3px; border-radius:3px; }
+.hero--brand .hero__sub{
+  max-width:46ch; line-height:1.68;
+  font-size:clamp(.97rem,1.3vw,1.07rem);
+}
+
+/* ---------- The trust rail ----------------------------------------------
+   Replaces .hero__badges (two pills) and .hero__offer (a boxed line). Those
+   two rules still exist above for any page that wants them; nothing on this
+   site uses them any more. */
+.htrust{
+  display:flex; flex-wrap:wrap; align-items:stretch; justify-content:center;
+  width:100%; margin:1rem 0 .35rem; padding-top:.85rem;
+  border-top:1px solid rgba(243,210,122,.18);
+}
+.htrust__cell{
+  display:flex; align-items:center; gap:.6rem;
+  padding:.1rem 1.05rem; min-width:0;
+}
+.htrust__cell + .htrust__cell{ border-left:1px solid rgba(243,210,122,.16); }
+.htrust__ic{
+  width:32px; height:32px; flex:none; display:grid; place-items:center;
+  border-radius:10px;
+  background-color:rgba(243,210,122,.12);
+  background-image:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0) 70%);
+  border:1px solid rgba(243,210,122,.28);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16);
+}
+.htrust__ic svg{
+  width:16px; height:16px; fill:none; stroke:#F6D98C;
+  stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round;
+}
+.htrust__tx{ display:flex; flex-direction:column; line-height:1.3; min-width:0; }
+.htrust__tx b{
+  font-family:var(--font-en); font-weight:800; font-size:.93rem;
+  color:var(--ink); letter-spacing:-.1px; white-space:nowrap;
+}
+.htrust__tx span{ font-size:.7rem; color:var(--muted); white-space:nowrap; }
+.htrust__tx span strong{ font-family:var(--font-en); font-weight:700; color:var(--ink-2); }
+.htrust__stars{ font-style:normal; color:#FFC94A; font-size:.76rem; letter-spacing:.6px; }
+.htrust__cell--offer .htrust__tx b{
+  background-image:linear-gradient(100deg,#FFD9EE 0%,#F6D98C 58%,#E3B257 100%);
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent; color:transparent;
+}
+
+/* ---------- The buttons read as a pair ----------------------------------- */
+.hero--brand .hero__actions{ margin:.75rem 0 0; gap:.75rem; }
+.hero--brand .hero__actions .btn{ min-width:176px; }
+
+/* ---------- The four facts: a rail, not four cards ----------------------- */
+.hero--brand .hero__facts{
+  gap:0; margin:.85rem 0 .1rem; padding-top:.85rem;
+  border-top:1px solid rgba(243,210,122,.16);
+}
+.hero--brand .hero__facts li{
+  display:flex; flex-direction:column; gap:.1rem;
+  padding:.05rem .9rem; border-radius:0;
+  background-color:transparent; background-image:none;
+  border:none; border-left:1px solid rgba(243,210,122,.14);
+  box-shadow:none;
+}
+.hero--brand .hero__facts li:first-child{ border-left:none; padding-left:0; }
+.hero--brand .hero__facts strong{
+  font-size:clamp(1.05rem,1.9vw,1.34rem); letter-spacing:-.4px;
+  background-image:linear-gradient(100deg,#FFC2E4 0%,#F6D98C 60%,#E3B257 100%);
+}
+.hero--brand .hero__facts span{ font-size:.715rem; line-height:1.4; }
+.hero--brand .hero__note{
+  margin:.75rem 0 0; font-size:.78rem; opacity:.9;
+  padding-left:.72rem; border-left:2px solid rgba(243,210,122,.26);
+}
+
+/* The search field was width:min(560px,92%) from the old centred hero, so on a
+   phone it sat 14px narrower than every other block in the column — the one
+   edge that did not line up. It takes the column's width now. */
+.hero--brand .hsearch{ width:100%; margin-inline:0; }
+
+/* ---------- Split layout: everything shares one left edge ---------------- */
+@media (min-width:961px){
+  .hero--split .htrust{ justify-content:flex-start; }
+  .hero--split .htrust__cell:first-child{ padding-left:0; }
+  .hero--split .hero__title{ max-width:21ch; }
+  .hero--split .hero__sub{ max-width:45ch; }
+  .hero--split .hero__facts li{ align-items:flex-start; text-align:left; }
+}
+
+/* ---------- Centred layout: the rails centre with it --------------------- */
+@media (max-width:960px){
+  .hero--brand .hero__facts li{ align-items:center; text-align:center; }
+  .htrust{ margin-inline:auto; }
+}
+
+/* ---------- Narrow: the rails unwind ------------------------------------- */
+@media (max-width:760px){
+  .hero--brand .hero__facts li:nth-child(odd){ border-left:none; padding-left:.3rem; }
+  .hero--brand .hero__facts li:nth-child(n+3){ margin-top:.7rem; }
+}
+@media (max-width:640px){
+  .htrust{ flex-direction:column; align-items:stretch; gap:.6rem; padding-top:.8rem; }
+  .htrust__cell{ justify-content:flex-start; padding:0; }
+  .htrust__cell + .htrust__cell{
+    border-left:none; border-top:1px solid rgba(243,210,122,.14); padding-top:.6rem;
+  }
+  .hero--brand .hero__actions .btn{ min-width:0; flex:1 1 auto; }
+}
+
+/* ---------- The doctors run the full width ------------------------------
+   The ten faces used to live inside the right-hand column, under the
+   before/after card. That made the right column 1070px tall against a 738px
+   text column, and the surplus opened a ~330px hole of empty plum beside
+   them. Lifted out of .hero__visual into a row of its own across both
+   columns: the card and the text now end within 20px of each other, and ten
+   faces across the full width read as a team rather than a 5x2 block. */
+@media (min-width:961px){
+  .hero--split .hero__inner{ grid-template-rows:auto 1fr auto; }
+  .hero--split .hdocs{
+    grid-column:1 / -1; grid-row:3;
+    margin:1.6rem 0 0; padding-top:1.35rem;
+    border-top:1px solid rgba(243,210,122,.16);
+    display:grid; grid-template-columns:auto minmax(0,1fr) auto;
+    align-items:center; column-gap:1.3rem; row-gap:1.15rem;
+  }
+  .hero--split .hdocs__founder{ grid-area:1 / 1; width:auto; margin:0; }
+  .hero--split .hdocs__head{ grid-area:1 / 2; margin:0; }
+  .hero--split .hdocs__all{ grid-area:1 / 3; margin:0; justify-self:end; }
+  .hero--split .hdocs__grid{
+    grid-area:2 / 1 / 3 / -1;
+    grid-template-columns:repeat(10,minmax(0,1fr)); gap:.55rem;
+  }
+  .hero--split .hdocs__grid img{ max-width:70px; }
+  .hero--split .hdocs__grid span{ font-size:.7rem; }
+}
+/* Below the split the card column is the whole column again, so the strip
+   goes back to the 5x2 block it was. */
