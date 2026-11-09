@@ -3532,11 +3532,12 @@ body.has-cookiebar .totop{ bottom:calc(84px + var(--cookie-h,56px)); }
    photographs, cards, the table, and the ten faces under the hero.
 
    The rail still stops: a gutter is not waste, and past ~1460 more width
-   just makes a card grid look thin. Gutters after: 86px at 1512, 84px at
-   1728, 180px at 1920.
+   just makes a card grid look thin. Gutters after: 96px at 1512, 124px at
+   1728, 220px at 1920. 1400 read too empty and 1560 too tight; this is the
+   middle the owner picked after seeing both live.
    =========================================================================== */
-@media (min-width:1500px){ :root{ --container:1360px; } }
-@media (min-width:1700px){ :root{ --container:1560px; } }
+@media (min-width:1500px){ :root{ --container:1320px; } }
+@media (min-width:1700px){ :root{ --container:1480px; } }
 
 @media (min-width:961px){
   /* The card column was .82fr, so on a wide rail it grew past the card and
@@ -3586,13 +3587,14 @@ body.has-cookiebar .totop{ bottom:calc(84px + var(--cookie-h,56px)); }
   .price-cats{ max-width:1160px; }
 }
 
-/* On a 1560 rail the hero's left column runs to ~1094px, and two of its
-   blocks stretch to fill it: the trust rail and the search field. A search
-   field is meant to be full width, so that one is fine. The rail is not —
-   its three cells are content-sized, so they clumped into the first 590px
-   and left a 500px tail of bare hairline. Spread across the column they read
-   as a distributed stat row instead, which is what that width wants. */
-@media (min-width:1700px){
+/* Past 1500 the hero's left column runs to 860-1010px, and two of its blocks
+   stretch to fill it: the trust rail and the search field. A search field is
+   meant to be full width, so that one is fine. The rail is not — its three
+   cells are content-sized, so they clumped into the first 590px and left a
+   270-420px tail of bare hairline trailing off to the right. Spread across
+   the column they read as a distributed stat row, which is what that width
+   wants. Applied from 1500 rather than 1700 so the two wide tiers agree. */
+@media (min-width:1500px){
   .hero--split .htrust{ justify-content:space-between; }
   .hero--split .htrust__cell{ padding-inline:0; }
   .hero--split .htrust__cell + .htrust__cell{ border-left:none; }
