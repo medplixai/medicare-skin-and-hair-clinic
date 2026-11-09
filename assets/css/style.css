@@ -3417,3 +3417,101 @@ tr.search-hit td{ background:rgba(243,210,122,.22); }
   .hero--split .hdocs{ margin-top:.6rem; padding-top:.6rem; row-gap:.5rem; }
   .hero--split .hdocs__grid img{ max-width:40px; }
 }
+
+/* ===========================================================================
+   COOKIE NOTICE — a strip along the bottom, not a card over the page
+   ---------------------------------------------------------------------------
+   It was a 560px card floating in the middle of the viewport with its text
+   stacked above its button: ~150px tall on a phone, sitting directly on top
+   of "Ask on WhatsApp". A consent notice that covers the call-to-action costs
+   you the visit it was shown to protect.
+
+   One row along the bottom edge instead — icon, sentence, button — on the
+   same container rail as the rest of the page, so the sentence starts on the
+   same left edge as the header above it. The floating buttons are lifted by
+   the strip's measured height while it is up (--cookie-h, set in the page's
+   own script) and settle back when it goes.
+   =========================================================================== */
+.cookie{
+  position:fixed; left:0; right:0; bottom:0; z-index:120;
+  max-width:none; margin:0; padding:0; border-radius:0;
+  border:none; border-top:1px solid rgba(243,210,122,.26);
+  background-color:rgba(20,6,16,.94);
+  background-image:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,0) 72%);
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  box-shadow:0 -14px 38px -20px rgba(0,0,0,.95);
+  display:none;
+}
+.cookie.show{ display:block; animation:cookieUp .34s var(--ease); }
+@keyframes cookieUp{ from{ transform:translateY(101%); } to{ transform:translateY(0); } }
+@media (prefers-reduced-motion: reduce){ .cookie.show{ animation:none; } }
+
+.cookie__in{
+  width:min(var(--container),92%); margin-inline:auto;
+  display:flex; align-items:center; gap:.9rem;
+  padding:.6rem 0 calc(.6rem + env(safe-area-inset-bottom,0px));
+}
+.cookie__ic{
+  width:21px; height:21px; flex:none;
+  fill:none; stroke:#F6D98C; stroke-width:1.6;
+}
+.cookie__ic circle:not(:first-child){ fill:#F6D98C; stroke:none; }
+.cookie p{
+  margin:0; flex:1 1 auto; min-width:0;
+  font-size:.78rem; line-height:1.5; color:var(--ink-2);
+}
+.cookie p a{
+  color:#F6D98C; font-weight:700;
+  text-decoration:underline; text-underline-offset:2px;
+}
+.cookie p a:hover{ color:#FFF2CF; }
+.cookie__ok{ flex:none; padding:.44rem 1.2rem; font-size:.82rem; }
+
+/* the floating buttons get out of its way */
+.fab, .chat-launch, .totop{ transition:bottom .32s var(--ease); }
+body.has-cookiebar .fab,
+body.has-cookiebar .chat-launch{ bottom:calc(18px + var(--cookie-h,56px)); }
+body.has-cookiebar .totop{ bottom:calc(84px + var(--cookie-h,56px)); }
+
+@media (max-width:640px){
+  .cookie__ic{ display:none; }
+  .cookie__in{ gap:.65rem; padding:.5rem 0 calc(.5rem + env(safe-area-inset-bottom,0px)); }
+  .cookie p{ font-size:.71rem; line-height:1.45; }
+  .cookie__ok{ padding:.36rem .95rem; font-size:.77rem; }
+}
+
+/* ---------- The doctors' labels: name and qualification -------------------
+   The faces carried a Telugu first name and nothing else — "మేఘన" under a
+   photograph, with the Dr title and the degree hidden in the hover tooltip
+   where a phone can never reach them. The credential is the whole point of
+   the row, so it goes on the page: English name with the title, and the
+   qualification under it in gold. The full "MBBS, MD (DVL) · branch · years"
+   stays in the title and alt text, and the Doctors section still carries the
+   council registration number for each one. */
+.hdocs__grid a{ gap:.34rem; }
+.hdocs__grid span{
+  display:flex; flex-direction:column; align-items:center; gap:.08rem;
+  width:100%; min-width:0;
+}
+.hdocs__grid b{
+  font-size:.63rem; font-weight:700; line-height:1.25;
+  color:var(--ink-2); letter-spacing:-.1px;
+  overflow-wrap:break-word; hyphens:auto;
+}
+.hdocs__grid i{
+  font-style:normal; font-family:var(--font-en);
+  font-size:.55rem; font-weight:700; letter-spacing:.02em;
+  color:#F6D98C; line-height:1.3; white-space:nowrap;
+}
+.hdocs__grid a:hover b, .hdocs__grid a:focus-visible b{ color:var(--ink); }
+
+/* Five 69px columns cannot hold "Dr. Sowmya Nuthalapati", so the phone drops
+   to four — ten faces over three rows — and the strip stays legible. */
+@media (max-width:760px){
+  .hdocs__grid{ grid-template-columns:repeat(4,minmax(0,1fr)); gap:.75rem .4rem; }
+  .hdocs__grid b{ font-size:.6rem; }
+  .hdocs__grid i{ font-size:.53rem; }
+}
+@media (max-width:420px){
+  .hdocs__grid{ grid-template-columns:repeat(3,minmax(0,1fr)); }
+}
