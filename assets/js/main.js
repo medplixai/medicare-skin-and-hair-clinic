@@ -177,7 +177,14 @@
   /* ---- Hero headline: typewriter, alternating Telugu <-> English (Telugu primary) ---- */
   const leadEl = $("#heroLead"), rot = $("#heroRotate");
   if (leadEl && rot) {
-    const LEAD = { te: "మీ చర్మం, జుట్టు & గోళ్ళ ఆరోగ్యానికి", en: "Your skin, hair & nail health —" };
+    /* The newlines are load-bearing, with white-space:pre-line on .hero__lead.
+       Telugu wraps to two lines on its own and English to one, so the headline
+       was two different heights and everything under it moved. Reserving the
+       taller box stopped the movement but left the English state with a blank
+       line under it — a hole between the headline and the paragraph. Breaking
+       both leads by hand makes every state exactly three lines, so there is no
+       hole and nothing to reserve. Keep both at two lines if you edit them. */
+    const LEAD = { te: "మీ చర్మం, జుట్టు & గోళ్ళ\nఆరోగ్యానికి", en: "Your skin, hair &\nnail health —" };
     /* NMC Guidelines on Ethical Advertising, 06/10/2026:
          • "a trusted name" / "నమ్మదగిన చిరునామా" — an unverifiable trust claim;
            cl. 8.1(ix) lists "most trusted" among the prohibited comparatives.
@@ -191,7 +198,10 @@
       { te: "చర్మవైద్య చికిత్సలు", en: "dermatology treatments" },
       { te: "ఆధునిక చికిత్సలు", en: "modern treatments" },
       { te: "అర్హత కలిగిన వైద్యులు", en: "qualified doctors" },
-      { te: "ఆంధ్రప్రదేశ్‌లో 10 శాఖలు", en: "10 branches in Andhra Pradesh" }
+      /* "10 branches in Andhra Pradesh" was the only phrase that needed two
+         lines in a phone-width column; "AP" is what the stats strip below
+         already says, and it keeps every phrase to a single line. */
+      { te: "ఆంధ్రప్రదేశ్‌లో 10 శాఖలు", en: "10 branches in AP" }
     ];
     // alternate Telugu then English -> Telugu shown first & on every other slide
     const order = [];
