@@ -867,6 +867,10 @@ window.MEDICARE_PRICING = {
 (function () {
   "use strict";
   var P = window.MEDICARE_PRICING;
+  /* The treatment photographs are edited in place and keep their names, so a
+     browser or CDN holding an older copy would go on showing it. Raise this
+     whenever a picture in assets/img/treatments/ is redrawn or corrected. */
+  var IMG_V = "?v=202611101200";
   var sig = document.getElementById("signatureList");
   var cats = document.getElementById("priceCategories");
   if (!P) return;
@@ -929,7 +933,7 @@ window.MEDICARE_PRICING = {
     sig.innerHTML = P.signature.map(function (s) {
       return '<article class="tx reveal">' +
         '<div class="tx__media">' +
-          '<img class="tx__img" src="assets/img/treatments/' + s.slug + '.jpg" alt="' + esc(s.name) + '" loading="lazy" onerror="this.style.display=\'none\'">' +
+          '<img class="tx__img" src="assets/img/treatments/' + s.slug + '.jpg' + IMG_V + '" alt="' + esc(s.name) + '" loading="lazy" onerror="this.style.display=\'none\'">' +
           '<span class="tx__ic">' + ic(s.icon) + '</span>' +
           (s.badge ? '<span class="tx__badge">' + esc(s.badge) + '</span>' : '') +
         '</div>' +

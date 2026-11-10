@@ -52,8 +52,17 @@ const IMAGES = [
     prompt: "A tidy arrangement of aesthetic dermatology equipment on a white counter: a laser handpiece, small glass serum vials with droppers, a rolled white towel, stainless steel tray, soft pink light falling across them." },
   { out: "assets/img/banner-chronic.jpg", aspect: "16:9",
     prompt: "An unlabelled white ointment tube and a small plain glass jar standing on a clean pale shelf beside a neatly folded towel, soft morning light from the side, calm and domestic, nothing clinical or dramatic." },
+  // Made for the AI-analysis section — a phone and a light are what a visitor
+  // uses to send a photograph in. It had been placed in the Technology section
+  // instead, where a selfie ring light stood above a paragraph about FDA-cleared
+  // lasers. Moved out on 10 Nov 2026; it is not used anywhere at the moment.
   { out: "assets/img/banner-ai.jpg", aspect: "16:9",
     prompt: "A smartphone lying face down on a pale marble surface beside a small ring light and a folded towel, soft morning light, the phone's screen not visible at all." },
+
+  // The Technology section's banner, cut from the lasers.jpg frame above and
+  // widened to the banner's 16:9. Equipment only, display dark, nobody in it.
+  { out: "assets/img/banner-technology.jpg", aspect: "16:9",
+    prompt: "A dermatology laser console with a handpiece on its holder, standing beside a treatment couch in a bright uncluttered room, its display switched off and completely dark with no interface, no text and no numbers anywhere, soft daylight." },
   { out: "assets/img/banner-children.jpg", aspect: "16:9",
     prompt: "A parent's hand gently holding a small child's hand, close crop on the two hands only, warm daylight, soft neutral background, no faces in frame." },
 
@@ -72,8 +81,14 @@ const IMAGES = [
     prompt: "Small glass ampoules of clear liquid standing in a neat row on a white marble surface, one lying on its side, soft pink light and gentle reflections." },
   { out: "assets/img/treatments/peels.jpg", aspect: "16:9",
     prompt: "A glass bowl of clear solution with a soft fan brush resting across it, cotton pads and a white towel beside it on a clean counter, warm light." },
+  // The model ignored "display switched off" here and drew a lit console with an
+  // interface on it — a model name, applicator buttons and invented settings
+  // (FLUENCE 20, FREQUENCY 15, PULSE WIDTH 25). That is lettering and a screen
+  // showing an interface, both of which the rules above forbid, and it sat on the
+  // Advanced Lasers card. The screen was painted out by hand on 10 Nov 2026.
+  // If this is redrawn, CHECK THE SCREEN before shipping it.
   { out: "assets/img/treatments/lasers.jpg", aspect: "16:9",
-    prompt: "A dermatology laser console beside a treatment couch in a bright uncluttered room, its display switched off, white linen, soft daylight through a blind." },
+    prompt: "A dermatology laser console beside a treatment couch in a bright uncluttered room, its display switched off and completely dark with no interface, no text and no numbers anywhere, white linen, soft daylight through a blind." },
 ];
 
 /**
