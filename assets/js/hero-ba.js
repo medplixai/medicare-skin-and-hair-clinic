@@ -17,6 +17,10 @@
    cropped out of the branded cards in assets/img/before-after/ so the two
    halves line up pixel for pixel. Add a case by adding a pair of files
    and one entry to CASES.
+
+   Every patient's eyes carry a black bar — tools/eye-mask.py puts it there,
+   and gives a before/after pair the same bar so the wipe does not step
+   across it. A new photograph has to be masked before it goes in.
    ===================================================================== */
 (function () {
   "use strict";
@@ -31,6 +35,11 @@
   ];
   var DOCTOR    = "Dr Meghana Valeti · MD (DVL)";
   var DIR       = "assets/img/hero/";
+  /* The eye masks were added to these files without renaming them, so a
+     browser or CDN holding the older copy would keep showing the patients'
+     faces. Raise this whenever a photograph is re-edited, and raise the
+     same token on the two <img> tags in index.html. */
+  var V         = "?v=202611100900";
   var HOLD_MS   = 1500;   // how long the finished "after" stays up before the next case
   var RESUME_MS = 8000;   // how long a visitor's own drag keeps the card still
   var LEG_MS    = 820;    // one leg of the sweep
@@ -144,8 +153,8 @@
     }
     b.onload = b.onerror = ready;
     a.onload = a.onerror = ready;
-    b.src = DIR + c.slug + "-before.jpg";
-    a.src = DIR + c.slug + "-after.jpg";
+    b.src = DIR + c.slug + "-before.jpg" + V;
+    a.src = DIR + c.slug + "-after.jpg" + V;
 
     Array.prototype.forEach.call(tabs.children, function (el, n) {
       var on = n === idx;
@@ -201,7 +210,7 @@
   /* quietly warm the other cases so a switch never flashes */
   window.addEventListener("load", function () {
     CASES.slice(1).forEach(function (c) {
-      ["before", "after"].forEach(function (s) { new Image().src = DIR + c.slug + "-" + s + ".jpg"; });
+      ["before", "after"].forEach(function (s) { new Image().src = DIR + c.slug + "-" + s + ".jpg" + V; });
     });
   });
 })();

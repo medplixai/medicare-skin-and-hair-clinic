@@ -26,3 +26,20 @@
    "Before & After" section మొత్తం దాగి ఉంటుంది (no broken blanks).
  • Size: ~800x800 px square బాగుంటుంది (before & after ఒకే size).
  • ⚠️ రోగి ఫోటోలు పెట్టే ముందు వారి అనుమతి (consent) తప్పక తీసుకోండి.
+
+------------------------------------------------------------
+  👁️  కళ్ళ మాస్క్ — కొత్త ఫోటో పెట్టే ముందు తప్పక
+------------------------------------------------------------
+రోగి ముఖం కనిపించే ప్రతి ఫోటోలో కళ్ళ మీద నల్లటి పట్టీ ఉండాలి.
+చేతితో వెయ్యక్కర్లేదు — ఈ రెండు commands చాలు:
+
+   swift tools/eye-detect.swift assets/img/before-after/*.jpg > /tmp/eyes.tsv
+   python3 tools/eye-mask.py /tmp/eyes.tsv assets/img/before-after \
+           assets/img/before-after/*.jpg
+
+ముఖం లేని ఫోటోలు (తల, పాదాలు, చెవి) అలాగే ఉండిపోతాయి.
+వివరాలు: tools/README-eye-masks.md
+
+⚠️ File పేరు మారదు కాబట్టి — assets/js/results.js లో ఉన్న
+   var V = "?v=..." ని కూడా పెంచాలి. లేకపోతే browser పాత
+   (మాస్క్ లేని) ఫోటోనే చూపిస్తూ ఉంటుంది.

@@ -3,6 +3,7 @@
    ---------------------------------------------------------------------
    Branded before/after cards scroll smoothly left → right (auto, infinite).
    👉 ఫోటోలు పెట్టండి: assets/img/before-after/<slug>.jpg
+   ⚠️ కొత్త ఫోటో పెట్టే ముందు కళ్ళకు మాస్క్ వెయ్యాలి — tools/eye-mask.py
    ఒక్క ఫోటో కూడా లోడ్ కాకపోతే "Before & After" section మొత్తం దాగి ఉంటుంది.
    కొత్త result add చేయాలంటే ఈ list లో ఒక slug చేర్చండి.
    ===================================================================== */
@@ -19,11 +20,15 @@ window.MEDICARE_RESULTS = [
   if (!section || !list || !window.MEDICARE_RESULTS || !window.MEDICARE_RESULTS.length) return;
 
   var DIR = "assets/img/before-after/";
+  /* The eye masks were added to these files without renaming them, so a
+     browser or CDN holding the older copy would keep showing the patients'
+     faces. Raise this whenever a card is re-edited. */
+  var V   = "?v=202611100900";
 
   // one glossy slide — full branded before/after image, height-fixed (width auto)
   function slide(slug) {
     return '<figure class="ba-slide">' +
-      '<img class="ba-img" src="' + DIR + slug + '.jpg" alt="Medicare — Before & After ' + slug +
+      '<img class="ba-img" src="' + DIR + slug + '.jpg' + V + '" alt="Medicare — Before & After ' + slug +
       '" decoding="async" onerror="this.closest(\'.ba-slide\').style.display=\'none\'">' +
       '</figure>';
   }
