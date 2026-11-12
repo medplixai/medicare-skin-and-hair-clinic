@@ -7,8 +7,9 @@
  * scores and a product recommendation list, and a wall sign for a "PEDIATRIC DERMA" clinic that
  * is not ours. NMC Guidelines on Ethical Advertising (6 Oct 2026) cl. 8.1(iii), (v), (vi), (xii).
  *
- * So every prompt here forbids three things, and the check at the end fails the run if the model
- * ignores them:
+ * So every prompt here forbids three things. Nothing in this file enforces them — the model is
+ * asked, not constrained, and it has disobeyed before (see point 2 under Run). A person looking
+ * at the picture is the only check there is:
  *   - no lettering of any kind, in any script;
  *   - no before/after, no treatment being performed on a patient, no result shown;
  *   - no signage, no logo, no branded premises — the room in a picture must not claim to be ours.
@@ -20,6 +21,21 @@
  * Run:  node tools/gen-images.mjs            (only what is missing)
  *       node tools/gen-images.mjs --force    (redraw everything)
  *       node tools/gen-images.mjs laser-hair peels     (just these)
+ *
+ * What this script does NOT do, and what will go wrong if you forget:
+ *
+ *   1. It writes the model's own bytes — 2752x1536 at quality 100, about 2.4 MB each. The site
+ *      ships 960x640 at quality 86, about 70 KB. Ship the raw files and one section weighs 17 MB.
+ *        magick <f> -gravity center -crop 2304x1536+0+0 +repage \
+ *               -resize 960x640 -unsharp 0x0.6+0.35+0.02 -quality 86 -strip <f>
+ *
+ *   2. It does not check the rules below — there is no check at the end, whatever the note said.
+ *      You are the check. On 10 Nov 2026 the model drew "FLUENCE 20 / FREQUENCY 15 / PULSE WIDTH
+ *      25" onto the laser screen in lasers.jpg, from a prompt that asked for the display switched
+ *      OFF, and it reached production. Zoom into every label, wall and screen before shipping.
+ *
+ *   3. The file names never change, so raise the cache token in BOTH places or the old picture
+ *      keeps being served: assets/js/pricing.js (var IMG_V) and the pricing.js ?v= in index.html.
  */
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";

@@ -870,7 +870,7 @@ window.MEDICARE_PRICING = {
   /* The treatment photographs are edited in place and keep their names, so a
      browser or CDN holding an older copy would go on showing it. Raise this
      whenever a picture in assets/img/treatments/ is redrawn or corrected. */
-  var IMG_V = "?v=202611101200";
+  var IMG_V = "?v=202611122100";
   var sig = document.getElementById("signatureList");
   var cats = document.getElementById("priceCategories");
   if (!P) return;
